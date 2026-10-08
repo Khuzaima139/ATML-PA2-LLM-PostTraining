@@ -46,6 +46,7 @@ RM_BATCH_SIZE = 8
 RM_MAX_LENGTH = 1024  # score_reward_pairs default
 WORDLIMIT_SAMPLES = 5
 LOGP_DECIMALS = 6
+PROGRESS_EVERY = 25  # print a progress line every N teacher-forcing / reward-model batches
 
 
 # ---------------------------------------------------------------- aggregation (pure, tested on Mac)
@@ -129,7 +130,8 @@ def score_pairs(model, tokenizer, rows, records, cfg) -> list[dict]:
     device = next(model.parameters()).device
     bs = int(cfg["batch_size"])
     out = []
-    for start in range(0, len(rows), bs):
+    timer, n_batches = wall_timer(), math.ceil(len(rows) / bs)
+    for b, start in enumerate(range(0, len(rows), bs), start=1):
         recs = records[start : start + bs]
         chosen, rejected, _ = collate([(r["id"], row) for r, row in zip(recs, rows[start : start + bs])])
         pc, pr, rc, rr = dpo_sequence_logprobs(model, to_device(chosen, device), to_device(rejected, device), with_grad=False)
@@ -149,6 +151,8 @@ def score_pairs(model, tokenizer, rows, records, cfg) -> list[dict]:
                 "chosen_truncated": rec["chosen_truncated"],
                 "rejected_truncated": rec["rejected_truncated"],
             })
+        if b % PROGRESS_EVERY == 0 or b == n_batches:
+            print(f"  teacher forcing batch {b}/{n_batches} t={timer():.0f}s", flush=True)
     return out
 
 
@@ -161,7 +165,8 @@ def generate_responses(model, tokenizer, prompts: list[list[dict]], cfg, with_kl
     max_prompt = int(cfg["max_sequence_length"])
     max_new = int(cfg["max_generation_tokens"])
     out = []
-    for start in range(0, len(prompts), GEN_BATCH_SIZE):
+    timer, n_batches = wall_timer(), math.ceil(len(prompts) / GEN_BATCH_SIZE)
+    for b, start in enumerate(range(0, len(prompts), GEN_BATCH_SIZE), start=1):
         g = batch_generate(
             model, tokenizer, prompts[start : start + GEN_BATCH_SIZE],
             max_prompt_length=max_prompt, max_new_tokens=max_new,
@@ -197,15 +202,19 @@ def generate_responses(model, tokenizer, prompts: list[list[dict]], cfg, with_kl
                 rec["ref_token_logp"] = ref_rows[k][:n].double().cpu().tolist()
             out.append(rec)
         del g
+        print(f"  generation batch {b}/{n_batches} t={timer():.0f}s", flush=True)
     return out
 
 
 def reward_scores(rm, rm_tok, prompts: list[list[dict]], texts: list[str]):
     """Fixed course reward model scores, plus which inputs exceed RM_MAX_LENGTH (truncated by the helper)."""
     scores, over = [], []
-    for start in range(0, len(texts), RM_BATCH_SIZE):
+    timer, n_batches = wall_timer(), math.ceil(len(texts) / RM_BATCH_SIZE)
+    for b, start in enumerate(range(0, len(texts), RM_BATCH_SIZE), start=1):
         ps, ts = prompts[start : start + RM_BATCH_SIZE], texts[start : start + RM_BATCH_SIZE]
         scores += score_reward_pairs(rm, rm_tok, ps, ts, max_length=RM_MAX_LENGTH).cpu().tolist()
+        if b % PROGRESS_EVERY == 0 or b == n_batches:
+            print(f"  reward model batch {b}/{n_batches} t={timer():.0f}s", flush=True)
     for i, (p, t) in enumerate(zip(prompts, texts)):
         n = len(rm_tok.apply_chat_template(list(p) + [{"role": "assistant", "content": t}], tokenize=True, add_generation_prompt=False))
         over.append(n > RM_MAX_LENGTH)
@@ -269,6 +278,7 @@ def main():
         if torch.cuda.is_available():
             torch.cuda.reset_peak_memory_stats()
         entry = {**run_metadata(cfg), "limit": args.limit, "smoke": args.limit is not None}
+        print(f"[{mode}] start ({args.name})", flush=True)
 
         if mode in ("pairs", "stratified"):
             path = cfg["paths"]["dpo_standard_eval" if mode == "pairs" else "dpo_length_eval"]
