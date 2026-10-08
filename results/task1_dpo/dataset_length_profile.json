@@ -73,15 +73,15 @@
     "results_dir": "results/task1_dpo"
   },
   "git": {
-    "commit": "ec2700c6340af14ab782f7c82487c33d9e4f78c8",
-    "dirty": true
+    "commit": "9fb106a0a120285f3c002286641047ae5da2ccf4",
+    "dirty": false
   },
   "tokenizer": "Qwen/Qwen2.5-1.5B-Instruct",
   "tokenizer_class": "Qwen2TokenizerFast",
   "eos_token": "<|im_end|>",
   "max_sequence_length": 768,
   "hardware": "macOS-27.0.1-arm64-arm-64bit",
-  "start_time": "2026-10-09T03:30:03",
+  "start_time": "2026-10-09T03:55:22",
   "length_definitions": {
     "raw_tokens": "tokenizer(response, add_special_tokens=False) length, no EOS, all pairs",
     "encoded_tokens": "response_mask.sum() from encode_prompt_response (truncated content + EOS), encodable pairs only",
@@ -1385,5 +1385,5 @@
       }
     }
   },
-  "wall_clock_seconds": 14.555360957994708
+  "wall_clock_seconds": 10.500814416998765
 }
