@@ -12,7 +12,7 @@ def load_cached_rollouts(path):
         raise ValueError("Expected a non-empty list in the supplied PPO rollout cache")
 
     # Instructor iterations used two equivalent names for these fields. Normalize once here so
-    # the student analysis code sees one stable interface.
+    # the analysis code sees one stable interface.
     normalized = []
     for row in rows:
         row = dict(row)
