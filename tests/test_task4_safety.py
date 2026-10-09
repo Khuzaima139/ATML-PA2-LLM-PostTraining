@@ -141,6 +141,36 @@ def test_judge_row_captures_raw_text_and_flags():
     assert (out["xstest_id"], out["policy"]) == (3, "dpo")
 
 
+JUDGE_RUN_KEYS = {"script", "policy", "status", "config_path", "config", "limit", "smoke", "git", "seed", "hardware", "dtype",
+                  "start_time", "input_file", "input_sha256", "settings", "n_done", "timing", "wall_clock_seconds",
+                  "peak_vram_bytes", "judge_file", "judge_sha256", "counts"}
+
+
+def test_judge_run_json_carries_no_labels(tmp_path, monkeypatch, capsys):
+    import sys
+    import types
+    import task4_safety.judge_responses as judge_mod
+    model = _FakeModel()
+    model.generation_config = types.SimpleNamespace(to_dict=lambda: {"do_sample": False})
+    model.config = types.SimpleNamespace()
+    monkeypatch.setattr(judge_mod, "load_judge", lambda cfg: (_FakeTok(), model))
+    src = tmp_path / "generated_dpo.jsonl"
+    src.write_text("".join(json.dumps({"xstest_id": i, "policy": "dpo", "prompt": "p", "response": "r"}) + "\n" for i in range(3)))
+    monkeypatch.setattr(sys, "argv", ["x", "--policy", "dpo", "--input", str(src),
+                                      "--sealed-dir", str(tmp_path / "sealed"), "--run-dir", str(tmp_path / "run")])
+    judge_mod.main()
+    run_text = (tmp_path / "run" / "judge_dpo_run.json").read_text()
+    run = json.loads(run_text)
+    assert set(run) == JUDGE_RUN_KEYS
+    assert run["counts"] == {"n_rows": 3, "n_parse_failure": 0}
+    console = capsys.readouterr().out
+    for lab in LABELS:
+        assert lab not in run_text and lab not in console
+    assert "label" not in json.dumps(run["counts"]) and "label" not in json.dumps(run["timing"])
+    sealed = [json.loads(l) for l in (tmp_path / "sealed" / "judge_dpo.jsonl").read_text().splitlines()]
+    assert [r["label"] for r in sealed] == ["OVER_REFUSAL"] * 3
+
+
 # ---------------------------------------------------------------- 3. audit sheet
 
 def gens_fixture(n_safe=40, n_unsafe=40, same_for=("dpo",)):

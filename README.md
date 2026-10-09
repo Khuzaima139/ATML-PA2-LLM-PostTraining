@@ -110,14 +110,25 @@ python -m task3_grpo.compare_normalization --config configs/grpo.yaml
 
 ### Task 4 - Safety calibration
 
-The judge loader/parser are supplied. You must implement the requested generation aggregation and evaluation.
+The judge loader/parser are supplied and used unchanged. Each command refuses to overwrite an existing output unless `--overwrite` is passed.
 
 ```bash
-python -m task4_safety.generate_responses --config configs/feedback.yaml
-python -m task4_safety.judge_responses --config configs/feedback.yaml
+# Generation (do_sample False, released repetition penalty 1.1, cap 256) for the four policies; adapters are sha256-checked against task4_safety/protocol.py.
+python -m task4_safety.generate_responses --config configs/feedback.yaml --policy sft
+python -m task4_safety.generate_responses --config configs/feedback.yaml --policy dpo --adapter outputs/task1_dpo/standard
+python -m task4_safety.generate_responses --config configs/feedback.yaml --policy ppo --adapter outputs/task2_ppo/standard/policy
+python -m task4_safety.generate_responses --config configs/feedback.yaml --policy grpo --adapter outputs/task3_grpo/standard/policy
+# Judge (released judge, labels written only to outputs/task4_safety/sealed/judge_<policy>.jsonl)
+python -m task4_safety.judge_responses --config configs/feedback.yaml --policy sft   # likewise dpo, ppo, grpo
+# Blind audit sheet from the generations and results/task4_safety/audit_rules.md, then validate the filled labels
 python -m task4_safety.make_audit_sheet --config configs/feedback.yaml
+python -m task4_safety.make_audit_sheet --config configs/feedback.yaml --validate
+# Summary; refuses to run unless the labels commit precedes the commit that imported each judge_<policy>.jsonl
 python -m task4_safety.evaluate_safety --config configs/feedback.yaml
+# GRPO minus PPO reward-model pair on the held-out evaluations of Tasks 2 and 3
+python -m task4_safety.reward_pairs --config configs/feedback.yaml
 ```
+Smoke runs: `--limit N` with `--out-dir` (generation) or `--sealed-dir` and `--run-dir` (judge) pointing to smoke folders.
 
 ### Task 5 - RLVR vs RLAIF
 
