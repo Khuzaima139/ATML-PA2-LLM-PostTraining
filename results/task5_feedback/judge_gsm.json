@@ -1,0 +1,181 @@
+{
+  "script": "task5_feedback.evaluate_math",
+  "stage": "judge",
+  "dataset": "gsm",
+  "status": "completed",
+  "smoke": false,
+  "config_path": "configs/feedback.yaml",
+  "config": {
+    "seed": 6304,
+    "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "reward_model": "yavuz-ai/qwen2.5-1.5b-rm-ultrafeedback",
+    "reward_tokenizer": "Qwen/Qwen2.5-1.5B-Instruct",
+    "ai_judge_model": "Qwen/Qwen2.5-3B-Instruct",
+    "value_model_init": "Qwen/Qwen2.5-0.5B-Instruct",
+    "dtype": "float16",
+    "quantize_frozen_models": true,
+    "lora": {
+      "r": 8,
+      "alpha": 16,
+      "dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "v_proj"
+      ]
+    },
+    "value_lora": {
+      "r": 8,
+      "alpha": 16,
+      "dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "v_proj"
+      ]
+    },
+    "generation": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "do_sample": true
+    },
+    "paths": {
+      "dpo_standard_train": "data/dpo_standard_train.jsonl",
+      "dpo_standard_eval": "data/dpo_standard_eval.jsonl",
+      "dpo_length_train": "data/dpo_length_balanced_train.jsonl",
+      "dpo_length_eval": "data/dpo_length_stratified_eval.jsonl",
+      "word_limit_prompts": "data/word_limit_prompts.jsonl",
+      "rl_prompt_train": "data/rl_prompt_pool_train.jsonl",
+      "rl_prompt_eval": "data/rl_prompt_pool_eval.jsonl",
+      "xstest": "data/xstest_safety_prompts.csv",
+      "gsm_train": "data/gsm8k_rl_train.jsonl",
+      "gsm_eval": "data/gsm8k_eval.jsonl",
+      "math_transfer_eval": "data/math_transfer_eval.jsonl",
+      "task5_diagnostics": "data/task5_controlled_reward_diagnostics.jsonl",
+      "ppo_rollout_cache": "cached/ppo_rollout.pt",
+      "grpo_k_cache": "cached/grpo_k_cache.jsonl",
+      "ppo_midpoint_policy": "checkpoints/ppo_midpoint_policy",
+      "ppo_midpoint_value": "checkpoints/ppo_midpoint_value",
+      "grpo_midpoint_policy": "checkpoints/grpo_midpoint_policy",
+      "rlvr_policy": "checkpoints/rlvr_policy",
+      "rlaif_policy": "checkpoints/rlaif_policy"
+    },
+    "results_dir": "results",
+    "safety_max_new_tokens": 256,
+    "math_max_new_tokens": 512,
+    "judge_max_new_tokens": 64,
+    "judge_temperature": 0.0,
+    "manual_audit_per_class": 30,
+    "policies": {
+      "sft": null,
+      "dpo": "outputs/task1_dpo/standard",
+      "ppo": "outputs/task2_ppo/standard",
+      "grpo": "outputs/task3_grpo/standard",
+      "rlvr": "checkpoints/rlvr_policy",
+      "rlaif": "checkpoints/rlaif_policy"
+    }
+  },
+  "git": {
+    "commit": "eaf23d88ccdb22ef92381edd209062582c57da2f",
+    "dirty": false
+  },
+  "seed": 6304,
+  "hardware": {
+    "device": "Tesla T4",
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "transformers": "4.57.1",
+    "peft": "0.17.1"
+  },
+  "dtype": "float16",
+  "start_time": "2026-10-09T23:07:12",
+  "data": {
+    "path": "data/gsm8k_eval.jsonl",
+    "sha256": "24f712750928c18c1a0a6849eebe97b3e01a6c0c0ebf2410d101a3df1872bf4a",
+    "n_prompts": 300
+  },
+  "generation_files": {
+    "sft": "results/task5_feedback/gen_gsm_sft.jsonl",
+    "rlvr": "results/task5_feedback/gen_gsm_rlvr.jsonl",
+    "rlaif": "results/task5_feedback/gen_gsm_rlaif.jsonl"
+  },
+  "settings": {
+    "argument_order": "compare(question, trained_response, sft_response)",
+    "orientation": "released hashed order",
+    "score": {
+      "A": 1.0,
+      "TIE": 0.5,
+      "B": 0.0
+    },
+    "judge": {
+      "model": "Qwen/Qwen2.5-3B-Instruct",
+      "passed_by_release": {
+        "max_new_tokens": 4,
+        "do_sample": false,
+        "pad_token_id": 151645,
+        "eos_token_id": 151645
+      },
+      "model_generation_config": {
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "repetition_penalty": 1.05,
+        "no_repeat_ngram_size": 0
+      },
+      "config_judge_max_new_tokens_unused": 64,
+      "config_judge_temperature_unused": 0.0,
+      "quantization": "4-bit nf4",
+      "batching": "one unbatched call per pair, as released"
+    }
+  },
+  "n_calls_planned": 600,
+  "n_calls_done": 600,
+  "parity": [
+    {
+      "comparison": "rlvr_vs_sft",
+      "prompt_id": "gsm8k:803",
+      "released_label": "TIE",
+      "wrapper_label": "TIE",
+      "match": true
+    },
+    {
+      "comparison": "rlaif_vs_sft",
+      "prompt_id": "gsm8k:803",
+      "released_label": "TIE",
+      "wrapper_label": "TIE",
+      "match": true
+    },
+    {
+      "comparison": "rlvr_vs_sft",
+      "prompt_id": "gsm8k:750",
+      "released_label": "TIE",
+      "wrapper_label": "TIE",
+      "match": true
+    },
+    {
+      "comparison": "rlaif_vs_sft",
+      "prompt_id": "gsm8k:750",
+      "released_label": "TIE",
+      "wrapper_label": "TIE",
+      "match": true
+    }
+  ],
+  "timing": {
+    "setup": 10.06258881399981,
+    "judge_seconds_per_call": {
+      "n": 600,
+      "mean": 0.5684457500066522,
+      "std": 0.12518428490599942,
+      "median": 0.559490513000128,
+      "q25": 0.48004787450020103,
+      "q75": 0.6522219907501494,
+      "iqr": 0.17217411624994838,
+      "min": 0.29199165399995763,
+      "max": 1.0219658290002371
+    }
+  },
+  "wall_clock_seconds": 355.10431686599986,
+  "peak_vram_bytes": 3084910592,
+  "judge_file": "results/task5_feedback/judge_gsm.jsonl",
+  "parity_all_match": true,
+  "n_parse_failures": 0
+}

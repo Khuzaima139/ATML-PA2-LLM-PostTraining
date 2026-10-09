@@ -1,0 +1,1519 @@
+{
+  "script": "task5_feedback.score_perturbations",
+  "order": "released",
+  "status": "completed",
+  "smoke": false,
+  "config_path": "configs/feedback.yaml",
+  "config": {
+    "seed": 6304,
+    "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "reward_model": "yavuz-ai/qwen2.5-1.5b-rm-ultrafeedback",
+    "reward_tokenizer": "Qwen/Qwen2.5-1.5B-Instruct",
+    "ai_judge_model": "Qwen/Qwen2.5-3B-Instruct",
+    "value_model_init": "Qwen/Qwen2.5-0.5B-Instruct",
+    "dtype": "float16",
+    "quantize_frozen_models": true,
+    "lora": {
+      "r": 8,
+      "alpha": 16,
+      "dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "v_proj"
+      ]
+    },
+    "value_lora": {
+      "r": 8,
+      "alpha": 16,
+      "dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "v_proj"
+      ]
+    },
+    "generation": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "do_sample": true
+    },
+    "paths": {
+      "dpo_standard_train": "data/dpo_standard_train.jsonl",
+      "dpo_standard_eval": "data/dpo_standard_eval.jsonl",
+      "dpo_length_train": "data/dpo_length_balanced_train.jsonl",
+      "dpo_length_eval": "data/dpo_length_stratified_eval.jsonl",
+      "word_limit_prompts": "data/word_limit_prompts.jsonl",
+      "rl_prompt_train": "data/rl_prompt_pool_train.jsonl",
+      "rl_prompt_eval": "data/rl_prompt_pool_eval.jsonl",
+      "xstest": "data/xstest_safety_prompts.csv",
+      "gsm_train": "data/gsm8k_rl_train.jsonl",
+      "gsm_eval": "data/gsm8k_eval.jsonl",
+      "math_transfer_eval": "data/math_transfer_eval.jsonl",
+      "task5_diagnostics": "data/task5_controlled_reward_diagnostics.jsonl",
+      "ppo_rollout_cache": "cached/ppo_rollout.pt",
+      "grpo_k_cache": "cached/grpo_k_cache.jsonl",
+      "ppo_midpoint_policy": "checkpoints/ppo_midpoint_policy",
+      "ppo_midpoint_value": "checkpoints/ppo_midpoint_value",
+      "grpo_midpoint_policy": "checkpoints/grpo_midpoint_policy",
+      "rlvr_policy": "checkpoints/rlvr_policy",
+      "rlaif_policy": "checkpoints/rlaif_policy"
+    },
+    "results_dir": "results",
+    "safety_max_new_tokens": 256,
+    "math_max_new_tokens": 512,
+    "judge_max_new_tokens": 64,
+    "judge_temperature": 0.0,
+    "manual_audit_per_class": 30,
+    "policies": {
+      "sft": null,
+      "dpo": "outputs/task1_dpo/standard",
+      "ppo": "outputs/task2_ppo/standard",
+      "grpo": "outputs/task3_grpo/standard",
+      "rlvr": "checkpoints/rlvr_policy",
+      "rlaif": "checkpoints/rlaif_policy"
+    }
+  },
+  "git": {
+    "commit": "eaf23d88ccdb22ef92381edd209062582c57da2f",
+    "dirty": false
+  },
+  "seed": 6304,
+  "hardware": {
+    "device": "Tesla T4",
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "transformers": "4.57.1",
+    "peft": "0.17.1"
+  },
+  "dtype": "float16",
+  "start_time": "2026-10-09T22:37:26",
+  "data": {
+    "path": "data/task5_controlled_reward_diagnostics.jsonl",
+    "sha256": "9008b96595bb1419f1326bf02beefd689f09028c2aa6598d7c427394602f036c",
+    "n_rows": 100,
+    "n_problems": 20,
+    "n_pairs_total": 80,
+    "n_pairs_judged": 80
+  },
+  "settings": {
+    "anchor": "clean_correct",
+    "categories": {
+      "reasoning_corrupt": "corrupt_reasoning_correct_final",
+      "wrong_final": "good_reasoning_wrong_final",
+      "filler": "persuasive_filler_correct",
+      "gold_distractor": "gold_distractor_wrong_final"
+    },
+    "argument_order": "compare(question, clean_response, perturbed_response)",
+    "orientation": "released hashed order",
+    "judge": {
+      "model": "Qwen/Qwen2.5-3B-Instruct",
+      "passed_by_release": {
+        "max_new_tokens": 4,
+        "do_sample": false,
+        "pad_token_id": 151645,
+        "eos_token_id": 151645
+      },
+      "model_generation_config": {
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "repetition_penalty": 1.05,
+        "no_repeat_ngram_size": 0
+      },
+      "config_judge_max_new_tokens_unused": 64,
+      "config_judge_temperature_unused": 0.0,
+      "quantization": "4-bit nf4",
+      "batching": "one unbatched call per pair, as released"
+    }
+  },
+  "verifier_responses": [
+    {
+      "problem_id": 23,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 23,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 23,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 23,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 23,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 103,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 103,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 103,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 103,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 103,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 113,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 113,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 113,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 113,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 113,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 289,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 289,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 289,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 289,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 289,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 299,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 299,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 299,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 299,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 299,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 459,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 459,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 459,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 459,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 459,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 505,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 505,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 505,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 505,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 505,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 506,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 506,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 506,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 506,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 506,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 558,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 558,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 558,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 558,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 558,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 569,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 569,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 569,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 569,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 569,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 620,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 620,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 620,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 620,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 620,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 677,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 677,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 677,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 677,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 677,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 681,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 681,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 681,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 681,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 681,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 736,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 736,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 736,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 736,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 736,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 750,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 750,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 750,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 750,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 750,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 803,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 803,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 803,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 803,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 803,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 867,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 867,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 867,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 867,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 867,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 1122,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 1122,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 1122,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 1122,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 1122,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 1200,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 1200,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 1200,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 1200,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 1200,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 1245,
+      "variant_type": "clean_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 1245,
+      "variant_type": "corrupt_reasoning_correct_final",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    },
+    {
+      "problem_id": 1245,
+      "variant_type": "gold_distractor_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 1245,
+      "variant_type": "good_reasoning_wrong_final",
+      "reward": 0.0,
+      "compliant": true,
+      "expected_exact_reward": 0
+    },
+    {
+      "problem_id": 1245,
+      "variant_type": "persuasive_filler_correct",
+      "reward": 1.0,
+      "compliant": true,
+      "expected_exact_reward": 1
+    }
+  ],
+  "verifier_pairs": [
+    {
+      "pair_id": "23:reasoning_corrupt",
+      "problem_id": 23,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "23:wrong_final",
+      "problem_id": 23,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "23:filler",
+      "problem_id": 23,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "23:gold_distractor",
+      "problem_id": 23,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "103:reasoning_corrupt",
+      "problem_id": 103,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "103:wrong_final",
+      "problem_id": 103,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "103:filler",
+      "problem_id": 103,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "103:gold_distractor",
+      "problem_id": 103,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "113:reasoning_corrupt",
+      "problem_id": 113,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "113:wrong_final",
+      "problem_id": 113,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "113:filler",
+      "problem_id": 113,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "113:gold_distractor",
+      "problem_id": 113,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "289:reasoning_corrupt",
+      "problem_id": 289,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "289:wrong_final",
+      "problem_id": 289,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "289:filler",
+      "problem_id": 289,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "289:gold_distractor",
+      "problem_id": 289,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "299:reasoning_corrupt",
+      "problem_id": 299,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "299:wrong_final",
+      "problem_id": 299,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "299:filler",
+      "problem_id": 299,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "299:gold_distractor",
+      "problem_id": 299,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "459:reasoning_corrupt",
+      "problem_id": 459,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "459:wrong_final",
+      "problem_id": 459,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "459:filler",
+      "problem_id": 459,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "459:gold_distractor",
+      "problem_id": 459,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "505:reasoning_corrupt",
+      "problem_id": 505,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "505:wrong_final",
+      "problem_id": 505,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "505:filler",
+      "problem_id": 505,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "505:gold_distractor",
+      "problem_id": 505,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "506:reasoning_corrupt",
+      "problem_id": 506,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "506:wrong_final",
+      "problem_id": 506,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "506:filler",
+      "problem_id": 506,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "506:gold_distractor",
+      "problem_id": 506,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "558:reasoning_corrupt",
+      "problem_id": 558,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "558:wrong_final",
+      "problem_id": 558,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "558:filler",
+      "problem_id": 558,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "558:gold_distractor",
+      "problem_id": 558,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "569:reasoning_corrupt",
+      "problem_id": 569,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "569:wrong_final",
+      "problem_id": 569,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "569:filler",
+      "problem_id": 569,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "569:gold_distractor",
+      "problem_id": 569,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "620:reasoning_corrupt",
+      "problem_id": 620,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "620:wrong_final",
+      "problem_id": 620,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "620:filler",
+      "problem_id": 620,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "620:gold_distractor",
+      "problem_id": 620,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "677:reasoning_corrupt",
+      "problem_id": 677,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "677:wrong_final",
+      "problem_id": 677,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "677:filler",
+      "problem_id": 677,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "677:gold_distractor",
+      "problem_id": 677,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "681:reasoning_corrupt",
+      "problem_id": 681,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "681:wrong_final",
+      "problem_id": 681,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "681:filler",
+      "problem_id": 681,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "681:gold_distractor",
+      "problem_id": 681,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "736:reasoning_corrupt",
+      "problem_id": 736,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "736:wrong_final",
+      "problem_id": 736,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "736:filler",
+      "problem_id": 736,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "736:gold_distractor",
+      "problem_id": 736,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "750:reasoning_corrupt",
+      "problem_id": 750,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "750:wrong_final",
+      "problem_id": 750,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "750:filler",
+      "problem_id": 750,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "750:gold_distractor",
+      "problem_id": 750,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "803:reasoning_corrupt",
+      "problem_id": 803,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "803:wrong_final",
+      "problem_id": 803,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "803:filler",
+      "problem_id": 803,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "803:gold_distractor",
+      "problem_id": 803,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "867:reasoning_corrupt",
+      "problem_id": 867,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "867:wrong_final",
+      "problem_id": 867,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "867:filler",
+      "problem_id": 867,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "867:gold_distractor",
+      "problem_id": 867,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "1122:reasoning_corrupt",
+      "problem_id": 1122,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "1122:wrong_final",
+      "problem_id": 1122,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "1122:filler",
+      "problem_id": 1122,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "1122:gold_distractor",
+      "problem_id": 1122,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "1200:reasoning_corrupt",
+      "problem_id": 1200,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "1200:wrong_final",
+      "problem_id": 1200,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "1200:filler",
+      "problem_id": 1200,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "1200:gold_distractor",
+      "problem_id": 1200,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "1245:reasoning_corrupt",
+      "problem_id": 1245,
+      "category": "reasoning_corrupt",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "1245:wrong_final",
+      "problem_id": 1245,
+      "category": "wrong_final",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    },
+    {
+      "pair_id": "1245:filler",
+      "problem_id": 1245,
+      "category": "filler",
+      "reward_better": 1.0,
+      "reward_other": 1.0,
+      "preference": "tie"
+    },
+    {
+      "pair_id": "1245:gold_distractor",
+      "problem_id": 1245,
+      "category": "gold_distractor",
+      "reward_better": 1.0,
+      "reward_other": 0.0,
+      "preference": "better"
+    }
+  ],
+  "n_calls_done": 80,
+  "parity": [
+    {
+      "pair_id": "23:reasoning_corrupt",
+      "released_label": "TIE",
+      "wrapper_label": "TIE",
+      "match": true
+    },
+    {
+      "pair_id": "23:wrong_final",
+      "released_label": "TIE",
+      "wrapper_label": "TIE",
+      "match": true
+    },
+    {
+      "pair_id": "23:filler",
+      "released_label": "TIE",
+      "wrapper_label": "TIE",
+      "match": true
+    },
+    {
+      "pair_id": "23:gold_distractor",
+      "released_label": "TIE",
+      "wrapper_label": "TIE",
+      "match": true
+    }
+  ],
+  "timing": {
+    "setup": 10.265003826999987,
+    "judge_seconds_per_call": {
+      "n": 80,
+      "mean": 0.3477133820374945,
+      "std": 0.0959237964377943,
+      "median": 0.32123439299999745,
+      "q25": 0.29903799074995163,
+      "q75": 0.38208572799999274,
+      "iqr": 0.08304773725004111,
+      "min": 0.19583783399991717,
+      "max": 0.9172740080000494
+    }
+  },
+  "wall_clock_seconds": 39.403518045000055,
+  "peak_vram_bytes": 3084910592,
+  "judge_file": "results/task5_feedback/diagnostics_released.jsonl",
+  "parity_all_match": true,
+  "n_parse_failures": 0
+}

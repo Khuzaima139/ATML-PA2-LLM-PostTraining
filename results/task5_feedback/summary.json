@@ -1,0 +1,2279 @@
+{
+  "script": "task5_feedback.compare_feedback",
+  "git": {
+    "commit": "df5c07c3f8a29f8f6d5fc11f9891d49c776d38a0",
+    "dirty": false
+  },
+  "seed": 6304,
+  "n_resamples": 10000,
+  "policies": {
+    "gsm": {
+      "sft": {
+        "n": 300,
+        "resolution_points": 0.3333333333333333,
+        "accuracy": {
+          "point": 0.31,
+          "ci_low": 0.25666666666666665,
+          "ci_high": 0.36333333333333334,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "format_compliance": {
+          "point": 0.4633333333333333,
+          "ci_low": 0.4066666666666667,
+          "ci_high": 0.52,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "mean_length": {
+          "point": 280.16,
+          "ci_low": 269.74975,
+          "ci_high": 290.82025,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "length": {
+          "n": 300,
+          "mean": 280.16,
+          "std": 92.52600211111829,
+          "median": 265.0,
+          "q25": 210.0,
+          "q75": 333.25,
+          "iqr": 123.25,
+          "min": 107.0,
+          "max": 512.0
+        },
+        "n_truncated_at_cap": 12,
+        "failure_type_counts": {
+          "correct": 93,
+          "wrong_compliant_gold_present": 7,
+          "wrong_compliant_gold_absent": 39,
+          "noncompliant_truncated": 11,
+          "noncompliant_ended": 150
+        }
+      },
+      "rlvr": {
+        "n": 300,
+        "resolution_points": 0.3333333333333333,
+        "accuracy": {
+          "point": 0.2966666666666667,
+          "ci_low": 0.24666666666666667,
+          "ci_high": 0.3466666666666667,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "format_compliance": {
+          "point": 0.41,
+          "ci_low": 0.3566666666666667,
+          "ci_high": 0.4666666666666667,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "mean_length": {
+          "point": 284.46,
+          "ci_low": 273.92333333333335,
+          "ci_high": 295.11008333333336,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "length": {
+          "n": 300,
+          "mean": 284.46,
+          "std": 95.17899838374709,
+          "median": 266.0,
+          "q25": 211.0,
+          "q75": 339.25,
+          "iqr": 128.25,
+          "min": 94.0,
+          "max": 512.0
+        },
+        "n_truncated_at_cap": 11,
+        "failure_type_counts": {
+          "correct": 89,
+          "wrong_compliant_gold_present": 7,
+          "wrong_compliant_gold_absent": 27,
+          "noncompliant_truncated": 11,
+          "noncompliant_ended": 166
+        }
+      },
+      "rlaif": {
+        "n": 300,
+        "resolution_points": 0.3333333333333333,
+        "accuracy": {
+          "point": 0.27666666666666667,
+          "ci_low": 0.22666666666666666,
+          "ci_high": 0.32666666666666666,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "format_compliance": {
+          "point": 0.42333333333333334,
+          "ci_low": 0.36666666666666664,
+          "ci_high": 0.48,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "mean_length": {
+          "point": 287.22333333333336,
+          "ci_low": 276.63975,
+          "ci_high": 298.0034166666667,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "length": {
+          "n": 300,
+          "mean": 287.22333333333336,
+          "std": 95.24316312587598,
+          "median": 271.0,
+          "q25": 219.0,
+          "q75": 338.0,
+          "iqr": 119.0,
+          "min": 116.0,
+          "max": 512.0
+        },
+        "n_truncated_at_cap": 7,
+        "failure_type_counts": {
+          "correct": 83,
+          "wrong_compliant_gold_present": 7,
+          "wrong_compliant_gold_absent": 37,
+          "noncompliant_truncated": 7,
+          "noncompliant_ended": 166
+        }
+      },
+      "paired_differences": {
+        "rlvr_minus_sft": {
+          "accuracy": {
+            "point": -0.013333333333333308,
+            "ci_low": -0.08333333333333331,
+            "ci_high": 0.05666666666666664,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "format_compliance": {
+            "point": -0.053333333333333344,
+            "ci_low": -0.1266666666666667,
+            "ci_high": 0.023333333333333317,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "mean_length": {
+            "point": 4.2999999999999545,
+            "ci_low": -6.026833333333364,
+            "ci_high": 14.356666666666626,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          }
+        },
+        "rlaif_minus_sft": {
+          "accuracy": {
+            "point": -0.033333333333333326,
+            "ci_low": -0.09333333333333332,
+            "ci_high": 0.026666666666666672,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "format_compliance": {
+            "point": -0.03999999999999998,
+            "ci_low": -0.10666666666666669,
+            "ci_high": 0.02999999999999997,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "mean_length": {
+            "point": 7.063333333333333,
+            "ci_low": -1.8769166666666661,
+            "ci_high": 15.786749999999966,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          }
+        },
+        "rlvr_minus_rlaif": {
+          "accuracy": {
+            "point": 0.020000000000000018,
+            "ci_low": -0.04666666666666666,
+            "ci_high": 0.08666666666666667,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "format_compliance": {
+            "point": -0.013333333333333364,
+            "ci_low": -0.08666666666666667,
+            "ci_high": 0.06,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "mean_length": {
+            "point": -2.763333333333378,
+            "ci_low": -12.563333333333333,
+            "ci_high": 7.113666666666672,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          }
+        }
+      }
+    },
+    "transfer": {
+      "sft": {
+        "n": 100,
+        "resolution_points": 1.0,
+        "accuracy": {
+          "point": 0.54,
+          "ci_low": 0.44,
+          "ci_high": 0.64,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "format_compliance": {
+          "point": 0.63,
+          "ci_low": 0.53,
+          "ci_high": 0.72,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "mean_length": {
+          "point": 160.88,
+          "ci_low": 146.86975,
+          "ci_high": 175.90075,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "length": {
+          "n": 100,
+          "mean": 160.88,
+          "std": 73.85922826566767,
+          "median": 147.5,
+          "q25": 115.0,
+          "q75": 187.75,
+          "iqr": 72.75,
+          "min": 42.0,
+          "max": 496.0
+        },
+        "n_truncated_at_cap": 0,
+        "failure_type_counts": {
+          "correct": 54,
+          "wrong_compliant_gold_present": 3,
+          "wrong_compliant_gold_absent": 6,
+          "noncompliant_truncated": 0,
+          "noncompliant_ended": 37
+        }
+      },
+      "rlvr": {
+        "n": 100,
+        "resolution_points": 1.0,
+        "accuracy": {
+          "point": 0.53,
+          "ci_low": 0.43,
+          "ci_high": 0.63,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "format_compliance": {
+          "point": 0.63,
+          "ci_low": 0.53,
+          "ci_high": 0.72,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "mean_length": {
+          "point": 160.15,
+          "ci_low": 146.16975,
+          "ci_high": 175.11,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "length": {
+          "n": 100,
+          "mean": 160.15,
+          "std": 73.51998027747288,
+          "median": 147.0,
+          "q25": 114.75,
+          "q75": 187.75,
+          "iqr": 73.0,
+          "min": 42.0,
+          "max": 496.0
+        },
+        "n_truncated_at_cap": 0,
+        "failure_type_counts": {
+          "correct": 53,
+          "wrong_compliant_gold_present": 3,
+          "wrong_compliant_gold_absent": 7,
+          "noncompliant_truncated": 0,
+          "noncompliant_ended": 37
+        }
+      },
+      "rlaif": {
+        "n": 100,
+        "resolution_points": 1.0,
+        "accuracy": {
+          "point": 0.56,
+          "ci_low": 0.46,
+          "ci_high": 0.66,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "format_compliance": {
+          "point": 0.65,
+          "ci_low": 0.56,
+          "ci_high": 0.74,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "mean_length": {
+          "point": 153.97,
+          "ci_low": 141.75975,
+          "ci_high": 167.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over prompts"
+        },
+        "length": {
+          "n": 100,
+          "mean": 153.97,
+          "std": 63.83783439309325,
+          "median": 145.0,
+          "q25": 108.75,
+          "q75": 186.25,
+          "iqr": 77.5,
+          "min": 55.0,
+          "max": 395.0
+        },
+        "n_truncated_at_cap": 0,
+        "failure_type_counts": {
+          "correct": 56,
+          "wrong_compliant_gold_present": 2,
+          "wrong_compliant_gold_absent": 7,
+          "noncompliant_truncated": 0,
+          "noncompliant_ended": 35
+        }
+      },
+      "paired_differences": {
+        "rlvr_minus_sft": {
+          "accuracy": {
+            "point": -0.010000000000000009,
+            "ci_low": -0.030000000000000027,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "format_compliance": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "mean_length": {
+            "point": -0.7299999999999898,
+            "ci_low": -1.9300000000000068,
+            "ci_high": 0.06999999999999318,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          }
+        },
+        "rlaif_minus_sft": {
+          "accuracy": {
+            "point": 0.020000000000000018,
+            "ci_low": -0.07999999999999996,
+            "ci_high": 0.11999999999999994,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "format_compliance": {
+            "point": 0.020000000000000018,
+            "ci_low": -0.07999999999999996,
+            "ci_high": 0.12,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "mean_length": {
+            "point": -6.909999999999997,
+            "ci_low": -18.160499999999995,
+            "ci_high": 3.5999999999999943,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          }
+        },
+        "rlvr_minus_rlaif": {
+          "accuracy": {
+            "point": -0.030000000000000027,
+            "ci_low": -0.13,
+            "ci_high": 0.06999999999999995,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "format_compliance": {
+            "point": -0.020000000000000018,
+            "ci_low": -0.12,
+            "ci_high": 0.07999999999999996,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          },
+          "mean_length": {
+            "point": 6.180000000000007,
+            "ci_low": -4.220249999999998,
+            "ci_high": 17.310000000000002,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired over prompts"
+          }
+        }
+      }
+    }
+  },
+  "judge": {
+    "gsm": {
+      "rlvr_vs_sft": {
+        "win": {
+          "n": 300,
+          "win_rate": {
+            "point": 0.5116666666666667,
+            "ci_low": 0.48833333333333334,
+            "ci_high": 0.535,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "iid over prompts"
+          },
+          "counts": {
+            "win": 29,
+            "loss": 22,
+            "tie": 249,
+            "parse_failure": 0
+          },
+          "rates": {
+            "win": 0.09666666666666666,
+            "loss": 0.07333333333333333,
+            "tie": 0.83,
+            "parse_failure": 0.0
+          },
+          "ties_incl_parse_failures": 249,
+          "resolution_points": 0.3333333333333333
+        },
+        "agreement_A": {
+          "exactly_one_correct": {
+            "n": 114,
+            "judge_prefers_correct": 12,
+            "judge_prefers_wrong": 10,
+            "judge_tie": 92,
+            "parse_failure": 0,
+            "agreement_rate": 0.10526315789473684,
+            "rates": {
+              "prefers_correct": 0.10526315789473684,
+              "prefers_wrong": 0.08771929824561403,
+              "tie": 0.8070175438596491,
+              "parse_failure": 0.0
+            },
+            "n_correct_is_trained": 55,
+            "resolution_points": 0.8771929824561403,
+            "agreement_rate_ci": {
+              "point": 0.10526315789473684,
+              "ci_low": 0.05263157894736842,
+              "ci_high": 0.16666666666666666,
+              "n_resamples": 10000,
+              "n_nonfinite_resamples": 0,
+              "seed": 6304,
+              "method": "iid over disagreeing prompts"
+            }
+          },
+          "both_correct": {
+            "n": 34,
+            "judge_counts_trained_side": {
+              "win": 2,
+              "loss": 2,
+              "tie": 30,
+              "parse_failure": 0
+            },
+            "rates": {
+              "win": 0.058823529411764705,
+              "loss": 0.058823529411764705,
+              "tie": 0.8823529411764706,
+              "parse_failure": 0.0
+            }
+          },
+          "both_wrong": {
+            "n": 152,
+            "judge_counts_trained_side": {
+              "win": 16,
+              "loss": 9,
+              "tie": 127,
+              "parse_failure": 0
+            },
+            "rates": {
+              "win": 0.10526315789473684,
+              "loss": 0.05921052631578947,
+              "tie": 0.8355263157894737,
+              "parse_failure": 0.0
+            }
+          }
+        }
+      },
+      "rlaif_vs_sft": {
+        "win": {
+          "n": 300,
+          "win_rate": {
+            "point": 0.49333333333333335,
+            "ci_low": 0.47333333333333333,
+            "ci_high": 0.5116666666666667,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "iid over prompts"
+          },
+          "counts": {
+            "win": 16,
+            "loss": 20,
+            "tie": 264,
+            "parse_failure": 0
+          },
+          "rates": {
+            "win": 0.05333333333333334,
+            "loss": 0.06666666666666667,
+            "tie": 0.88,
+            "parse_failure": 0.0
+          },
+          "ties_incl_parse_failures": 264,
+          "resolution_points": 0.3333333333333333
+        },
+        "agreement_A": {
+          "exactly_one_correct": {
+            "n": 84,
+            "judge_prefers_correct": 9,
+            "judge_prefers_wrong": 2,
+            "judge_tie": 73,
+            "parse_failure": 0,
+            "agreement_rate": 0.10714285714285714,
+            "rates": {
+              "prefers_correct": 0.10714285714285714,
+              "prefers_wrong": 0.023809523809523808,
+              "tie": 0.8690476190476191,
+              "parse_failure": 0.0
+            },
+            "n_correct_is_trained": 37,
+            "resolution_points": 1.1904761904761905,
+            "agreement_rate_ci": {
+              "point": 0.10714285714285714,
+              "ci_low": 0.047619047619047616,
+              "ci_high": 0.17857142857142858,
+              "n_resamples": 10000,
+              "n_nonfinite_resamples": 0,
+              "seed": 6304,
+              "method": "iid over disagreeing prompts"
+            }
+          },
+          "both_correct": {
+            "n": 46,
+            "judge_counts_trained_side": {
+              "win": 3,
+              "loss": 2,
+              "tie": 41,
+              "parse_failure": 0
+            },
+            "rates": {
+              "win": 0.06521739130434782,
+              "loss": 0.043478260869565216,
+              "tie": 0.8913043478260869,
+              "parse_failure": 0.0
+            }
+          },
+          "both_wrong": {
+            "n": 170,
+            "judge_counts_trained_side": {
+              "win": 9,
+              "loss": 11,
+              "tie": 150,
+              "parse_failure": 0
+            },
+            "rates": {
+              "win": 0.052941176470588235,
+              "loss": 0.06470588235294118,
+              "tie": 0.8823529411764706,
+              "parse_failure": 0.0
+            }
+          }
+        }
+      },
+      "agreement_A_pooled": {
+        "exactly_one_correct": {
+          "n": 198,
+          "judge_prefers_correct": 21,
+          "judge_prefers_wrong": 12,
+          "judge_tie": 165,
+          "parse_failure": 0,
+          "agreement_rate": 0.10606060606060606,
+          "rates": {
+            "prefers_correct": 0.10606060606060606,
+            "prefers_wrong": 0.06060606060606061,
+            "tie": 0.8333333333333334,
+            "parse_failure": 0.0
+          },
+          "n_correct_is_trained": 92,
+          "resolution_points": 0.5050505050505051
+        },
+        "both_correct": {
+          "n": 80,
+          "judge_counts_trained_side": {
+            "win": 5,
+            "loss": 4,
+            "tie": 71,
+            "parse_failure": 0
+          },
+          "rates": {
+            "win": 0.0625,
+            "loss": 0.05,
+            "tie": 0.8875,
+            "parse_failure": 0.0
+          }
+        },
+        "both_wrong": {
+          "n": 322,
+          "judge_counts_trained_side": {
+            "win": 25,
+            "loss": 20,
+            "tie": 277,
+            "parse_failure": 0
+          },
+          "rates": {
+            "win": 0.07763975155279502,
+            "loss": 0.062111801242236024,
+            "tie": 0.860248447204969,
+            "parse_failure": 0.0
+          }
+        }
+      },
+      "win_rate_rlvr_minus_rlaif": {
+        "point": 0.018333333333333368,
+        "ci_low": -0.010000000000000009,
+        "ci_high": 0.04666666666666669,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "paired over prompts"
+      },
+      "judge_seconds_per_call": {
+        "n": 600,
+        "mean": 0.5684457500066522,
+        "std": 0.12518428490599942,
+        "median": 0.559490513000128,
+        "q25": 0.48004787450020103,
+        "q75": 0.6522219907501494,
+        "iqr": 0.17217411624994838,
+        "min": 0.29199165399995763,
+        "max": 1.0219658290002371
+      },
+      "judge_settings": {
+        "model": "Qwen/Qwen2.5-3B-Instruct",
+        "passed_by_release": {
+          "max_new_tokens": 4,
+          "do_sample": false,
+          "pad_token_id": 151645,
+          "eos_token_id": 151645
+        },
+        "model_generation_config": {
+          "do_sample": true,
+          "temperature": 0.7,
+          "top_p": 0.8,
+          "top_k": 20,
+          "repetition_penalty": 1.05,
+          "no_repeat_ngram_size": 0
+        },
+        "config_judge_max_new_tokens_unused": 64,
+        "config_judge_temperature_unused": 0.0,
+        "quantization": "4-bit nf4",
+        "batching": "one unbatched call per pair, as released"
+      },
+      "physical_position_counts": {
+        "first_shown": 54,
+        "second_shown": 33,
+        "tie": 513,
+        "parse_failure": 0
+      }
+    },
+    "transfer": {
+      "rlvr_vs_sft": {
+        "win": {
+          "n": 100,
+          "win_rate": {
+            "point": 0.49,
+            "ci_low": 0.445,
+            "ci_high": 0.535,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "iid over prompts"
+          },
+          "counts": {
+            "win": 10,
+            "loss": 12,
+            "tie": 78,
+            "parse_failure": 0
+          },
+          "rates": {
+            "win": 0.1,
+            "loss": 0.12,
+            "tie": 0.78,
+            "parse_failure": 0.0
+          },
+          "ties_incl_parse_failures": 78,
+          "resolution_points": 1.0
+        },
+        "agreement_A": {
+          "exactly_one_correct": {
+            "n": 1,
+            "judge_prefers_correct": 0,
+            "judge_prefers_wrong": 0,
+            "judge_tie": 1,
+            "parse_failure": 0,
+            "agreement_rate": 0.0,
+            "rates": {
+              "prefers_correct": 0.0,
+              "prefers_wrong": 0.0,
+              "tie": 1.0,
+              "parse_failure": 0.0
+            },
+            "n_correct_is_trained": 0,
+            "resolution_points": 100.0,
+            "agreement_rate_ci": {
+              "point": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0,
+              "n_resamples": 10000,
+              "n_nonfinite_resamples": 0,
+              "seed": 6304,
+              "method": "iid over disagreeing prompts"
+            }
+          },
+          "both_correct": {
+            "n": 53,
+            "judge_counts_trained_side": {
+              "win": 1,
+              "loss": 6,
+              "tie": 46,
+              "parse_failure": 0
+            },
+            "rates": {
+              "win": 0.018867924528301886,
+              "loss": 0.11320754716981132,
+              "tie": 0.8679245283018868,
+              "parse_failure": 0.0
+            }
+          },
+          "both_wrong": {
+            "n": 46,
+            "judge_counts_trained_side": {
+              "win": 9,
+              "loss": 6,
+              "tie": 31,
+              "parse_failure": 0
+            },
+            "rates": {
+              "win": 0.1956521739130435,
+              "loss": 0.13043478260869565,
+              "tie": 0.6739130434782609,
+              "parse_failure": 0.0
+            }
+          }
+        }
+      },
+      "rlaif_vs_sft": {
+        "win": {
+          "n": 100,
+          "win_rate": {
+            "point": 0.52,
+            "ci_low": 0.47,
+            "ci_high": 0.57,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "iid over prompts"
+          },
+          "counts": {
+            "win": 16,
+            "loss": 12,
+            "tie": 72,
+            "parse_failure": 0
+          },
+          "rates": {
+            "win": 0.16,
+            "loss": 0.12,
+            "tie": 0.72,
+            "parse_failure": 0.0
+          },
+          "ties_incl_parse_failures": 72,
+          "resolution_points": 1.0
+        },
+        "agreement_A": {
+          "exactly_one_correct": {
+            "n": 24,
+            "judge_prefers_correct": 8,
+            "judge_prefers_wrong": 3,
+            "judge_tie": 13,
+            "parse_failure": 0,
+            "agreement_rate": 0.3333333333333333,
+            "rates": {
+              "prefers_correct": 0.3333333333333333,
+              "prefers_wrong": 0.125,
+              "tie": 0.5416666666666666,
+              "parse_failure": 0.0
+            },
+            "n_correct_is_trained": 13,
+            "resolution_points": 4.166666666666667,
+            "agreement_rate_ci": {
+              "point": 0.3333333333333333,
+              "ci_low": 0.16666666666666666,
+              "ci_high": 0.5,
+              "n_resamples": 10000,
+              "n_nonfinite_resamples": 0,
+              "seed": 6304,
+              "method": "iid over disagreeing prompts"
+            }
+          },
+          "both_correct": {
+            "n": 43,
+            "judge_counts_trained_side": {
+              "win": 3,
+              "loss": 2,
+              "tie": 38,
+              "parse_failure": 0
+            },
+            "rates": {
+              "win": 0.06976744186046512,
+              "loss": 0.046511627906976744,
+              "tie": 0.8837209302325582,
+              "parse_failure": 0.0
+            }
+          },
+          "both_wrong": {
+            "n": 33,
+            "judge_counts_trained_side": {
+              "win": 8,
+              "loss": 4,
+              "tie": 21,
+              "parse_failure": 0
+            },
+            "rates": {
+              "win": 0.24242424242424243,
+              "loss": 0.12121212121212122,
+              "tie": 0.6363636363636364,
+              "parse_failure": 0.0
+            }
+          }
+        }
+      },
+      "agreement_A_pooled": {
+        "exactly_one_correct": {
+          "n": 25,
+          "judge_prefers_correct": 8,
+          "judge_prefers_wrong": 3,
+          "judge_tie": 14,
+          "parse_failure": 0,
+          "agreement_rate": 0.32,
+          "rates": {
+            "prefers_correct": 0.32,
+            "prefers_wrong": 0.12,
+            "tie": 0.56,
+            "parse_failure": 0.0
+          },
+          "n_correct_is_trained": 13,
+          "resolution_points": 4.0
+        },
+        "both_correct": {
+          "n": 96,
+          "judge_counts_trained_side": {
+            "win": 4,
+            "loss": 8,
+            "tie": 84,
+            "parse_failure": 0
+          },
+          "rates": {
+            "win": 0.041666666666666664,
+            "loss": 0.08333333333333333,
+            "tie": 0.875,
+            "parse_failure": 0.0
+          }
+        },
+        "both_wrong": {
+          "n": 79,
+          "judge_counts_trained_side": {
+            "win": 17,
+            "loss": 10,
+            "tie": 52,
+            "parse_failure": 0
+          },
+          "rates": {
+            "win": 0.21518987341772153,
+            "loss": 0.12658227848101267,
+            "tie": 0.6582278481012658,
+            "parse_failure": 0.0
+          }
+        }
+      },
+      "win_rate_rlvr_minus_rlaif": {
+        "point": -0.030000000000000027,
+        "ci_low": -0.09000000000000002,
+        "ci_high": 0.02999999999999997,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "paired over prompts"
+      },
+      "judge_seconds_per_call": {
+        "n": 200,
+        "mean": 0.4470444475849945,
+        "std": 0.09745328730191602,
+        "median": 0.4269055854999806,
+        "q25": 0.3941316305000555,
+        "q75": 0.47873842825003976,
+        "iqr": 0.08460679774998425,
+        "min": 0.2625620889998572,
+        "max": 0.9508923009998398
+      },
+      "judge_settings": {
+        "model": "Qwen/Qwen2.5-3B-Instruct",
+        "passed_by_release": {
+          "max_new_tokens": 4,
+          "do_sample": false,
+          "pad_token_id": 151645,
+          "eos_token_id": 151645
+        },
+        "model_generation_config": {
+          "do_sample": true,
+          "temperature": 0.7,
+          "top_p": 0.8,
+          "top_k": 20,
+          "repetition_penalty": 1.05,
+          "no_repeat_ngram_size": 0
+        },
+        "config_judge_max_new_tokens_unused": 64,
+        "config_judge_temperature_unused": 0.0,
+        "quantization": "4-bit nf4",
+        "batching": "one unbatched call per pair, as released"
+      },
+      "physical_position_counts": {
+        "first_shown": 46,
+        "second_shown": 4,
+        "tie": 150,
+        "parse_failure": 0
+      }
+    }
+  },
+  "drops": {
+    "sft": {
+      "accuracy": {
+        "point": 0.23000000000000004,
+        "ci_low": 0.12,
+        "ci_high": 0.34333333333333327,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "SVAMP minus GSM8K; two-sample, each prompt set resampled independently"
+      },
+      "format_compliance": {
+        "point": 0.16666666666666669,
+        "ci_low": 0.0566666666666667,
+        "ci_high": 0.2766666666666666,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "SVAMP minus GSM8K; two-sample, each prompt set resampled independently"
+      },
+      "mean_length": {
+        "point": -119.28000000000003,
+        "ci_low": -137.33666666666667,
+        "ci_high": -100.98316666666666,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "SVAMP minus GSM8K; two-sample, each prompt set resampled independently"
+      }
+    },
+    "rlvr": {
+      "accuracy": {
+        "point": 0.23333333333333334,
+        "ci_low": 0.12666666666666665,
+        "ci_high": 0.3433333333333333,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "SVAMP minus GSM8K; two-sample, each prompt set resampled independently"
+      },
+      "format_compliance": {
+        "point": 0.22000000000000003,
+        "ci_low": 0.11000000000000004,
+        "ci_high": 0.32999999999999996,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "SVAMP minus GSM8K; two-sample, each prompt set resampled independently"
+      },
+      "mean_length": {
+        "point": -124.30999999999997,
+        "ci_low": -141.80066666666667,
+        "ci_high": -106.05275000000002,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "SVAMP minus GSM8K; two-sample, each prompt set resampled independently"
+      },
+      "win_rate_vs_sft": {
+        "point": -0.021666666666666723,
+        "ci_low": -0.0733333333333333,
+        "ci_high": 0.030000000000000027,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "SVAMP minus GSM8K; two-sample"
+      }
+    },
+    "rlaif": {
+      "accuracy": {
+        "point": 0.2833333333333334,
+        "ci_low": 0.17333333333333328,
+        "ci_high": 0.39333333333333337,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "SVAMP minus GSM8K; two-sample, each prompt set resampled independently"
+      },
+      "format_compliance": {
+        "point": 0.22666666666666668,
+        "ci_low": 0.11666666666666664,
+        "ci_high": 0.3333333333333333,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "SVAMP minus GSM8K; two-sample, each prompt set resampled independently"
+      },
+      "mean_length": {
+        "point": -133.25333333333336,
+        "ci_low": -149.9348333333333,
+        "ci_high": -116.81966666666669,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "SVAMP minus GSM8K; two-sample, each prompt set resampled independently"
+      },
+      "win_rate_vs_sft": {
+        "point": 0.026666666666666672,
+        "ci_low": -0.02833333333333332,
+        "ci_high": 0.08166666666666661,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "SVAMP minus GSM8K; two-sample"
+      }
+    }
+  },
+  "diagnostics": {
+    "verifier_responses": {
+      "clean_correct": {
+        "n": 20,
+        "mean_reward": 1.0,
+        "compliance": 1.0,
+        "n_reward_differs_from_expected": 0
+      },
+      "corrupt_reasoning_correct_final": {
+        "n": 20,
+        "mean_reward": 1.0,
+        "compliance": 1.0,
+        "n_reward_differs_from_expected": 0
+      },
+      "gold_distractor_wrong_final": {
+        "n": 20,
+        "mean_reward": 0.0,
+        "compliance": 1.0,
+        "n_reward_differs_from_expected": 0
+      },
+      "good_reasoning_wrong_final": {
+        "n": 20,
+        "mean_reward": 0.0,
+        "compliance": 1.0,
+        "n_reward_differs_from_expected": 0
+      },
+      "persuasive_filler_correct": {
+        "n": 20,
+        "mean_reward": 1.0,
+        "compliance": 1.0,
+        "n_reward_differs_from_expected": 0
+      }
+    },
+    "verifier": {
+      "reasoning_corrupt": {
+        "n": 20,
+        "counts": {
+          "better": 0,
+          "tie": 20,
+          "wrong": 0,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "better_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "tie_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "wrong_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "parse_failure_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        }
+      },
+      "wrong_final": {
+        "n": 20,
+        "counts": {
+          "better": 20,
+          "tie": 0,
+          "wrong": 0,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "better_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "tie_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "wrong_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "parse_failure_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        }
+      },
+      "filler": {
+        "n": 20,
+        "counts": {
+          "better": 0,
+          "tie": 20,
+          "wrong": 0,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "better_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "tie_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "wrong_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "parse_failure_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        }
+      },
+      "gold_distractor": {
+        "n": 20,
+        "counts": {
+          "better": 20,
+          "tie": 0,
+          "wrong": 0,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "better_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "tie_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "wrong_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "parse_failure_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        }
+      }
+    },
+    "judge": {
+      "reasoning_corrupt": {
+        "n": 20,
+        "counts": {
+          "better": 0,
+          "tie": 20,
+          "wrong": 0,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "better_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "tie_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "wrong_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "parse_failure_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        }
+      },
+      "wrong_final": {
+        "n": 20,
+        "counts": {
+          "better": 0,
+          "tie": 20,
+          "wrong": 0,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "better_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "tie_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "wrong_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "parse_failure_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        }
+      },
+      "filler": {
+        "n": 20,
+        "counts": {
+          "better": 0,
+          "tie": 15,
+          "wrong": 5,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "better_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "tie_rate": {
+          "point": 0.75,
+          "ci_low": 0.55,
+          "ci_high": 0.9,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "wrong_rate": {
+          "point": 0.25,
+          "ci_low": 0.1,
+          "ci_high": 0.45,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "parse_failure_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        }
+      },
+      "gold_distractor": {
+        "n": 20,
+        "counts": {
+          "better": 5,
+          "tie": 14,
+          "wrong": 1,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "better_rate": {
+          "point": 0.25,
+          "ci_low": 0.1,
+          "ci_high": 0.45,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "tie_rate": {
+          "point": 0.7,
+          "ci_low": 0.5,
+          "ci_high": 0.9,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "wrong_rate": {
+          "point": 0.05,
+          "ci_low": 0.0,
+          "ci_high": 0.15,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        },
+        "parse_failure_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "iid over problems"
+        }
+      }
+    },
+    "position_swap": {
+      "reasoning_corrupt": {
+        "n": 20,
+        "unchanged": 20,
+        "unchanged_rate": 1.0,
+        "released_counts": {
+          "better": 0,
+          "tie": 20,
+          "wrong": 0,
+          "parse_failure": 0
+        },
+        "swapped_counts": {
+          "better": 0,
+          "tie": 20,
+          "wrong": 0,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "released_physical": {
+          "first_shown": 0,
+          "second_shown": 0,
+          "tie": 20,
+          "parse_failure": 0
+        },
+        "swapped_physical": {
+          "first_shown": 0,
+          "second_shown": 0,
+          "tie": 20,
+          "parse_failure": 0
+        }
+      },
+      "wrong_final": {
+        "n": 20,
+        "unchanged": 17,
+        "unchanged_rate": 0.85,
+        "released_counts": {
+          "better": 0,
+          "tie": 20,
+          "wrong": 0,
+          "parse_failure": 0
+        },
+        "swapped_counts": {
+          "better": 3,
+          "tie": 17,
+          "wrong": 0,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "released_physical": {
+          "first_shown": 0,
+          "second_shown": 0,
+          "tie": 20,
+          "parse_failure": 0
+        },
+        "swapped_physical": {
+          "first_shown": 0,
+          "second_shown": 3,
+          "tie": 17,
+          "parse_failure": 0
+        }
+      },
+      "filler": {
+        "n": 20,
+        "unchanged": 15,
+        "unchanged_rate": 0.75,
+        "released_counts": {
+          "better": 0,
+          "tie": 15,
+          "wrong": 5,
+          "parse_failure": 0
+        },
+        "swapped_counts": {
+          "better": 3,
+          "tie": 16,
+          "wrong": 1,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "released_physical": {
+          "first_shown": 4,
+          "second_shown": 1,
+          "tie": 15,
+          "parse_failure": 0
+        },
+        "swapped_physical": {
+          "first_shown": 4,
+          "second_shown": 0,
+          "tie": 16,
+          "parse_failure": 0
+        }
+      },
+      "gold_distractor": {
+        "n": 20,
+        "unchanged": 8,
+        "unchanged_rate": 0.4,
+        "released_counts": {
+          "better": 5,
+          "tie": 14,
+          "wrong": 1,
+          "parse_failure": 0
+        },
+        "swapped_counts": {
+          "better": 5,
+          "tie": 13,
+          "wrong": 2,
+          "parse_failure": 0
+        },
+        "resolution_points": 5.0,
+        "released_physical": {
+          "first_shown": 0,
+          "second_shown": 6,
+          "tie": 14,
+          "parse_failure": 0
+        },
+        "swapped_physical": {
+          "first_shown": 0,
+          "second_shown": 7,
+          "tie": 13,
+          "parse_failure": 0
+        }
+      }
+    },
+    "S_reason": {
+      "verifier": {
+        "point": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "iid over problems"
+      },
+      "judge": {
+        "point": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "iid over problems"
+      }
+    },
+    "S_outcome": {
+      "verifier": {
+        "point": 1.0,
+        "ci_low": 1.0,
+        "ci_high": 1.0,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "iid over problems"
+      },
+      "judge": {
+        "point": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "iid over problems"
+      }
+    },
+    "definitions": {
+      "S_reason": "Pr[R(clean_correct) > R(corrupt_reasoning_correct_final)] over the 20 problems",
+      "S_outcome": "Pr[R(clean_correct) > R(good_reasoning_wrong_final)] over the 20 problems; gold_distractor reported separately",
+      "judge_rates": "released order; parse failures are a separate category (the release would read them as TIE)"
+    },
+    "judge_seconds_per_call": {
+      "released": {
+        "n": 80,
+        "mean": 0.3477133820374945,
+        "std": 0.0959237964377943,
+        "median": 0.32123439299999745,
+        "q25": 0.29903799074995163,
+        "q75": 0.38208572799999274,
+        "iqr": 0.08304773725004111,
+        "min": 0.19583783399991717,
+        "max": 0.9172740080000494
+      },
+      "swapped": {
+        "n": 80,
+        "mean": 0.35123026651250344,
+        "std": 0.0913373009969028,
+        "median": 0.32350141850002956,
+        "q25": 0.29925267950000034,
+        "q75": 0.37951040250004553,
+        "iqr": 0.08025772300004519,
+        "min": 0.20969411900000523,
+        "max": 0.8548593540000411
+      }
+    }
+  },
+  "qualitative_candidates": {
+    "reasoning_corrupt": {
+      "problem_id": 23,
+      "pair_id": "23:reasoning_corrupt",
+      "branch": "tie",
+      "judge_label": "TIE",
+      "judge_parse_matched": true,
+      "n_parse_failures_in_category": 0
+    },
+    "filler": {
+      "problem_id": 113,
+      "pair_id": "113:filler",
+      "branch": "perturbed_preferred",
+      "judge_label": "B",
+      "judge_parse_matched": true,
+      "n_parse_failures_in_category": 0
+    },
+    "gold_distractor": {
+      "problem_id": 113,
+      "pair_id": "113:gold_distractor",
+      "branch": "perturbed_preferred",
+      "judge_label": "B",
+      "judge_parse_matched": true,
+      "n_parse_failures_in_category": 0
+    }
+  },
+  "generation_seconds_per_prompt": {
+    "gsm_sft": 1.3516537278000003,
+    "gsm_rlvr": 1.6059834241933333,
+    "gsm_rlaif": 1.5972622041099998,
+    "transfer_sft": 1.03732093071,
+    "transfer_rlvr": 1.22932497023,
+    "transfer_rlaif": 1.0404827049899996
+  },
+  "effective_generation": {
+    "do_sample": true,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": 20,
+    "min_p": null,
+    "typical_p": 1.0,
+    "repetition_penalty": 1.1,
+    "no_repeat_ngram_size": 0,
+    "eos_token_id": 151645,
+    "pad_token_id": 151643,
+    "max_new_tokens": 512,
+    "from_model_generation_config": [
+      "min_p",
+      "no_repeat_ngram_size",
+      "repetition_penalty",
+      "top_k",
+      "typical_p"
+    ]
+  },
+  "protocol_checks": [
+    {
+      "check": "gen gsm sft: completed, not smoke",
+      "ok": true,
+      "detail": "completed"
+    },
+    {
+      "check": "gen gsm sft: 300 responses",
+      "ok": true,
+      "detail": 300
+    },
+    {
+      "check": "gen gsm sft: data sha256",
+      "ok": true,
+      "detail": "24f712750928c18c1a0a6849eebe97b3e01a6c0c0ebf2410d101a3df1872bf4a"
+    },
+    {
+      "check": "gen gsm sft: base model, no adapter",
+      "ok": true,
+      "detail": "none (base model)"
+    },
+    {
+      "check": "gen gsm sft: no prompt over cap, none skipped or truncated",
+      "ok": true,
+      "detail": 239.0
+    },
+    {
+      "check": "gen gsm sft: seed 6304, 1 sample, batch 16",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gen gsm sft: per-row ids follow the data file order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gen gsm rlvr: completed, not smoke",
+      "ok": true,
+      "detail": "completed"
+    },
+    {
+      "check": "gen gsm rlvr: 300 responses",
+      "ok": true,
+      "detail": 300
+    },
+    {
+      "check": "gen gsm rlvr: data sha256",
+      "ok": true,
+      "detail": "24f712750928c18c1a0a6849eebe97b3e01a6c0c0ebf2410d101a3df1872bf4a"
+    },
+    {
+      "check": "gen gsm rlvr: adapter sha256",
+      "ok": true,
+      "detail": "b309564b45c0268e4e5ffb0db5cb100e557a2c407a68ea3fa3de91fe964d92c8"
+    },
+    {
+      "check": "gen gsm rlvr: no prompt over cap, none skipped or truncated",
+      "ok": true,
+      "detail": 239.0
+    },
+    {
+      "check": "gen gsm rlvr: seed 6304, 1 sample, batch 16",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gen gsm rlvr: per-row ids follow the data file order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gen gsm rlaif: completed, not smoke",
+      "ok": true,
+      "detail": "completed"
+    },
+    {
+      "check": "gen gsm rlaif: 300 responses",
+      "ok": true,
+      "detail": 300
+    },
+    {
+      "check": "gen gsm rlaif: data sha256",
+      "ok": true,
+      "detail": "24f712750928c18c1a0a6849eebe97b3e01a6c0c0ebf2410d101a3df1872bf4a"
+    },
+    {
+      "check": "gen gsm rlaif: adapter sha256",
+      "ok": true,
+      "detail": "e5a0eaacb3ce32a73fe86fd6a823be21c60a460eee8682493e5cc0f2e1019713"
+    },
+    {
+      "check": "gen gsm rlaif: no prompt over cap, none skipped or truncated",
+      "ok": true,
+      "detail": 239.0
+    },
+    {
+      "check": "gen gsm rlaif: seed 6304, 1 sample, batch 16",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gen gsm rlaif: per-row ids follow the data file order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gen transfer sft: completed, not smoke",
+      "ok": true,
+      "detail": "completed"
+    },
+    {
+      "check": "gen transfer sft: 100 responses",
+      "ok": true,
+      "detail": 100
+    },
+    {
+      "check": "gen transfer sft: data sha256",
+      "ok": true,
+      "detail": "f24163301035ccd4b66d12b687887fe1e167dd31ef62d6bc62a2fa152dcdcb76"
+    },
+    {
+      "check": "gen transfer sft: base model, no adapter",
+      "ok": true,
+      "detail": "none (base model)"
+    },
+    {
+      "check": "gen transfer sft: no prompt over cap, none skipped or truncated",
+      "ok": true,
+      "detail": 114.0
+    },
+    {
+      "check": "gen transfer sft: seed 6304, 1 sample, batch 16",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gen transfer sft: per-row ids follow the data file order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gen transfer rlvr: completed, not smoke",
+      "ok": true,
+      "detail": "completed"
+    },
+    {
+      "check": "gen transfer rlvr: 100 responses",
+      "ok": true,
+      "detail": 100
+    },
+    {
+      "check": "gen transfer rlvr: data sha256",
+      "ok": true,
+      "detail": "f24163301035ccd4b66d12b687887fe1e167dd31ef62d6bc62a2fa152dcdcb76"
+    },
+    {
+      "check": "gen transfer rlvr: adapter sha256",
+      "ok": true,
+      "detail": "b309564b45c0268e4e5ffb0db5cb100e557a2c407a68ea3fa3de91fe964d92c8"
+    },
+    {
+      "check": "gen transfer rlvr: no prompt over cap, none skipped or truncated",
+      "ok": true,
+      "detail": 114.0
+    },
+    {
+      "check": "gen transfer rlvr: seed 6304, 1 sample, batch 16",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gen transfer rlvr: per-row ids follow the data file order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gen transfer rlaif: completed, not smoke",
+      "ok": true,
+      "detail": "completed"
+    },
+    {
+      "check": "gen transfer rlaif: 100 responses",
+      "ok": true,
+      "detail": 100
+    },
+    {
+      "check": "gen transfer rlaif: data sha256",
+      "ok": true,
+      "detail": "f24163301035ccd4b66d12b687887fe1e167dd31ef62d6bc62a2fa152dcdcb76"
+    },
+    {
+      "check": "gen transfer rlaif: adapter sha256",
+      "ok": true,
+      "detail": "e5a0eaacb3ce32a73fe86fd6a823be21c60a460eee8682493e5cc0f2e1019713"
+    },
+    {
+      "check": "gen transfer rlaif: no prompt over cap, none skipped or truncated",
+      "ok": true,
+      "detail": 114.0
+    },
+    {
+      "check": "gen transfer rlaif: seed 6304, 1 sample, batch 16",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gen transfer rlaif: per-row ids follow the data file order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gsm: identical prompt order across policies",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "gsm: identical effective generation settings across policies",
+      "ok": true,
+      "detail": {
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": null,
+        "typical_p": 1.0,
+        "repetition_penalty": 1.1,
+        "no_repeat_ngram_size": 0,
+        "eos_token_id": 151645,
+        "pad_token_id": 151643,
+        "max_new_tokens": 512,
+        "from_model_generation_config": [
+          "min_p",
+          "no_repeat_ngram_size",
+          "repetition_penalty",
+          "top_k",
+          "typical_p"
+        ]
+      }
+    },
+    {
+      "check": "judge gsm: completed, not smoke",
+      "ok": true,
+      "detail": "completed"
+    },
+    {
+      "check": "judge gsm: 600 calls",
+      "ok": true,
+      "detail": 600
+    },
+    {
+      "check": "judge gsm: all calls in released order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "judge gsm: wrapper parity",
+      "ok": true,
+      "detail": [
+        {
+          "comparison": "rlvr_vs_sft",
+          "prompt_id": "gsm8k:803",
+          "released_label": "TIE",
+          "wrapper_label": "TIE",
+          "match": true
+        },
+        {
+          "comparison": "rlaif_vs_sft",
+          "prompt_id": "gsm8k:803",
+          "released_label": "TIE",
+          "wrapper_label": "TIE",
+          "match": true
+        },
+        {
+          "comparison": "rlvr_vs_sft",
+          "prompt_id": "gsm8k:750",
+          "released_label": "TIE",
+          "wrapper_label": "TIE",
+          "match": true
+        },
+        {
+          "comparison": "rlaif_vs_sft",
+          "prompt_id": "gsm8k:750",
+          "released_label": "TIE",
+          "wrapper_label": "TIE",
+          "match": true
+        }
+      ]
+    },
+    {
+      "check": "judge gsm rlvr_vs_sft: one call per prompt, generation order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "judge gsm rlaif_vs_sft: one call per prompt, generation order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "judge gsm: verifier labels match generation files",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "transfer: identical prompt order across policies",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "transfer: identical effective generation settings across policies",
+      "ok": true,
+      "detail": {
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": null,
+        "typical_p": 1.0,
+        "repetition_penalty": 1.1,
+        "no_repeat_ngram_size": 0,
+        "eos_token_id": 151645,
+        "pad_token_id": 151643,
+        "max_new_tokens": 512,
+        "from_model_generation_config": [
+          "min_p",
+          "no_repeat_ngram_size",
+          "repetition_penalty",
+          "top_k",
+          "typical_p"
+        ]
+      }
+    },
+    {
+      "check": "judge transfer: completed, not smoke",
+      "ok": true,
+      "detail": "completed"
+    },
+    {
+      "check": "judge transfer: 200 calls",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "check": "judge transfer: all calls in released order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "judge transfer: wrapper parity",
+      "ok": true,
+      "detail": [
+        {
+          "comparison": "rlvr_vs_sft",
+          "prompt_id": "svamp:chal-1",
+          "released_label": "B",
+          "wrapper_label": "B",
+          "match": true
+        },
+        {
+          "comparison": "rlaif_vs_sft",
+          "prompt_id": "svamp:chal-1",
+          "released_label": "B",
+          "wrapper_label": "B",
+          "match": true
+        },
+        {
+          "comparison": "rlvr_vs_sft",
+          "prompt_id": "svamp:chal-2",
+          "released_label": "B",
+          "wrapper_label": "B",
+          "match": true
+        },
+        {
+          "comparison": "rlaif_vs_sft",
+          "prompt_id": "svamp:chal-2",
+          "released_label": "B",
+          "wrapper_label": "B",
+          "match": true
+        }
+      ]
+    },
+    {
+      "check": "judge transfer rlvr_vs_sft: one call per prompt, generation order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "judge transfer rlaif_vs_sft: one call per prompt, generation order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "judge transfer: verifier labels match generation files",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "diagnostics released: completed, not smoke",
+      "ok": true,
+      "detail": "completed"
+    },
+    {
+      "check": "diagnostics released: 80 pairs",
+      "ok": true,
+      "detail": 80
+    },
+    {
+      "check": "diagnostics released: 100 verifier rows",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "diagnostics released: data sha256",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "diagnostics released: orientation flag",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "diagnostics swapped: completed, not smoke",
+      "ok": true,
+      "detail": "completed"
+    },
+    {
+      "check": "diagnostics swapped: 80 pairs",
+      "ok": true,
+      "detail": 80
+    },
+    {
+      "check": "diagnostics swapped: 100 verifier rows",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "diagnostics swapped: data sha256",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "diagnostics swapped: orientation flag",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "diagnostics released: wrapper parity",
+      "ok": true,
+      "detail": [
+        {
+          "pair_id": "23:reasoning_corrupt",
+          "released_label": "TIE",
+          "wrapper_label": "TIE",
+          "match": true
+        },
+        {
+          "pair_id": "23:wrong_final",
+          "released_label": "TIE",
+          "wrapper_label": "TIE",
+          "match": true
+        },
+        {
+          "pair_id": "23:filler",
+          "released_label": "TIE",
+          "wrapper_label": "TIE",
+          "match": true
+        },
+        {
+          "pair_id": "23:gold_distractor",
+          "released_label": "TIE",
+          "wrapper_label": "TIE",
+          "match": true
+        }
+      ]
+    },
+    {
+      "check": "diagnostics swapped: every pair in the opposite physical order",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "all runs from one commit",
+      "ok": true,
+      "detail": [
+        "eaf23d88ccdb22ef92381edd209062582c57da2f"
+      ]
+    }
+  ],
+  "all_checks_ok": true,
+  "wall_clock_seconds": 5.335114707995672
+}
