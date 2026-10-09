@@ -1,0 +1,2331 @@
+{
+  "script": "task3_grpo.analyze_group_size",
+  "git": {
+    "commit": "d3ed690cea213fa21ccd4edbb44b2c4bce5495d6",
+    "dirty": false
+  },
+  "seed": 6304,
+  "cache": {
+    "path": "cached/grpo_k_cache.jsonl",
+    "generation_cap": 768,
+    "n_prompts": 24,
+    "n_completions": 192,
+    "n_clipped_at_max": 29,
+    "n_terminated_with_eos": 163
+  },
+  "group_sizes": [
+    2,
+    4,
+    8
+  ],
+  "partition": "each prompt's 8 completions sorted by generation_index, split into 8/K consecutive groups",
+  "informative": "informative iff population std of the group's rewards > 1e-06",
+  "advantages": "task3_grpo.grpo.group_relative_advantages (population std, eps 1e-6)",
+  "binning": "tertiles of per-prompt mean reward over all 8 completions, ties by prompt_id, 8 prompts per bin, same bins for every K; bin1 = lowest mean reward",
+  "bootstrap": "cluster bootstrap over prompts, 10000 resamples, seed 6304, 95% percentile interval",
+  "notes": "all 24 cached prompts are used, including those over 256 chat-template tokens; clipped completions stay in their groups",
+  "scopes": {
+    "all": [
+      "d407599fef051a44d505c8439c3c6a6fb7d8fb6658384a4c391e9c2f2146f16d",
+      "01a4b2ed4479c8fa682c3466f7db16f277168d90c8450a729089f4527345ee8d",
+      "4f38c04a24c73c45df69326d4c7cd11dd422127645725ebba220231150bca382",
+      "b8b9d3c72997de501f1e5179b0e5e2b5dae4c865f92dbe51ac4224e2039ea58d",
+      "faff5c962224bd104f4c6eb8c00bcfd84c37b29d3de55e600ccc3cc3ea4c3f99",
+      "bdfcf969f2a84458b2498e0acc198d3094334b81d595fed1724210d7c9f89279",
+      "527fbcd702b2e3e8125b5516be289806fa79e2685c0e4285276d03acf3dcc043",
+      "c359f7ed5e4a168b1e27bd1c27dc9752980103a2e1b38991e5011a7ea44d214e",
+      "cb3bebe583bd8475019b58042be3a76432b23c81b79b32c441d4b3bf203760df",
+      "da4fae100599eb9dfb9500f28dd604665eaba000cd4b94940f3471c85c8de99d",
+      "d31b039922e3bb89d63a8f7331c90d77437a449e4b5f757a114b28002ffae60a",
+      "23bd8f99e8359f0052e16c65689eae80cb20bf937ea6ca5794d36d29734a560b",
+      "be78486affffe4f57015a153c5529c949aeb7511e1f30ed76da522452f245bed",
+      "d995e3ae06848698448f0310c0956505e70240e048f520449e325f00ed1479a0",
+      "5294c9606e5e6fb93dc94319d5547c1cba3d6d44da00ee551d2621227e3b6ee8",
+      "5df5fb2b07b896cb5c4419afc9d3fd2b653535528abe1819bd2b52c07d52726b",
+      "15837ad2725266a35255f91d2e023ea644ede5cb9d7ec9270ab3c6dd6449a74c",
+      "a2d24c910daf54855e433d30c3e03a33384b87f028e9306be71ecab95700964b",
+      "ba7ddaf72f0e034da39b43276b9f418894a12a6fffdbcf6359a302ef1b34688e",
+      "ad86afe9508e533cc19d35c42f785e900274a28e57d150e0007c7fb632a70889",
+      "de9a80e769756c36c3bec31ccca84a180e2862f7dd06ef5e5a36fde7caceaa2a",
+      "651e4c1d0b8bf0212c220f3f0a7d08161ad0952d9e3ea9d0963ab97a45937ea6",
+      "d618f38c0b2f73bb7985a1f07a7b4ca3b70e62a96407b8f6877da59e9241ba82",
+      "81b5deabb0959afb606520d2b821cd91dfd5c103f414ed5c2c132d18b0cc2f3a"
+    ],
+    "bin1_low_reward": [
+      "01a4b2ed4479c8fa682c3466f7db16f277168d90c8450a729089f4527345ee8d",
+      "faff5c962224bd104f4c6eb8c00bcfd84c37b29d3de55e600ccc3cc3ea4c3f99",
+      "527fbcd702b2e3e8125b5516be289806fa79e2685c0e4285276d03acf3dcc043",
+      "23bd8f99e8359f0052e16c65689eae80cb20bf937ea6ca5794d36d29734a560b",
+      "be78486affffe4f57015a153c5529c949aeb7511e1f30ed76da522452f245bed",
+      "d995e3ae06848698448f0310c0956505e70240e048f520449e325f00ed1479a0",
+      "651e4c1d0b8bf0212c220f3f0a7d08161ad0952d9e3ea9d0963ab97a45937ea6",
+      "81b5deabb0959afb606520d2b821cd91dfd5c103f414ed5c2c132d18b0cc2f3a"
+    ],
+    "bin2_mid_reward": [
+      "d407599fef051a44d505c8439c3c6a6fb7d8fb6658384a4c391e9c2f2146f16d",
+      "4f38c04a24c73c45df69326d4c7cd11dd422127645725ebba220231150bca382",
+      "b8b9d3c72997de501f1e5179b0e5e2b5dae4c865f92dbe51ac4224e2039ea58d",
+      "c359f7ed5e4a168b1e27bd1c27dc9752980103a2e1b38991e5011a7ea44d214e",
+      "cb3bebe583bd8475019b58042be3a76432b23c81b79b32c441d4b3bf203760df",
+      "5294c9606e5e6fb93dc94319d5547c1cba3d6d44da00ee551d2621227e3b6ee8",
+      "15837ad2725266a35255f91d2e023ea644ede5cb9d7ec9270ab3c6dd6449a74c",
+      "ad86afe9508e533cc19d35c42f785e900274a28e57d150e0007c7fb632a70889"
+    ],
+    "bin3_high_reward": [
+      "bdfcf969f2a84458b2498e0acc198d3094334b81d595fed1724210d7c9f89279",
+      "da4fae100599eb9dfb9500f28dd604665eaba000cd4b94940f3471c85c8de99d",
+      "d31b039922e3bb89d63a8f7331c90d77437a449e4b5f757a114b28002ffae60a",
+      "5df5fb2b07b896cb5c4419afc9d3fd2b653535528abe1819bd2b52c07d52726b",
+      "a2d24c910daf54855e433d30c3e03a33384b87f028e9306be71ecab95700964b",
+      "ba7ddaf72f0e034da39b43276b9f418894a12a6fffdbcf6359a302ef1b34688e",
+      "de9a80e769756c36c3bec31ccca84a180e2862f7dd06ef5e5a36fde7caceaa2a",
+      "d618f38c0b2f73bb7985a1f07a7b4ca3b70e62a96407b8f6877da59e9241ba82"
+    ]
+  },
+  "results": {
+    "all": {
+      "K2": {
+        "informative_rate": {
+          "point": 0.9375,
+          "ci_low": 0.8333333333333334,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.0625,
+          "ci_low": 0.0,
+          "ci_high": 0.16666666666666663,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.3845672607421875,
+          "ci_low": 0.2689071655273438,
+          "ci_high": 0.5293055216471354,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 0.9375,
+          "ci_low": 0.8333333333333334,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.5386904761904762,
+          "ci_low": 0.4872448979591837,
+          "ci_high": 0.5676020408163266,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.22515527950310557,
+          "ci_low": 0.21816770186335402,
+          "ci_high": 0.2329192546583851,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.010869565217391302,
+          "ci_low": 0.002976190476190476,
+          "ci_high": 0.022108843537414963,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "agree_rate": {
+          "point": 0.7639751552795031,
+          "ci_low": 0.7516233766233766,
+          "ci_high": 0.7727272727272727,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "n_groups": 96
+      },
+      "K4": {
+        "informative_rate": {
+          "point": 0.9583333333333334,
+          "ci_low": 0.875,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.04166666666666663,
+          "ci_low": 0.0,
+          "ci_high": 0.125,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.5410043647319412,
+          "ci_low": 0.40126351994605197,
+          "ci_high": 0.7080411269253145,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 0.9583333333333334,
+          "ci_low": 0.875,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.1950208771012473,
+          "ci_low": 0.17342625251994237,
+          "ci_high": 0.21052005327352288,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.12701863354037268,
+          "ci_low": 0.10512422360248447,
+          "ci_high": 0.1494047619047619,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.0017080745341614906,
+          "ci_low": 0.0004464285714285714,
+          "ci_high": 0.0035714285714285713,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "agree_rate": {
+          "point": 0.8712732919254658,
+          "ci_low": 0.8482919254658385,
+          "ci_high": 0.893200421472937,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "n_groups": 48
+      },
+      "K8": {
+        "informative_rate": {
+          "point": 0.9583333333333334,
+          "ci_low": 0.875,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.04166666666666663,
+          "ci_low": 0.0,
+          "ci_high": 0.125,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.6190544134665206,
+          "ci_low": 0.4643442378289761,
+          "ci_high": 0.796705311484964,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 0.9583333333333334,
+          "ci_low": 0.875,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "agree_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 24 prompts"
+        },
+        "n_groups": 24
+      },
+      "K2_minus_K8": {
+        "informative_rate": {
+          "point": -0.02083333333333337,
+          "ci_low": -0.05208333333333337,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 24 prompts, same resamples for both K"
+        },
+        "uninformative_rate": {
+          "point": 0.02083333333333337,
+          "ci_low": 0.0,
+          "ci_high": 0.05208333333333337,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 24 prompts, same resamples for both K"
+        },
+        "mean_within_group_std": {
+          "point": -0.23448715272433307,
+          "ci_low": -0.33325460986831423,
+          "ci_high": -0.15761673948273244,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 24 prompts, same resamples for both K"
+        },
+        "pooled_advantage_var": {
+          "point": -0.02083333333333337,
+          "ci_low": -0.05208333333333337,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 24 prompts, same resamples for both K"
+        },
+        "regrouping_noise": {
+          "point": 0.5386904761904762,
+          "ci_low": 0.4872448979591837,
+          "ci_high": 0.5676020408163266,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 24 prompts, same resamples for both K"
+        },
+        "sign_flip_rate": {
+          "point": 0.22515527950310557,
+          "ci_low": 0.21816770186335402,
+          "ci_high": 0.2329192546583851,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 24 prompts, same resamples for both K"
+        },
+        "no_signal_rate": {
+          "point": 0.010869565217391302,
+          "ci_low": 0.002976190476190476,
+          "ci_high": 0.022108843537414963,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 24 prompts, same resamples for both K"
+        },
+        "agree_rate": {
+          "point": -0.2360248447204969,
+          "ci_low": -0.24837662337662336,
+          "ci_high": -0.2272727272727273,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 24 prompts, same resamples for both K"
+        }
+      }
+    },
+    "bin1_low_reward": {
+      "K2": {
+        "informative_rate": {
+          "point": 0.84375,
+          "ci_low": 0.59375,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.15625,
+          "ci_low": 0.0,
+          "ci_high": 0.40625,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.49340057373046875,
+          "ci_low": 0.22720375061035156,
+          "ci_high": 0.8545684814453125,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 0.84375,
+          "ci_low": 0.59375,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.4961734693877551,
+          "ci_low": 0.35331632653061223,
+          "ci_high": 0.5714285714285714,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.22704081632653056,
+          "ci_low": 0.2107142857142857,
+          "ci_high": 0.24999999999999997,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.00510204081632653,
+          "ci_low": 0.0,
+          "ci_high": 0.015306122448979591,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "agree_rate": {
+          "point": 0.7678571428571429,
+          "ci_low": 0.7474489795918368,
+          "ci_high": 0.7821428571428571,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "n_groups": 32
+      },
+      "K4": {
+        "informative_rate": {
+          "point": 0.875,
+          "ci_low": 0.625,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.125,
+          "ci_low": 0.0,
+          "ci_high": 0.375,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.6614877562072954,
+          "ci_low": 0.3168653115846642,
+          "ci_high": 1.0893310299385952,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 0.875,
+          "ci_low": 0.625,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.16791811923474856,
+          "ci_low": 0.11629148267844519,
+          "ci_high": 0.19880519801335425,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.10357142857142858,
+          "ci_low": 0.08571428571428572,
+          "ci_high": 0.12193877551020409,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "agree_rate": {
+          "point": 0.8964285714285715,
+          "ci_low": 0.878061224489796,
+          "ci_high": 0.9142857142857143,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "n_groups": 16
+      },
+      "K8": {
+        "informative_rate": {
+          "point": 0.875,
+          "ci_low": 0.625,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.125,
+          "ci_low": 0.0,
+          "ci_high": 0.375,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.7633688437029319,
+          "ci_low": 0.41145064149449184,
+          "ci_high": 1.1850495551675295,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 0.875,
+          "ci_low": 0.625,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "agree_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "n_groups": 8
+      },
+      "K2_minus_K8": {
+        "informative_rate": {
+          "point": -0.03125,
+          "ci_low": -0.09375,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "uninformative_rate": {
+          "point": 0.03125,
+          "ci_low": 0.0,
+          "ci_high": 0.09375,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "mean_within_group_std": {
+          "point": -0.26996826997246315,
+          "ci_low": -0.4140048876565576,
+          "ci_high": -0.14846854444261137,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "pooled_advantage_var": {
+          "point": -0.03125,
+          "ci_low": -0.09375,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "regrouping_noise": {
+          "point": 0.4961734693877551,
+          "ci_low": 0.35331632653061223,
+          "ci_high": 0.5714285714285714,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "sign_flip_rate": {
+          "point": 0.22704081632653056,
+          "ci_low": 0.2107142857142857,
+          "ci_high": 0.24999999999999997,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "no_signal_rate": {
+          "point": 0.00510204081632653,
+          "ci_low": 0.0,
+          "ci_high": 0.015306122448979591,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "agree_rate": {
+          "point": -0.2321428571428571,
+          "ci_low": -0.25255102040816324,
+          "ci_high": -0.21785714285714286,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        }
+      }
+    },
+    "bin2_mid_reward": {
+      "K2": {
+        "informative_rate": {
+          "point": 0.96875,
+          "ci_low": 0.90625,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.03125,
+          "ci_low": 0.0,
+          "ci_high": 0.09375,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.41237640380859375,
+          "ci_low": 0.25244140625,
+          "ci_high": 0.6044815063476561,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 0.96875,
+          "ci_low": 0.90625,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.5561224489795917,
+          "ci_low": 0.5331632653061225,
+          "ci_high": 0.5714285714285714,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.22544642857142855,
+          "ci_low": 0.21875,
+          "ci_high": 0.22991071428571425,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.017857142857142856,
+          "ci_low": 0.0,
+          "ci_high": 0.04464285714285714,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "agree_rate": {
+          "point": 0.7566964285714286,
+          "ci_low": 0.7276785714285714,
+          "ci_high": 0.7767857142857143,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "n_groups": 32
+      },
+      "K4": {
+        "informative_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.5516941225351226,
+          "ci_low": 0.36127582478139497,
+          "ci_high": 0.7602241301701362,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.21714185243803993,
+          "ci_low": 0.20040871815380865,
+          "ci_high": 0.23405128575781212,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.14955357142857142,
+          "ci_low": 0.11428571428571428,
+          "ci_high": 0.18483258928571414,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.0013392857142857143,
+          "ci_low": 0.0,
+          "ci_high": 0.003125,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "agree_rate": {
+          "point": 0.8491071428571428,
+          "ci_low": 0.8142857142857143,
+          "ci_high": 0.8839285714285714,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "n_groups": 16
+      },
+      "K8": {
+        "informative_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.5990220788024174,
+          "ci_low": 0.40039960279898684,
+          "ci_high": 0.8105266774787478,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 1.0,
+          "ci_low": 0.9999999999999999,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "agree_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "n_groups": 8
+      },
+      "K2_minus_K8": {
+        "informative_rate": {
+          "point": -0.03125,
+          "ci_low": -0.09375,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "uninformative_rate": {
+          "point": 0.03125,
+          "ci_low": 0.0,
+          "ci_high": 0.09375,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "mean_within_group_std": {
+          "point": -0.18664567499382367,
+          "ci_low": -0.2868171715322321,
+          "ci_high": -0.10887354338600325,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "pooled_advantage_var": {
+          "point": -0.03125,
+          "ci_low": -0.09375,
+          "ci_high": 1.1102230246251565e-16,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "regrouping_noise": {
+          "point": 0.5561224489795917,
+          "ci_low": 0.5331632653061225,
+          "ci_high": 0.5714285714285714,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "sign_flip_rate": {
+          "point": 0.22544642857142855,
+          "ci_low": 0.21875,
+          "ci_high": 0.22991071428571425,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "no_signal_rate": {
+          "point": 0.017857142857142856,
+          "ci_low": 0.0,
+          "ci_high": 0.04464285714285714,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "agree_rate": {
+          "point": -0.2433035714285714,
+          "ci_low": -0.2723214285714286,
+          "ci_high": -0.2232142857142857,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        }
+      }
+    },
+    "bin3_high_reward": {
+      "K2": {
+        "informative_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.2479248046875,
+          "ci_low": 0.1661376953125,
+          "ci_high": 0.34643859863281246,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.5637755102040817,
+          "ci_low": 0.552295918367347,
+          "ci_high": 0.5714285714285714,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.2232142857142857,
+          "ci_low": 0.20982142857142855,
+          "ci_high": 0.23214285714285715,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.008928571428571428,
+          "ci_low": 0.0,
+          "ci_high": 0.02232142857142857,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "agree_rate": {
+          "point": 0.7678571428571429,
+          "ci_low": 0.7678571428571428,
+          "ci_high": 0.7678571428571429,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "n_groups": 32
+      },
+      "K4": {
+        "informative_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.4098312154534056,
+          "ci_low": 0.2778293542568743,
+          "ci_high": 0.5425734834114663,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.20000265963095343,
+          "ci_low": 0.18786653618328011,
+          "ci_high": 0.21364690351310558,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.125,
+          "ci_low": 0.07946428571428571,
+          "ci_high": 0.17232142857142857,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.0035714285714285713,
+          "ci_low": 0.0004464285714285714,
+          "ci_high": 0.008035714285714285,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "agree_rate": {
+          "point": 0.8714285714285714,
+          "ci_low": 0.821875,
+          "ci_high": 0.9178571428571428,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "n_groups": 16
+      },
+      "K8": {
+        "informative_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "uninformative_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "mean_within_group_std": {
+          "point": 0.49477231789421244,
+          "ci_low": 0.2983318488906799,
+          "ci_high": 0.736920454708053,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "pooled_advantage_var": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "regrouping_noise": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "sign_flip_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "no_signal_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "agree_rate": {
+          "point": 1.0,
+          "ci_low": 1.0,
+          "ci_high": 1.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "cluster bootstrap over 8 prompts"
+        },
+        "n_groups": 8
+      },
+      "K2_minus_K8": {
+        "informative_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "uninformative_rate": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "mean_within_group_std": {
+          "point": -0.24684751320671244,
+          "ci_low": -0.4803815057511751,
+          "ci_high": -0.09612330335804498,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "pooled_advantage_var": {
+          "point": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "regrouping_noise": {
+          "point": 0.5637755102040817,
+          "ci_low": 0.552295918367347,
+          "ci_high": 0.5714285714285714,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "sign_flip_rate": {
+          "point": 0.2232142857142857,
+          "ci_low": 0.20982142857142855,
+          "ci_high": 0.23214285714285715,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "no_signal_rate": {
+          "point": 0.008928571428571428,
+          "ci_low": 0.0,
+          "ci_high": 0.02232142857142857,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        },
+        "agree_rate": {
+          "point": -0.2321428571428571,
+          "ci_low": -0.2321428571428572,
+          "ci_high": -0.2321428571428571,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired cluster bootstrap over 8 prompts, same resamples for both K"
+        }
+      }
+    }
+  },
+  "per_prompt": [
+    {
+      "source_index": "124",
+      "prompt_id": "d407599fef051a44d505c8439c3c6a6fb7d8fb6658384a4c391e9c2f2146f16d",
+      "bin": "bin2_mid_reward",
+      "mean_reward_8": 2.375,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 1.3125,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428572,
+        "n_eligible": 8.0,
+        "sum_flip": 1.857142857142857,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.7291720754207988,
+        "n_completions": 8,
+        "sum_adv": -5.551115123125783e-17,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.4808211413751209,
+        "n_eligible": 8.0,
+        "sum_flip": 0.7428571428571429,
+        "sum_no_signal": 0.05714285714285714
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.3900972998116143,
+        "n_completions": 8,
+        "sum_adv": -2.220446049250313e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "671",
+      "prompt_id": "01a4b2ed4479c8fa682c3466f7db16f277168d90c8450a729089f4527345ee8d",
+      "bin": "bin1_low_reward",
+      "mean_reward_8": -1.45556640625,
+      "n_clipped_at_max": 2,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 6.458984375,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428572,
+        "n_eligible": 8.0,
+        "sum_flip": 1.8571428571428568,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 3.8368681207013307,
+        "n_completions": 8,
+        "sum_adv": 2.7755575615628914e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.4780797958982488,
+        "n_eligible": 8.0,
+        "sum_flip": 0.6857142857142857,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 1.9795737868410508,
+        "n_completions": 8,
+        "sum_adv": 3.3306690738754696e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "510",
+      "prompt_id": "4f38c04a24c73c45df69326d4c7cd11dd422127645725ebba220231150bca382",
+      "bin": "bin2_mid_reward",
+      "mean_reward_8": 1.86572265625,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 2.091796875,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428571,
+        "n_eligible": 8.0,
+        "sum_flip": 1.857142857142857,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 1.2136568390696802,
+        "n_completions": 8,
+        "sum_adv": -2.220446049250313e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.7190684186687029,
+        "n_eligible": 8.0,
+        "sum_flip": 1.4857142857142855,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.7184153897474302,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "981",
+      "prompt_id": "b8b9d3c72997de501f1e5179b0e5e2b5dae4c865f92dbe51ac4224e2039ea58d",
+      "bin": "bin2_mid_reward",
+      "mean_reward_8": 2.2646484375,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 3,
+        "sum_std": 0.70703125,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 6.0,
+        "sum_regroup_var": 3.836734693877551,
+        "n_eligible": 8.0,
+        "sum_flip": 1.8571428571428568,
+        "sum_no_signal": 0.857142857142857
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.5670961487579628,
+        "n_completions": 8,
+        "sum_adv": -3.3306690738754696e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.9940272031783102,
+        "n_eligible": 8.0,
+        "sum_flip": 1.0857142857142856,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.28358507379548353,
+        "n_completions": 8,
+        "sum_adv": -2.220446049250313e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "175",
+      "prompt_id": "faff5c962224bd104f4c6eb8c00bcfd84c37b29d3de55e600ccc3cc3ea4c3f99",
+      "bin": "bin1_low_reward",
+      "mean_reward_8": 0.7420654296875,
+      "n_clipped_at_max": 7,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 2.24462890625,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428571,
+        "n_eligible": 8.0,
+        "sum_flip": 2.2857142857142856,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 1.2237005459532266,
+        "n_completions": 8,
+        "sum_adv": 3.3306690738754696e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.7574784550154803,
+        "n_eligible": 8.0,
+        "sum_flip": 1.1428571428571428,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.8345445721364121,
+        "n_completions": 8,
+        "sum_adv": -4.440892098500626e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "185",
+      "prompt_id": "bdfcf969f2a84458b2498e0acc198d3094334b81d595fed1724210d7c9f89279",
+      "bin": "bin3_high_reward",
+      "mean_reward_8": 2.4599609375,
+      "n_clipped_at_max": 4,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 0.80078125,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428572,
+        "n_eligible": 8.0,
+        "sum_flip": 1.857142857142857,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 1.3814843880599696,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.5716116310858377,
+        "n_eligible": 8.0,
+        "sum_flip": 1.0571428571428572,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 1.2204730251883498,
+        "n_completions": 8,
+        "sum_adv": 8.881784197001252e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "953",
+      "prompt_id": "527fbcd702b2e3e8125b5516be289806fa79e2685c0e4285276d03acf3dcc043",
+      "bin": "bin1_low_reward",
+      "mean_reward_8": 0.73388671875,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 1.908203125,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428572,
+        "n_eligible": 8.0,
+        "sum_flip": 1.714285714285714,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 1.1869419070671552,
+        "n_completions": 8,
+        "sum_adv": -1.6653345369377348e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.6149581921498144,
+        "n_eligible": 8.0,
+        "sum_flip": 1.0571428571428572,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.7473388189352107,
+        "n_completions": 8,
+        "sum_adv": -4.440892098500626e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "873",
+      "prompt_id": "c359f7ed5e4a168b1e27bd1c27dc9752980103a2e1b38991e5011a7ea44d214e",
+      "bin": "bin2_mid_reward",
+      "mean_reward_8": 2.1845703125,
+      "n_clipped_at_max": 7,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 1.12109375,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428572,
+        "n_eligible": 8.0,
+        "sum_flip": 1.7142857142857142,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 1.3883651530147163,
+        "n_completions": 8,
+        "sum_adv": -2.220446049250313e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.6845245122317898,
+        "n_eligible": 8.0,
+        "sum_flip": 1.2000000000000002,
+        "sum_no_signal": 0.02857142857142857
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.7471864697278944,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "796",
+      "prompt_id": "cb3bebe583bd8475019b58042be3a76432b23c81b79b32c441d4b3bf203760df",
+      "bin": "bin2_mid_reward",
+      "mean_reward_8": 1.81658935546875,
+      "n_clipped_at_max": 3,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 3.780517578125,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428572,
+        "n_eligible": 8.0,
+        "sum_flip": 1.8571428571428568,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 2.0886456399402533,
+        "n_completions": 8,
+        "sum_adv": -1.1102230246251565e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.4996804389823712,
+        "n_eligible": 8.0,
+        "sum_flip": 0.5714285714285714,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 1.0774114690525276,
+        "n_completions": 8,
+        "sum_adv": 2.220446049250313e-16,
+        "sum_adv2": 7.999999999999998,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "263",
+      "prompt_id": "da4fae100599eb9dfb9500f28dd604665eaba000cd4b94940f3471c85c8de99d",
+      "bin": "bin3_high_reward",
+      "mean_reward_8": 2.4296875,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 1.53125,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428572,
+        "n_eligible": 8.0,
+        "sum_flip": 1.8571428571428572,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.8195698903396169,
+        "n_completions": 8,
+        "sum_adv": 1.1102230246251565e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.4197591547366533,
+        "n_eligible": 8.0,
+        "sum_flip": 0.7428571428571429,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.4283893743484863,
+        "n_completions": 8,
+        "sum_adv": 3.3306690738754696e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "507",
+      "prompt_id": "d31b039922e3bb89d63a8f7331c90d77437a449e4b5f757a114b28002ffae60a",
+      "bin": "bin3_high_reward",
+      "mean_reward_8": 3.220703125,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 2.1171875,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428571,
+        "n_eligible": 8.0,
+        "sum_flip": 1.8571428571428568,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 1.354014261224369,
+        "n_completions": 8,
+        "sum_adv": 1.1102230246251565e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.5292907940702087,
+        "n_eligible": 8.0,
+        "sum_flip": 0.2571428571428571,
+        "sum_no_signal": 0.02857142857142857
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.7185137816655707,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "961",
+      "prompt_id": "23bd8f99e8359f0052e16c65689eae80cb20bf937ea6ca5794d36d29734a560b",
+      "bin": "bin1_low_reward",
+      "mean_reward_8": -0.1944580078125,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 1.87646484375,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428571,
+        "n_eligible": 8.0,
+        "sum_flip": 1.857142857142857,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 1.1755225612843443,
+        "n_completions": 8,
+        "sum_adv": -1.6653345369377348e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.470883841459034,
+        "n_eligible": 8.0,
+        "sum_flip": 0.5428571428571428,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.6329310623998741,
+        "n_completions": 8,
+        "sum_adv": 2.220446049250313e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "280",
+      "prompt_id": "be78486affffe4f57015a153c5529c949aeb7511e1f30ed76da522452f245bed",
+      "bin": "bin1_low_reward",
+      "mean_reward_8": 1.2734375,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 0,
+        "sum_std": 0.0,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 0.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 0.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 0,
+        "sum_std": 0.0,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 0.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 0.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 0,
+        "sum_std": 0.0,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 0.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 0.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "936",
+      "prompt_id": "d995e3ae06848698448f0310c0956505e70240e048f520449e325f00ed1479a0",
+      "bin": "bin1_low_reward",
+      "mean_reward_8": 0.8939208984375,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 1.53076171875,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428571,
+        "n_eligible": 8.0,
+        "sum_flip": 1.714285714285714,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 2.0357308351749257,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.5444175538135807,
+        "n_eligible": 8.0,
+        "sum_flip": 0.8,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 1.0813008883524027,
+        "n_completions": 8,
+        "sum_adv": -1.1102230246251565e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "254",
+      "prompt_id": "5294c9606e5e6fb93dc94319d5547c1cba3d6d44da00ee551d2621227e3b6ee8",
+      "bin": "bin2_mid_reward",
+      "mean_reward_8": 1.3321533203125,
+      "n_clipped_at_max": 6,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 2.57763671875,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428571,
+        "n_eligible": 8.0,
+        "sum_flip": 1.7142857142857142,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 1.801680210478299,
+        "n_completions": 8,
+        "sum_adv": -2.220446049250313e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.6261020066827319,
+        "n_eligible": 8.0,
+        "sum_flip": 1.0285714285714287,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.9530207389339215,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "463",
+      "prompt_id": "5df5fb2b07b896cb5c4419afc9d3fd2b653535528abe1819bd2b52c07d52726b",
+      "bin": "bin3_high_reward",
+      "mean_reward_8": 3.00390625,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 0.4375,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.326530612244898,
+        "n_eligible": 8.0,
+        "sum_flip": 1.5714285714285712,
+        "sum_no_signal": 0.2857142857142857
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.3243329431675903,
+        "n_completions": 8,
+        "sum_adv": 3.3306690738754696e-16,
+        "sum_adv2": 7.999999999999999,
+        "sum_regroup_var": 1.8360534970677995,
+        "n_eligible": 8.0,
+        "sum_flip": 1.5714285714285714,
+        "sum_no_signal": 0.14285714285714285
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.1781095799246562,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "436",
+      "prompt_id": "15837ad2725266a35255f91d2e023ea644ede5cb9d7ec9270ab3c6dd6449a74c",
+      "bin": "bin2_mid_reward",
+      "mean_reward_8": 2.212890625,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 0.9140625,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.326530612244898,
+        "n_eligible": 8.0,
+        "sum_flip": 1.7142857142857142,
+        "sum_no_signal": 0.2857142857142857
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.5871666974803387,
+        "n_completions": 8,
+        "sum_adv": -2.220446049250313e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 2.038535673762735,
+        "n_eligible": 8.0,
+        "sum_flip": 1.9142857142857141,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.3636748120182155,
+        "n_completions": 8,
+        "sum_adv": -1.1102230246251565e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "942",
+      "prompt_id": "a2d24c910daf54855e433d30c3e03a33384b87f028e9306be71ecab95700964b",
+      "bin": "bin3_high_reward",
+      "mean_reward_8": 2.6875,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 0.515625,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.326530612244898,
+        "n_eligible": 8.0,
+        "sum_flip": 1.5714285714285712,
+        "sum_no_signal": 0.2857142857142857
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.37238611272231215,
+        "n_completions": 8,
+        "sum_adv": 2.220446049250313e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.6922342597979434,
+        "n_eligible": 8.0,
+        "sum_flip": 1.6857142857142855,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.19200321449132043,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 7.999999999999999,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "184",
+      "prompt_id": "ba7ddaf72f0e034da39b43276b9f418894a12a6fffdbcf6359a302ef1b34688e",
+      "bin": "bin3_high_reward",
+      "mean_reward_8": 2.966796875,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 0.8046875,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428572,
+        "n_eligible": 8.0,
+        "sum_flip": 1.857142857142857,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.5491227191355653,
+        "n_completions": 8,
+        "sum_adv": -1.1102230246251565e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.7971128388238513,
+        "n_eligible": 8.0,
+        "sum_flip": 1.6285714285714286,
+        "sum_no_signal": 0.02857142857142857
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.3191133709292974,
+        "n_completions": 8,
+        "sum_adv": -2.220446049250313e-16,
+        "sum_adv2": 8.000000000000002,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "922",
+      "prompt_id": "ad86afe9508e533cc19d35c42f785e900274a28e57d150e0007c7fb632a70889",
+      "bin": "bin2_mid_reward",
+      "mean_reward_8": 2.4169921875,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 0.69140625,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428571,
+        "n_eligible": 8.0,
+        "sum_flip": 1.8571428571428568,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.45132319639991364,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 7.999999999999999,
+        "sum_regroup_var": 1.8543191611527945,
+        "n_eligible": 8.0,
+        "sum_flip": 1.5428571428571427,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.2587853773322521,
+        "n_completions": 8,
+        "sum_adv": -1.1102230246251565e-16,
+        "sum_adv2": 7.999999999999998,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "755",
+      "prompt_id": "de9a80e769756c36c3bec31ccca84a180e2862f7dd06ef5e5a36fde7caceaa2a",
+      "bin": "bin3_high_reward",
+      "mean_reward_8": 3.072265625,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 0.9609375,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428572,
+        "n_eligible": 8.0,
+        "sum_flip": 1.8571428571428568,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.9320274998024086,
+        "n_completions": 8,
+        "sum_adv": 4.440892098500626e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.5173843042014825,
+        "n_eligible": 8.0,
+        "sum_flip": 0.6285714285714286,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.4708246731031992,
+        "n_completions": 8,
+        "sum_adv": -4.440892098500626e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "457",
+      "prompt_id": "651e4c1d0b8bf0212c220f3f0a7d08161ad0952d9e3ea9d0963ab97a45937ea6",
+      "bin": "bin1_low_reward",
+      "mean_reward_8": -0.85198974609375,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 1.263916015625,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428571,
+        "n_eligible": 8.0,
+        "sum_flip": 1.714285714285714,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.7892152882216436,
+        "n_completions": 8,
+        "sum_adv": -2.220446049250313e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.4747441406887178,
+        "n_eligible": 8.0,
+        "sum_flip": 0.7428571428571429,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.47132480689723505,
+        "n_completions": 8,
+        "sum_adv": -2.220446049250313e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "832",
+      "prompt_id": "d618f38c0b2f73bb7985a1f07a7b4ca3b70e62a96407b8f6877da59e9241ba82",
+      "bin": "bin3_high_reward",
+      "mean_reward_8": 2.65625,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 4,
+        "sum_std": 0.765625,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 4.571428571428571,
+        "n_eligible": 8.0,
+        "sum_flip": 1.8571428571428572,
+        "sum_no_signal": 0.0
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.8243616328026582,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.4367237365972418,
+        "n_eligible": 8.0,
+        "sum_flip": 0.42857142857142855,
+        "sum_no_signal": 0.02857142857142857
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.4307515235028194,
+        "n_completions": 8,
+        "sum_adv": -2.220446049250313e-16,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    },
+    {
+      "source_index": "495",
+      "prompt_id": "81b5deabb0959afb606520d2b821cd91dfd5c103f414ed5c2c132d18b0cc2f3a",
+      "bin": "bin1_low_reward",
+      "mean_reward_8": -1.42041015625,
+      "n_clipped_at_max": 0,
+      "K2": {
+        "n_groups": 4,
+        "n_informative": 3,
+        "sum_std": 0.505859375,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 6.0,
+        "sum_regroup_var": 4.326530612244898,
+        "n_eligible": 8.0,
+        "sum_flip": 1.5714285714285712,
+        "sum_no_signal": 0.2857142857142857
+      },
+      "K4": {
+        "n_groups": 2,
+        "n_informative": 2,
+        "sum_std": 0.33582484091410086,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 1.4061976519990314,
+        "n_eligible": 8.0,
+        "sum_flip": 0.8285714285714285,
+        "sum_no_signal": 0.0
+      },
+      "K8": {
+        "n_groups": 1,
+        "n_informative": 1,
+        "sum_std": 0.35993681406126987,
+        "n_completions": 8,
+        "sum_adv": 0.0,
+        "sum_adv2": 8.0,
+        "sum_regroup_var": 0.0,
+        "n_eligible": 8.0,
+        "sum_flip": 0.0,
+        "sum_no_signal": 0.0
+      }
+    }
+  ],
+  "sqrt_(K-1)/K": {
+    "K2": 0.7071067811865476,
+    "K4": 0.8660254037844386,
+    "K8": 0.9354143466934853
+  },
+  "wall_clock_seconds": 6.294289875018876
+}
