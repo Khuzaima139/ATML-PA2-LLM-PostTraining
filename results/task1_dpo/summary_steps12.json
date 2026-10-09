@@ -1,0 +1,1106 @@
+{
+  "script": "task1_dpo.summarize",
+  "config_path": "configs/dpo.yaml",
+  "results_dir": "results/task1_dpo",
+  "git": {
+    "commit": "d48135f38444f0a9263fdeb50ddf0e905192a21c",
+    "dirty": false
+  },
+  "seed": 6304,
+  "bootstrap": {
+    "n_resamples": 10000,
+    "seed": 6304,
+    "interval": "95% percentile (2.5th, 97.5th)",
+    "rng": "a fresh numpy.random.default_rng(seed) for every quantity"
+  },
+  "input_sha256": {
+    "results/task1_dpo/standard_train.json": "8f99b5fc0ee33a9f10e34375dd93c97ed28139783b8af8144278783ed2ccb292",
+    "results/task1_dpo/beta_0p03_train.json": "c40efcc83d3326b208600599cd9e4b8957cc5eed0d3baf98e721e77c6d825a33",
+    "results/task1_dpo/beta_0p10_train.json": "029f01e407f69f212e21f73e32004c6cb717aa78f7582486de00955e24720900",
+    "results/task1_dpo/beta_0p30_train.json": "86de156c77b0218cebc348d7f4112ca3610b25d06c8a6be2cf11a8a63f43dc96",
+    "results/task1_dpo/eval_standard.json": "92aa284b4336b2898af8b48752eefc2542ec5b1176b36388603b87a32fe3f138",
+    "results/task1_dpo/eval_beta_0p03.json": "09a363daafeb53e7b5536b569180d047a08b101b00a9d86530e71b34f96ee141",
+    "results/task1_dpo/eval_beta_0p10.json": "bdf6b079f08ea7f5accf032609b44132d6f2c73bbdedcf250d7ed47d87f364dd",
+    "results/task1_dpo/eval_beta_0p30.json": "3b02235d4e1001765156fc5e94a66293df8962c51c120ea0b19525a56a8dce95",
+    "results/task1_dpo/eval_sft.json": "ac4053cb4461d8a2a67dce5ec5699282db020700b0d40a82a57ca6b7cb742db9",
+    "results/task1_dpo/generations_standard_generate.jsonl": "125cc822c6446de9e892203e35ab6684ef4f7a5a6437b613c42dc638e9b1437f",
+    "results/task1_dpo/generations_beta_0p03_generate.jsonl": "335c584be405f9ccc17c3ee83cea172fac31630b1beb582ac8ce0efd187b8b8d",
+    "results/task1_dpo/generations_beta_0p10_generate.jsonl": "a8378c4e620ac8d83822c41462ee22d88076694af56e32c6a4df08dc573c9d31",
+    "results/task1_dpo/generations_beta_0p30_generate.jsonl": "9c372fce2d593af93d08569afb59c1a7c3121b4d08c005ef944d0d13d81937e1",
+    "results/task1_dpo/generations_sft_generate.jsonl": "72bf35b0a0763a634c45be4c38a193acc2bd266177ca349efa2eeb44de4dbc83",
+    "results/task1_dpo/length_balanced_train.json": "b2170e5689c21aa483a34c89b3d2d42668496fdbb416ced86f191059a312096e",
+    "results/task1_dpo/eval_length_balanced.json": "bae2c8050ebe18eaeb78d934396b7ff5b9288583736a12a35a0ae61f27f2f8e2",
+    "results/task1_dpo/generations_standard_wordlimit.jsonl": "46dbf14850e93cafaa6fa9a4889b1910908b2ca803fbb424d2aad5fbd25e4703",
+    "results/task1_dpo/generations_length_balanced_wordlimit.jsonl": "1a33a2df6cede4a54695657cf4b51341c1594f6d31d8b590039f90b9098568bb",
+    "data/dpo_standard_eval.jsonl": "c1f9e7c7e140b4671efd67173a4434946780cf04232aabc03ef317ae621e5079",
+    "data/word_limit_prompts.jsonl": "4252fb01e078eaa835f9d4b3d6abaaba8033fe68e30dfa2d17c4d6886dd2ea49"
+  },
+  "checks": [
+    {
+      "check": "standard: training completed",
+      "passed": true,
+      "detail": "completed"
+    },
+    {
+      "check": "standard: first micro-batch loss equals log 2",
+      "passed": true,
+      "detail": {
+        "loss": 0.6931471824645996,
+        "log_2": 0.6931471805599453,
+        "abs_diff": 1.904654323148236e-09,
+        "tolerance": 0.001,
+        "passed": true
+      }
+    },
+    {
+      "check": "standard: LoRA init digest",
+      "passed": true,
+      "detail": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e"
+    },
+    {
+      "check": "beta_0p03: training completed",
+      "passed": true,
+      "detail": "completed"
+    },
+    {
+      "check": "beta_0p03: first micro-batch loss equals log 2",
+      "passed": true,
+      "detail": {
+        "loss": 0.6931471824645996,
+        "log_2": 0.6931471805599453,
+        "abs_diff": 1.904654323148236e-09,
+        "tolerance": 0.001,
+        "passed": true
+      }
+    },
+    {
+      "check": "beta_0p03: LoRA init digest",
+      "passed": true,
+      "detail": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e"
+    },
+    {
+      "check": "beta_0p10: training completed",
+      "passed": true,
+      "detail": "completed"
+    },
+    {
+      "check": "beta_0p10: first micro-batch loss equals log 2",
+      "passed": true,
+      "detail": {
+        "loss": 0.6931471824645996,
+        "log_2": 0.6931471805599453,
+        "abs_diff": 1.904654323148236e-09,
+        "tolerance": 0.001,
+        "passed": true
+      }
+    },
+    {
+      "check": "beta_0p10: LoRA init digest",
+      "passed": true,
+      "detail": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e"
+    },
+    {
+      "check": "beta_0p30: training completed",
+      "passed": true,
+      "detail": "completed"
+    },
+    {
+      "check": "beta_0p30: first micro-batch loss equals log 2",
+      "passed": true,
+      "detail": {
+        "loss": 0.6931471824645996,
+        "log_2": 0.6931471805599453,
+        "abs_diff": 1.904654323148236e-09,
+        "tolerance": 0.001,
+        "passed": true
+      }
+    },
+    {
+      "check": "beta_0p30: LoRA init digest",
+      "passed": true,
+      "detail": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e"
+    },
+    {
+      "check": "eval standard: has mode pairs",
+      "passed": true,
+      "detail": [
+        "generate",
+        "pairs",
+        "stratified",
+        "wordlimit"
+      ]
+    },
+    {
+      "check": "eval standard:pairs: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval standard: adapter is the trained standard adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/standard",
+        "train_adapter": "outputs/task1_dpo/standard"
+      }
+    },
+    {
+      "check": "eval standard:pairs: DPO loss beta equals training beta",
+      "passed": true,
+      "detail": {
+        "eval": 0.1,
+        "train": 0.1
+      }
+    },
+    {
+      "check": "eval beta_0p03: has mode pairs",
+      "passed": true,
+      "detail": [
+        "generate",
+        "pairs"
+      ]
+    },
+    {
+      "check": "eval beta_0p03:pairs: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval beta_0p03: adapter is the trained beta_0p03 adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/beta_0p03",
+        "train_adapter": "outputs/task1_dpo/beta_0p03"
+      }
+    },
+    {
+      "check": "eval beta_0p03:pairs: DPO loss beta equals training beta",
+      "passed": true,
+      "detail": {
+        "eval": 0.03,
+        "train": 0.03
+      }
+    },
+    {
+      "check": "eval beta_0p10: has mode pairs",
+      "passed": true,
+      "detail": [
+        "generate",
+        "pairs"
+      ]
+    },
+    {
+      "check": "eval beta_0p10:pairs: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval beta_0p10: adapter is the trained beta_0p10 adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/beta_0p10",
+        "train_adapter": "outputs/task1_dpo/beta_0p10"
+      }
+    },
+    {
+      "check": "eval beta_0p10:pairs: DPO loss beta equals training beta",
+      "passed": true,
+      "detail": {
+        "eval": 0.1,
+        "train": 0.1
+      }
+    },
+    {
+      "check": "eval beta_0p30: has mode pairs",
+      "passed": true,
+      "detail": [
+        "generate",
+        "pairs"
+      ]
+    },
+    {
+      "check": "eval beta_0p30:pairs: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval beta_0p30: adapter is the trained beta_0p30 adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/beta_0p30",
+        "train_adapter": "outputs/task1_dpo/beta_0p30"
+      }
+    },
+    {
+      "check": "eval beta_0p30:pairs: DPO loss beta equals training beta",
+      "passed": true,
+      "detail": {
+        "eval": 0.3,
+        "train": 0.3
+      }
+    },
+    {
+      "check": "eval standard: has mode generate",
+      "passed": true,
+      "detail": [
+        "generate",
+        "pairs",
+        "stratified",
+        "wordlimit"
+      ]
+    },
+    {
+      "check": "eval standard:generate: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval standard: adapter is the trained standard adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/standard",
+        "train_adapter": "outputs/task1_dpo/standard"
+      }
+    },
+    {
+      "check": "eval beta_0p03: has mode generate",
+      "passed": true,
+      "detail": [
+        "generate",
+        "pairs"
+      ]
+    },
+    {
+      "check": "eval beta_0p03:generate: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval beta_0p03: adapter is the trained beta_0p03 adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/beta_0p03",
+        "train_adapter": "outputs/task1_dpo/beta_0p03"
+      }
+    },
+    {
+      "check": "eval beta_0p10: has mode generate",
+      "passed": true,
+      "detail": [
+        "generate",
+        "pairs"
+      ]
+    },
+    {
+      "check": "eval beta_0p10:generate: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval beta_0p10: adapter is the trained beta_0p10 adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/beta_0p10",
+        "train_adapter": "outputs/task1_dpo/beta_0p10"
+      }
+    },
+    {
+      "check": "eval beta_0p30: has mode generate",
+      "passed": true,
+      "detail": [
+        "generate",
+        "pairs"
+      ]
+    },
+    {
+      "check": "eval beta_0p30:generate: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval beta_0p30: adapter is the trained beta_0p30 adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/beta_0p30",
+        "train_adapter": "outputs/task1_dpo/beta_0p30"
+      }
+    },
+    {
+      "check": "eval sft: has mode generate",
+      "passed": true,
+      "detail": [
+        "generate"
+      ]
+    },
+    {
+      "check": "eval sft:generate: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval sft: untrained base model",
+      "passed": true,
+      "detail": "none"
+    },
+    {
+      "check": "generate: identical generation settings across ['standard', 'beta_0p03', 'beta_0p10', 'beta_0p30', 'sft']",
+      "passed": true,
+      "detail": {
+        "differ_from_standard": []
+      }
+    },
+    {
+      "check": "standard preference accuracy recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.6448275862068965,
+        "saved": 0.6448275862068965
+      }
+    },
+    {
+      "check": "standard mean margin recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.4315089360232754,
+        "saved": 0.4315089360232754
+      }
+    },
+    {
+      "check": "standard pooled KL recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": -2.7932175120041264e-05,
+        "saved": -2.7932175120041264e-05
+      }
+    },
+    {
+      "check": "beta_0p03 preference accuracy recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.6241379310344828,
+        "saved": 0.6241379310344828
+      }
+    },
+    {
+      "check": "beta_0p03 mean margin recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.1415769441310188,
+        "saved": 0.1415769441310188
+      }
+    },
+    {
+      "check": "beta_0p03 pooled KL recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": -4.2288028012743627e-05,
+        "saved": -4.2288028012743627e-05
+      }
+    },
+    {
+      "check": "beta_0p10 preference accuracy recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.6275862068965518,
+        "saved": 0.6275862068965518
+      }
+    },
+    {
+      "check": "beta_0p10 mean margin recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.13221009483817836,
+        "saved": 0.13221009483817836
+      }
+    },
+    {
+      "check": "beta_0p10 pooled KL recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": -3.207877109078624e-05,
+        "saved": -3.207877109078624e-05
+      }
+    },
+    {
+      "check": "beta_0p30 preference accuracy recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.6344827586206897,
+        "saved": 0.6344827586206897
+      }
+    },
+    {
+      "check": "beta_0p30 mean margin recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.13266832458561864,
+        "saved": 0.13266832458561864
+      }
+    },
+    {
+      "check": "beta_0p30 pooled KL recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": -0.00011627926361057245,
+        "saved": -0.00011627926361057245
+      }
+    },
+    {
+      "check": "standard RM mean recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 1.342157482278758,
+        "saved": 1.342157482278758
+      }
+    },
+    {
+      "check": "standard length mean recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 155.6206896551724,
+        "saved": 155.6206896551724
+      }
+    },
+    {
+      "check": "beta_0p03 RM mean recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 1.3150185946760506,
+        "saved": 1.3150185946760506
+      }
+    },
+    {
+      "check": "beta_0p03 length mean recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 154.89310344827587,
+        "saved": 154.89310344827587
+      }
+    },
+    {
+      "check": "beta_0p10 RM mean recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 1.3375899610848263,
+        "saved": 1.3375899610848263
+      }
+    },
+    {
+      "check": "beta_0p10 length mean recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 155.3310344827586,
+        "saved": 155.3310344827586
+      }
+    },
+    {
+      "check": "beta_0p30 RM mean recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 1.309212375509328,
+        "saved": 1.309212375509328
+      }
+    },
+    {
+      "check": "beta_0p30 length mean recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 155.69655172413792,
+        "saved": 155.69655172413792
+      }
+    },
+    {
+      "check": "sft RM mean recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 1.2538305874528557,
+        "saved": 1.2538305874528557
+      }
+    },
+    {
+      "check": "sft length mean recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 153.8206896551724,
+        "saved": 153.8206896551724
+      }
+    },
+    {
+      "check": "length_balanced: training completed",
+      "passed": true,
+      "detail": "completed"
+    },
+    {
+      "check": "length_balanced: first micro-batch loss equals log 2",
+      "passed": true,
+      "detail": {
+        "loss": 0.6931471824645996,
+        "log_2": 0.6931471805599453,
+        "abs_diff": 1.904654323148236e-09,
+        "tolerance": 0.001,
+        "passed": true
+      }
+    },
+    {
+      "check": "length_balanced: LoRA init digest",
+      "passed": true,
+      "detail": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e"
+    },
+    {
+      "check": "eval standard: has mode stratified",
+      "passed": true,
+      "detail": [
+        "generate",
+        "pairs",
+        "stratified",
+        "wordlimit"
+      ]
+    },
+    {
+      "check": "eval standard:stratified: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval standard: adapter is the trained standard adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/standard",
+        "train_adapter": "outputs/task1_dpo/standard"
+      }
+    },
+    {
+      "check": "eval standard:stratified: DPO loss beta equals training beta",
+      "passed": true,
+      "detail": {
+        "eval": 0.1,
+        "train": 0.1
+      }
+    },
+    {
+      "check": "eval length_balanced: has mode stratified",
+      "passed": true,
+      "detail": [
+        "stratified",
+        "wordlimit"
+      ]
+    },
+    {
+      "check": "eval length_balanced:stratified: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval length_balanced: adapter is the trained length_balanced adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/length_balanced",
+        "train_adapter": "outputs/task1_dpo/length_balanced"
+      }
+    },
+    {
+      "check": "eval length_balanced:stratified: DPO loss beta equals training beta",
+      "passed": true,
+      "detail": {
+        "eval": 0.1,
+        "train": 0.1
+      }
+    },
+    {
+      "check": "eval standard: has mode wordlimit",
+      "passed": true,
+      "detail": [
+        "generate",
+        "pairs",
+        "stratified",
+        "wordlimit"
+      ]
+    },
+    {
+      "check": "eval standard:wordlimit: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval standard: adapter is the trained standard adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/standard",
+        "train_adapter": "outputs/task1_dpo/standard"
+      }
+    },
+    {
+      "check": "eval length_balanced: has mode wordlimit",
+      "passed": true,
+      "detail": [
+        "stratified",
+        "wordlimit"
+      ]
+    },
+    {
+      "check": "eval length_balanced:wordlimit: full run (not smoke, no --limit)",
+      "passed": true,
+      "detail": {
+        "smoke": false,
+        "limit": null
+      }
+    },
+    {
+      "check": "eval length_balanced: adapter is the trained length_balanced adapter",
+      "passed": true,
+      "detail": {
+        "eval_adapter": "outputs/task1_dpo/length_balanced",
+        "train_adapter": "outputs/task1_dpo/length_balanced"
+      }
+    },
+    {
+      "check": "wordlimit: identical generation settings across ['standard', 'length_balanced']",
+      "passed": true,
+      "detail": {
+        "differ_from_standard": []
+      }
+    },
+    {
+      "check": "standard word-limit: every limit parsed",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "check": "length_balanced word-limit: every limit parsed",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "check": "stratified pairs: same stratum labels for both models",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "stratified pairs: expected strata",
+      "passed": true,
+      "detail": [
+        "length_matched",
+        "preferred_longer",
+        "rejected_longer"
+      ]
+    },
+    {
+      "check": "standard stratified accuracy recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.5485232067510548,
+        "saved": 0.5485232067510548
+      }
+    },
+    {
+      "check": "standard word-limit compliance recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.5,
+        "saved": 0.5
+      }
+    },
+    {
+      "check": "length_balanced stratified accuracy recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.6160337552742616,
+        "saved": 0.6160337552742616
+      }
+    },
+    {
+      "check": "length_balanced word-limit compliance recomputed from per-item outputs",
+      "passed": true,
+      "detail": {
+        "recomputed": 0.5,
+        "saved": 0.5
+      }
+    }
+  ],
+  "wall_clock_seconds": 2.557915666999179,
+  "table": {
+    "budget_note": "standard is one epoch over all retained dpo_standard_train pairs; the beta forks are short runs over the first short_ablation_examples retained pairs; the budgets differ",
+    "kl_definition": "common.metrics.sampled_kl pooled over all generated response tokens (token-level mean); the untrained base model's KL is 0 by definition and not computed",
+    "dpo_loss_definition": "held-out DPO loss at each run's own training beta",
+    "rows": [
+      {
+        "run": "standard",
+        "budget": "standard one-epoch run: all 1446 retained pairs, 91 optimizer steps",
+        "train_examples": 1446,
+        "optimizer_steps": 91,
+        "beta": 0.1,
+        "n_pairs": 290,
+        "dpo_loss": 0.6749373647808191,
+        "dpo_loss_beta": 0.1,
+        "preference_accuracy": 0.6448275862068965,
+        "acc_ci_low": 0.5896551724137931,
+        "acc_ci_high": 0.7,
+        "mean_margin": 0.4315089360232754,
+        "m_ci_low": 0.24752074133436164,
+        "m_ci_high": 0.6147659930089842,
+        "n_responses": 290,
+        "kl_token_pooled": -2.7932175120041264e-05,
+        "kl_computed": true,
+        "rm_mean": 1.342157482278758,
+        "rm_std": 1.1066661197570078,
+        "len_mean": 155.6206896551724,
+        "len_std": 105.8477806823858,
+        "len_median": 214.0,
+        "len_iqr": 218.75,
+        "truncated_fraction": 0.46206896551724136,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "run": "beta_0p03",
+        "budget": "short-run fork: first 600 retained pairs, 1 epoch, 38 optimizer steps",
+        "train_examples": 600,
+        "optimizer_steps": 38,
+        "beta": 0.03,
+        "n_pairs": 290,
+        "dpo_loss": 0.6910752199594381,
+        "dpo_loss_beta": 0.03,
+        "preference_accuracy": 0.6241379310344828,
+        "acc_ci_low": 0.5655172413793104,
+        "acc_ci_high": 0.6793103448275862,
+        "mean_margin": 0.1415769441310188,
+        "m_ci_low": 0.0641637298158081,
+        "m_ci_high": 0.21931797631325775,
+        "n_responses": 290,
+        "kl_token_pooled": -4.2288028012743627e-05,
+        "kl_computed": true,
+        "rm_mean": 1.3150185946760506,
+        "rm_std": 1.1530605233377855,
+        "len_mean": 154.89310344827587,
+        "len_std": 106.14767992018278,
+        "len_median": 206.0,
+        "len_iqr": 220.75,
+        "truncated_fraction": 0.45517241379310347,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "run": "beta_0p10",
+        "budget": "short-run fork: first 600 retained pairs, 1 epoch, 38 optimizer steps",
+        "train_examples": 600,
+        "optimizer_steps": 38,
+        "beta": 0.1,
+        "n_pairs": 290,
+        "dpo_loss": 0.6870623240702378,
+        "dpo_loss_beta": 0.1,
+        "preference_accuracy": 0.6275862068965518,
+        "acc_ci_low": 0.5689655172413793,
+        "acc_ci_high": 0.6827586206896552,
+        "mean_margin": 0.13221009483817836,
+        "m_ci_low": 0.05880157939270781,
+        "m_ci_high": 0.20596404243774455,
+        "n_responses": 290,
+        "kl_token_pooled": -3.207877109078624e-05,
+        "kl_computed": true,
+        "rm_mean": 1.3375899610848263,
+        "rm_std": 1.1410059146728344,
+        "len_mean": 155.3310344827586,
+        "len_std": 106.48581289169796,
+        "len_median": 214.0,
+        "len_iqr": 220.75,
+        "truncated_fraction": 0.4586206896551724,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "run": "beta_0p30",
+        "budget": "short-run fork: first 600 retained pairs, 1 epoch, 38 optimizer steps",
+        "train_examples": 600,
+        "optimizer_steps": 38,
+        "beta": 0.3,
+        "n_pairs": 290,
+        "dpo_loss": 0.6768325357198852,
+        "dpo_loss_beta": 0.3,
+        "preference_accuracy": 0.6344827586206897,
+        "acc_ci_low": 0.5792241379310346,
+        "acc_ci_high": 0.6896551724137931,
+        "mean_margin": 0.13266832458561864,
+        "m_ci_low": 0.06891155631634696,
+        "m_ci_high": 0.19646699933399414,
+        "n_responses": 290,
+        "kl_token_pooled": -0.00011627926361057245,
+        "kl_computed": true,
+        "rm_mean": 1.309212375509328,
+        "rm_std": 1.1475104851271536,
+        "len_mean": 155.69655172413792,
+        "len_std": 106.84244437087668,
+        "len_median": 218.5,
+        "len_iqr": 220.75,
+        "truncated_fraction": 0.4689655172413793,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "run": "sft",
+        "budget": "untrained base model (no DPO); generation metrics only",
+        "n_responses": 290,
+        "kl_token_pooled": 0.0,
+        "kl_computed": false,
+        "rm_mean": 1.2538305874528557,
+        "rm_std": 1.1563889904142948,
+        "len_mean": 153.8206896551724,
+        "len_std": 106.33117873859092,
+        "len_median": 201.5,
+        "len_iqr": 220.75,
+        "truncated_fraction": 0.4517241379310345,
+        "n_rm_input_truncated": 0
+      }
+    ]
+  },
+  "uncertainty": {
+    "per_model": {
+      "standard": {
+        "preference_accuracy": {
+          "point": 0.6448275862068965,
+          "ci_low": 0.5896551724137931,
+          "ci_high": 0.7,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "percentile bootstrap, items resampled with replacement (pairs)"
+        },
+        "mean_margin": {
+          "point": 0.4315089360232754,
+          "ci_low": 0.24752074133436164,
+          "ci_high": 0.6147659930089842,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "percentile bootstrap, items resampled with replacement (pairs)"
+        }
+      },
+      "beta_0p03": {
+        "preference_accuracy": {
+          "point": 0.6241379310344828,
+          "ci_low": 0.5655172413793104,
+          "ci_high": 0.6793103448275862,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "percentile bootstrap, items resampled with replacement (pairs)"
+        },
+        "mean_margin": {
+          "point": 0.1415769441310188,
+          "ci_low": 0.0641637298158081,
+          "ci_high": 0.21931797631325775,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "percentile bootstrap, items resampled with replacement (pairs)"
+        }
+      },
+      "beta_0p10": {
+        "preference_accuracy": {
+          "point": 0.6275862068965518,
+          "ci_low": 0.5689655172413793,
+          "ci_high": 0.6827586206896552,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "percentile bootstrap, items resampled with replacement (pairs)"
+        },
+        "mean_margin": {
+          "point": 0.13221009483817836,
+          "ci_low": 0.05880157939270781,
+          "ci_high": 0.20596404243774455,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "percentile bootstrap, items resampled with replacement (pairs)"
+        }
+      },
+      "beta_0p30": {
+        "preference_accuracy": {
+          "point": 0.6344827586206897,
+          "ci_low": 0.5792241379310346,
+          "ci_high": 0.6896551724137931,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "percentile bootstrap, items resampled with replacement (pairs)"
+        },
+        "mean_margin": {
+          "point": 0.13266832458561864,
+          "ci_low": 0.06891155631634696,
+          "ci_high": 0.19646699933399414,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "percentile bootstrap, items resampled with replacement (pairs)"
+        }
+      }
+    },
+    "fork_differences": {
+      "beta_0p03_minus_beta_0p10": {
+        "preference_accuracy": {
+          "point": -0.0034482758620689724,
+          "ci_low": -0.034482758620689724,
+          "ci_high": 0.02758620689655178,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (pair IDs)"
+        },
+        "kl_token_pooled": {
+          "point": -1.0209256921957386e-05,
+          "ci_low": -8.504183934916563e-05,
+          "ci_high": 6.495768966603547e-05,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs); KL recomputed as the pooled token mean on each resample"
+        },
+        "rm_mean": {
+          "point": -0.02257136640877566,
+          "ci_low": -0.06410859239512463,
+          "ci_high": 0.016349835560239688,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs)"
+        },
+        "len_mean": {
+          "point": -0.4379310344827445,
+          "ci_low": -1.3310344827586107,
+          "ci_high": 0.3103448275861929,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs)"
+        }
+      },
+      "beta_0p10_minus_beta_0p30": {
+        "preference_accuracy": {
+          "point": -0.006896551724137945,
+          "ci_low": -0.037931034482758585,
+          "ci_high": 0.024137931034482807,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (pair IDs)"
+        },
+        "kl_token_pooled": {
+          "point": 8.42004925197862e-05,
+          "ci_low": 2.133416393486928e-05,
+          "ci_high": 0.00014565878317359133,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs); KL recomputed as the pooled token mean on each resample"
+        },
+        "rm_mean": {
+          "point": 0.02837758557549841,
+          "ci_low": -0.010801694475371269,
+          "ci_high": 0.0683749958564495,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs)"
+        },
+        "len_mean": {
+          "point": -0.3655172413793082,
+          "ci_low": -1.1517241379310406,
+          "ci_high": 0.29310344827587187,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs)"
+        }
+      },
+      "beta_0p03_minus_beta_0p30": {
+        "preference_accuracy": {
+          "point": -0.010344827586206917,
+          "ci_low": -0.04137931034482756,
+          "ci_high": 0.020689655172413834,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (pair IDs)"
+        },
+        "kl_token_pooled": {
+          "point": 7.399123559782882e-05,
+          "ci_low": 2.958062310196431e-06,
+          "ci_high": 0.00014972653243180953,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs); KL recomputed as the pooled token mean on each resample"
+        },
+        "rm_mean": {
+          "point": 0.005806219166722748,
+          "ci_low": -0.039039921596132565,
+          "ci_high": 0.05221941158689291,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs)"
+        },
+        "len_mean": {
+          "point": -0.8034482758620527,
+          "ci_low": -1.8655172413793082,
+          "ci_high": 0.15172413793104056,
+          "n_resamples": 10000,
+          "n_nonfinite_resamples": 0,
+          "seed": 6304,
+          "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs)"
+        }
+      }
+    },
+    "standard_minus_sft": {
+      "rm_mean": {
+        "point": 0.08832689482590239,
+        "ci_low": 0.010957851409912208,
+        "ci_high": 0.16953327244725716,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs)"
+      },
+      "len_mean": {
+        "point": 1.8000000000000114,
+        "ci_low": -0.3897413793103474,
+        "ci_high": 4.396551724137936,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs)"
+      }
+    }
+  }
+}
