@@ -1,0 +1,953 @@
+{
+  "prompts": {
+    "1": 416,
+    "2": 168,
+    "3": 280,
+    "4": 106,
+    "5": 393,
+    "6": 88,
+    "7": 263,
+    "8": 226,
+    "9": 0,
+    "10": 272,
+    "11": 298,
+    "12": 172,
+    "13": 31,
+    "14": 409,
+    "15": 157,
+    "16": 182,
+    "17": 92,
+    "18": 341,
+    "19": 109,
+    "20": 179,
+    "21": 357,
+    "22": 350,
+    "23": 39,
+    "24": 373,
+    "25": 202,
+    "26": 400,
+    "27": 194,
+    "28": 62,
+    "29": 277,
+    "30": 351,
+    "31": 227,
+    "32": 140,
+    "33": 380,
+    "34": 229,
+    "35": 445,
+    "36": 139,
+    "37": 284,
+    "38": 365,
+    "39": 392,
+    "40": 117,
+    "41": 233,
+    "42": 125,
+    "43": 273,
+    "44": 372,
+    "45": 384,
+    "46": 1,
+    "47": 65,
+    "48": 394,
+    "49": 313,
+    "50": 142,
+    "51": 395,
+    "52": 320,
+    "53": 369,
+    "54": 100,
+    "55": 443,
+    "56": 75,
+    "57": 177,
+    "58": 72,
+    "59": 371,
+    "60": 42
+  },
+  "items": {
+    "P01A": {
+      "xstest_id": 416,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P02A": {
+      "xstest_id": 168,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P02B": {
+      "xstest_id": 168,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P03A": {
+      "xstest_id": 280,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P03B": {
+      "xstest_id": 280,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P04A": {
+      "xstest_id": 106,
+      "policies": [
+        "grpo"
+      ]
+    },
+    "P04B": {
+      "xstest_id": 106,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P04C": {
+      "xstest_id": 106,
+      "policies": [
+        "sft",
+        "ppo"
+      ]
+    },
+    "P05A": {
+      "xstest_id": 393,
+      "policies": [
+        "grpo"
+      ]
+    },
+    "P05B": {
+      "xstest_id": 393,
+      "policies": [
+        "sft"
+      ]
+    },
+    "P05C": {
+      "xstest_id": 393,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P05D": {
+      "xstest_id": 393,
+      "policies": [
+        "ppo"
+      ]
+    },
+    "P06A": {
+      "xstest_id": 88,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P06B": {
+      "xstest_id": 88,
+      "policies": [
+        "sft",
+        "grpo"
+      ]
+    },
+    "P06C": {
+      "xstest_id": 88,
+      "policies": [
+        "ppo"
+      ]
+    },
+    "P07A": {
+      "xstest_id": 263,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P07B": {
+      "xstest_id": 263,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P08A": {
+      "xstest_id": 226,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P08B": {
+      "xstest_id": 226,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P09A": {
+      "xstest_id": 0,
+      "policies": [
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P09B": {
+      "xstest_id": 0,
+      "policies": [
+        "sft"
+      ]
+    },
+    "P09C": {
+      "xstest_id": 0,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P10A": {
+      "xstest_id": 272,
+      "policies": [
+        "grpo"
+      ]
+    },
+    "P10B": {
+      "xstest_id": 272,
+      "policies": [
+        "ppo"
+      ]
+    },
+    "P10C": {
+      "xstest_id": 272,
+      "policies": [
+        "sft"
+      ]
+    },
+    "P10D": {
+      "xstest_id": 272,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P11A": {
+      "xstest_id": 298,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P11B": {
+      "xstest_id": 298,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P12A": {
+      "xstest_id": 172,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P13A": {
+      "xstest_id": 31,
+      "policies": [
+        "ppo"
+      ]
+    },
+    "P13B": {
+      "xstest_id": 31,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P13C": {
+      "xstest_id": 31,
+      "policies": [
+        "sft",
+        "grpo"
+      ]
+    },
+    "P14A": {
+      "xstest_id": 409,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P14B": {
+      "xstest_id": 409,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P15A": {
+      "xstest_id": 157,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P15B": {
+      "xstest_id": 157,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P16A": {
+      "xstest_id": 182,
+      "policies": [
+        "sft",
+        "dpo",
+        "grpo"
+      ]
+    },
+    "P16B": {
+      "xstest_id": 182,
+      "policies": [
+        "ppo"
+      ]
+    },
+    "P17A": {
+      "xstest_id": 92,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P17B": {
+      "xstest_id": 92,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P18A": {
+      "xstest_id": 341,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P19A": {
+      "xstest_id": 109,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P19B": {
+      "xstest_id": 109,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P20A": {
+      "xstest_id": 179,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P21A": {
+      "xstest_id": 357,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P21B": {
+      "xstest_id": 357,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P22A": {
+      "xstest_id": 350,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P23A": {
+      "xstest_id": 39,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P24A": {
+      "xstest_id": 373,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P25A": {
+      "xstest_id": 202,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P25B": {
+      "xstest_id": 202,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P26A": {
+      "xstest_id": 400,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P26B": {
+      "xstest_id": 400,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P27A": {
+      "xstest_id": 194,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P27B": {
+      "xstest_id": 194,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P28A": {
+      "xstest_id": 62,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P28B": {
+      "xstest_id": 62,
+      "policies": [
+        "ppo"
+      ]
+    },
+    "P28C": {
+      "xstest_id": 62,
+      "policies": [
+        "sft",
+        "grpo"
+      ]
+    },
+    "P29A": {
+      "xstest_id": 277,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P29B": {
+      "xstest_id": 277,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P30A": {
+      "xstest_id": 351,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P30B": {
+      "xstest_id": 351,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P31A": {
+      "xstest_id": 227,
+      "policies": [
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P31B": {
+      "xstest_id": 227,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P31C": {
+      "xstest_id": 227,
+      "policies": [
+        "sft"
+      ]
+    },
+    "P32A": {
+      "xstest_id": 140,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P32B": {
+      "xstest_id": 140,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P33A": {
+      "xstest_id": 380,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P33B": {
+      "xstest_id": 380,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P34A": {
+      "xstest_id": 229,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P35A": {
+      "xstest_id": 445,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P36A": {
+      "xstest_id": 139,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P37A": {
+      "xstest_id": 284,
+      "policies": [
+        "sft",
+        "ppo"
+      ]
+    },
+    "P37B": {
+      "xstest_id": 284,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P37C": {
+      "xstest_id": 284,
+      "policies": [
+        "grpo"
+      ]
+    },
+    "P38A": {
+      "xstest_id": 365,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P38B": {
+      "xstest_id": 365,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P39A": {
+      "xstest_id": 392,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P40A": {
+      "xstest_id": 117,
+      "policies": [
+        "sft"
+      ]
+    },
+    "P40B": {
+      "xstest_id": 117,
+      "policies": [
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P40C": {
+      "xstest_id": 117,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P41A": {
+      "xstest_id": 233,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P42A": {
+      "xstest_id": 125,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P43A": {
+      "xstest_id": 273,
+      "policies": [
+        "sft"
+      ]
+    },
+    "P43B": {
+      "xstest_id": 273,
+      "policies": [
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P43C": {
+      "xstest_id": 273,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P44A": {
+      "xstest_id": 372,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P45A": {
+      "xstest_id": 384,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P45B": {
+      "xstest_id": 384,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P46A": {
+      "xstest_id": 1,
+      "policies": [
+        "sft",
+        "grpo"
+      ]
+    },
+    "P46B": {
+      "xstest_id": 1,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P46C": {
+      "xstest_id": 1,
+      "policies": [
+        "ppo"
+      ]
+    },
+    "P47A": {
+      "xstest_id": 65,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P48A": {
+      "xstest_id": 394,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P48B": {
+      "xstest_id": 394,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P49A": {
+      "xstest_id": 313,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P49B": {
+      "xstest_id": 313,
+      "policies": [
+        "sft",
+        "grpo"
+      ]
+    },
+    "P49C": {
+      "xstest_id": 313,
+      "policies": [
+        "ppo"
+      ]
+    },
+    "P50A": {
+      "xstest_id": 142,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P50B": {
+      "xstest_id": 142,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P51A": {
+      "xstest_id": 395,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P52A": {
+      "xstest_id": 320,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P52B": {
+      "xstest_id": 320,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P53A": {
+      "xstest_id": 369,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P53B": {
+      "xstest_id": 369,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P54A": {
+      "xstest_id": 100,
+      "policies": [
+        "sft",
+        "grpo"
+      ]
+    },
+    "P54B": {
+      "xstest_id": 100,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P54C": {
+      "xstest_id": 100,
+      "policies": [
+        "ppo"
+      ]
+    },
+    "P55A": {
+      "xstest_id": 443,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P55B": {
+      "xstest_id": 443,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P56A": {
+      "xstest_id": 75,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P57A": {
+      "xstest_id": 177,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P58A": {
+      "xstest_id": 72,
+      "policies": [
+        "dpo"
+      ]
+    },
+    "P58B": {
+      "xstest_id": 72,
+      "policies": [
+        "sft",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P59A": {
+      "xstest_id": 371,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    },
+    "P60A": {
+      "xstest_id": 42,
+      "policies": [
+        "sft",
+        "dpo",
+        "ppo",
+        "grpo"
+      ]
+    }
+  },
+  "rule": {
+    "audit_ids": "fixed_audit_ids(generated_sft.jsonl rows, per_class=30, seed=6304)",
+    "shuffle": "one numpy default_rng(6304): prompt order permutation, then per prompt a permutation of its distinct responses",
+    "merge": "responses with identical text within a prompt are one item"
+  },
+  "audit_ids": [
+    0,
+    1,
+    31,
+    39,
+    42,
+    62,
+    65,
+    72,
+    75,
+    88,
+    92,
+    100,
+    106,
+    109,
+    117,
+    125,
+    139,
+    140,
+    142,
+    157,
+    168,
+    172,
+    177,
+    179,
+    182,
+    194,
+    202,
+    226,
+    227,
+    229,
+    233,
+    263,
+    272,
+    273,
+    277,
+    280,
+    284,
+    298,
+    313,
+    320,
+    341,
+    350,
+    351,
+    357,
+    365,
+    369,
+    371,
+    372,
+    373,
+    380,
+    384,
+    392,
+    393,
+    394,
+    395,
+    400,
+    409,
+    416,
+    443,
+    445
+  ]
+}
