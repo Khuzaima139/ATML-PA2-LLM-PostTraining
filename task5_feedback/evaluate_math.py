@@ -23,7 +23,7 @@ from task1_dpo.evaluate import generate_responses
 from task1_dpo.train import display_path, peak_vram_bytes, run_metadata
 from task3_grpo.grpo_utils import effective_generation_settings
 from task5_feedback import protocol as P
-from task5_feedback.judge_wrapper import judge_call, judge_generation_settings, parity_check
+from task5_feedback.judge_wrapper import enforce_parity, judge_call, judge_generation_settings, parity_check
 from task5_feedback.rlaif import PairwiseAIJudge
 
 
@@ -294,8 +294,8 @@ def run_judge(args, cfg):
             secs.append(rec["seconds"])
             if n_parity[t["comparison"]] < args.parity_checks:
                 n_parity[t["comparison"]] += 1
-                result["parity"].append({"comparison": t["comparison"], "prompt_id": t["prompt_id"],
-                                         **parity_check(judge, t["question"], t["a_text"], t["b_text"], rec["label"])})
+                enforce_parity(result["parity"], {"comparison": t["comparison"], "prompt_id": t["prompt_id"],
+                                                  **parity_check(judge, t["question"], t["a_text"], t["b_text"], rec["label"])})
             out = {k2: t[k2] for k2 in ("comparison", "prompt_id", "index", "a_policy", "b_policy", "a_correct", "b_correct")}
             append_jsonl(out_jsonl, {**out, **rec})
             result["n_calls_done"] = k

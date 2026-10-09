@@ -13,7 +13,7 @@ from task5_feedback import protocol as P
 from task5_feedback.compare_feedback import (
     agreement_block, build_summary, category_block, drop_section, judge_outcome, swap_block, win_rate_block, win_scores,
 )
-from task5_feedback.judge_wrapper import judge_call, parity_check, released_swap
+from task5_feedback.judge_wrapper import ParityMismatch, enforce_parity, judge_call, parity_check, released_swap
 from task5_feedback.rlaif import PairwiseAIJudge
 from task5_feedback.score_perturbations import verifier_pairs
 
@@ -41,11 +41,28 @@ def test_classify_response(text, gold, truncated, expected):
     assert out["correct"] == (expected == "correct")
 
 
-def test_gold_mentioned_reads_commas_and_signs():
-    assert P.gold_mentioned("costs 1,200 dollars", "1200")
-    assert P.gold_mentioned("drop of -18 degrees", "18")
-    assert P.gold_mentioned("drop of -18 degrees", "-18")
-    assert not P.gold_mentioned("118 and 181", "18")
+@pytest.mark.parametrize("text,gold,present", [
+    ("drop of -18 degrees", "18", False),   # sign included: -18 is not 18
+    ("drop of -18 degrees", "-18", True),
+    ("so 18.0 in total", "18", True),       # numeric equality
+    ("costs 1,800 dollars", "1800", True),  # commas stripped
+    ("costs 1,200 dollars", "1200", True),
+    ("118 and 181", "18", False),
+    ("x = 5-7 so", "7", True),              # minus after a digit is subtraction, not a sign
+    ("(3+4)-7", "7", True),
+    ("it fell to -7", "7", False),
+])
+def test_gold_mentioned_sign_and_normalization(text, gold, present):
+    assert P.gold_mentioned(text, gold) == present
+
+
+@pytest.mark.parametrize("text,gold,expected", [
+    ("it went to -18 degrees\n#### 5", "18", "wrong_compliant_gold_absent"),
+    ("so 18.0 apples\n#### 5", "18", "wrong_compliant_gold_present"),
+    ("about 1,800 people\n#### 5", "1800", "wrong_compliant_gold_present"),
+])
+def test_failure_type_gold_present_is_signed(text, gold, expected):
+    assert P.classify_response(text, gold, False)["failure_type"] == expected
 
 
 # ---------------------------------------------------------------- judge mocks
@@ -128,6 +145,25 @@ def test_parity_check_leaves_cache_untouched(tmp_path):
     out = parity_check(judge, "p", "good one", "bad one", rec["label"])
     assert out["match"] and judge.cache == {"sentinel": "A"} and judge.cache_path == tmp_path / "released_cache.json"
     assert not (tmp_path / "released_cache.json").exists()
+
+
+def test_parity_mismatch_raises_and_is_logged(tmp_path):
+    # A judge whose output changes between calls: the wrapper call says A, the released re-run says B.
+    outputs = iter([" A", " B"])
+    judge = fake_judge(lambda a, b: next(outputs), tmp_path)
+    rec = judge_call(judge, "p", "x", "y")
+    log = []
+    with pytest.raises(ParityMismatch):
+        enforce_parity(log, {"pair_id": "1:x", **parity_check(judge, "p", "x", "y", rec["label"])})
+    assert len(log) == 1 and not log[0]["match"]
+
+
+def test_parity_match_does_not_raise(tmp_path):
+    judge = fake_judge(content_rule, tmp_path)
+    rec = judge_call(judge, "p", "good one", "bad one")
+    log = []
+    enforce_parity(log, parity_check(judge, "p", "good one", "bad one", rec["label"]))
+    assert log[0]["match"]
 
 
 def test_swap_gives_opposite_physical_order(tmp_path):
@@ -264,12 +300,23 @@ def qrow(pid, label, matched=True):
 
 
 def test_qualitative_rule_branches():
-    assert P.qualitative_choice([qrow(5, "A"), qrow(9, "B"), qrow(7, "B"), qrow(1, "TIE")]) == {
+    out = P.qualitative_choice([qrow(5, "A"), qrow(9, "B"), qrow(7, "B"), qrow(1, "TIE")])
+    assert {k: out[k] for k in ("problem_id", "pair_id", "branch", "judge_label", "judge_parse_matched")} == {
         "problem_id": 7, "pair_id": "7:x", "branch": "perturbed_preferred", "judge_label": "B", "judge_parse_matched": True}
     out = P.qualitative_choice([qrow(5, "A"), qrow(9, "TIE", matched=False), qrow(3, "TIE")])
-    assert (out["problem_id"], out["branch"]) == (3, "tie")
+    assert (out["problem_id"], out["branch"], out["n_parse_failures_in_category"]) == (3, "tie", 1)
     out = P.qualitative_choice([qrow(5, "A"), qrow(2, "A")])
     assert (out["problem_id"], out["branch"]) == (2, "lowest_id")
+
+
+def test_qualitative_parse_failure_tie_never_qualifies():
+    # Parse failure at the lowest id, genuine TIE higher: the genuine TIE is chosen.
+    out = P.qualitative_choice([qrow(1, "TIE", matched=False), qrow(4, "A"), qrow(6, "TIE")])
+    assert (out["problem_id"], out["branch"], out["judge_parse_matched"]) == (6, "tie", True)
+    # Only parse-failure ties and A: falls through to lowest_id (which may be the parse failure, flagged).
+    out = P.qualitative_choice([qrow(3, "TIE", matched=False), qrow(8, "A")])
+    assert (out["problem_id"], out["branch"], out["judge_parse_matched"]) == (3, "lowest_id", False)
+    assert out["n_parse_failures_in_category"] == 1
 
 
 # ---------------------------------------------------------------- end to end on synthetic result files

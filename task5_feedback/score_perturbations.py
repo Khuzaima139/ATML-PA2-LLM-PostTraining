@@ -18,7 +18,7 @@ from common.logging_utils import append_jsonl, save_json, wall_timer
 from task1_dpo.dataset_stats import describe
 from task1_dpo.train import display_path, peak_vram_bytes, run_metadata
 from task5_feedback import protocol as P
-from task5_feedback.judge_wrapper import judge_call, judge_generation_settings, parity_check
+from task5_feedback.judge_wrapper import enforce_parity, judge_call, judge_generation_settings, parity_check
 from task5_feedback.rlaif import PairwiseAIJudge
 from task5_feedback.rlvr import exact_reward, extract_designated_final
 
@@ -140,7 +140,7 @@ def main():
             rec = judge_call(judge, p["question"], p["better_response"], p["other_response"], swap_order=swap)
             secs.append(rec["seconds"])
             if not swap and k <= args.parity_checks:
-                result["parity"].append({"pair_id": p["pair_id"], **parity_check(
+                enforce_parity(result["parity"], {"pair_id": p["pair_id"], **parity_check(
                     judge, p["question"], p["better_response"], p["other_response"], rec["label"])})
             append_jsonl(out_jsonl, {"pair_id": p["pair_id"], "problem_id": p["problem_id"], "category": p["category"],
                                      "preference": P.judge_preference(rec["label"], rec["parse_matched"]), **rec})

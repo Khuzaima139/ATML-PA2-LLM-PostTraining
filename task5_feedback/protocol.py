@@ -89,14 +89,15 @@ def prompt_id(dataset: str, row: dict) -> str:
 
 
 # ---------------------------------------------------------------- per-response rules
-_NUMBER_RE = re.compile(r"-?\d[\d,]*(?:\.\d+)?")
+# A leading minus is a sign unless it directly follows a digit or ")" (then it is subtraction: "5-7" -> 5, 7).
+_NUMBER_RE = re.compile(r"(?:(?<![\d)])-)?\d[\d,]*(?:\.\d+)?")
 
 
 def gold_mentioned(text: str, gold) -> bool:
-    """True if any number in the text, read with or without its leading minus sign, equals gold."""
+    """True if any number token in the text, sign included, equals gold under the verifier's normalization
+    (commas stripped, numeric equality): "18.0" and "1,800" match 18 and 1800; "-18" does not match 18."""
     for tok in _NUMBER_RE.findall(str(text)):
-        tok = tok.replace(",", "")
-        if numerically_equal(tok, gold) or numerically_equal(tok.lstrip("-"), gold):
+        if numerically_equal(tok.replace(",", ""), gold):
             return True
     return False
 
@@ -160,14 +161,16 @@ def judge_preference(label: str, parse_matched: bool) -> str:
 
 def qualitative_choice(judge_rows: list[dict]) -> dict:
     """Qualitative-example selection rule for one category. judge_rows: released-order rows with problem_id, label (released, parse
-    failures already TIE), parse_matched. Rule branches: perturbed_preferred, tie, lowest_id."""
+    failures already TIE), parse_matched. Branches in order, lowest problem_id within each: perturbed_preferred
+    (parsed B), tie (genuine parsed TIE only; parse-failure ties never qualify), lowest_id (any row)."""
     rows = sorted(judge_rows, key=lambda r: r["problem_id"])
-    for branch, keep in (("perturbed_preferred", lambda r: r["label"] == "B"),
-                         ("tie", lambda r: r["label"] == "TIE"),
+    for branch, keep in (("perturbed_preferred", lambda r: r["parse_matched"] and r["label"] == "B"),
+                         ("tie", lambda r: r["parse_matched"] and r["label"] == "TIE"),
                          ("lowest_id", lambda r: True)):
         hit = [r for r in rows if keep(r)]
         if hit:
             r = hit[0]
             return {"problem_id": r["problem_id"], "pair_id": r.get("pair_id"), "branch": branch,
-                    "judge_label": r["label"], "judge_parse_matched": r["parse_matched"]}
+                    "judge_label": r["label"], "judge_parse_matched": r["parse_matched"],
+                    "n_parse_failures_in_category": sum(1 for x in rows if not x["parse_matched"])}
     return {"problem_id": None, "branch": "none"}

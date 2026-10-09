@@ -65,6 +65,10 @@ def judge_call(judge, problem: str, a: str, b: str, swap_order: bool = False) ->
     }
 
 
+class ParityMismatch(RuntimeError):
+    """The wrapper label differs from the released compare() label; the judge stage must stop."""
+
+
 def parity_check(judge, problem: str, a: str, b: str, wrapper_label: str) -> dict:
     """Run the released compare() with a throwaway cache and compare its label with the wrapper's."""
     old_cache, old_path = judge.cache, judge.cache_path
@@ -75,6 +79,13 @@ def parity_check(judge, problem: str, a: str, b: str, wrapper_label: str) -> dic
         finally:
             judge.cache, judge.cache_path = old_cache, old_path
     return {"released_label": released, "wrapper_label": wrapper_label, "match": released == wrapper_label}
+
+
+def enforce_parity(log: list, entry: dict) -> None:
+    """Append one parity record to the run log, then raise ParityMismatch if it does not match."""
+    log.append(entry)
+    if not entry["match"]:
+        raise ParityMismatch(f"wrapper {entry['wrapper_label']} != released {entry['released_label']}: {entry}")
 
 
 def judge_generation_settings(judge, cfg: dict) -> dict:
