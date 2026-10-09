@@ -1,0 +1,332 @@
+{
+  "script": "task4_safety.reward_pairs",
+  "git": {
+    "commit": "58dd38f4e639463aef2b5210e10fe962dfe16efb",
+    "dirty": true
+  },
+  "seed": 6304,
+  "bootstrap": {
+    "n_resamples": 10000,
+    "seed": 6304,
+    "interval": "95% percentile (2.5th, 97.5th)",
+    "rng": "a fresh numpy.random.default_rng(seed) for every quantity"
+  },
+  "grpo_minus_ppo": {
+    "n_prompts": 165,
+    "same_prompt_ids": true,
+    "same_order": true,
+    "n_rm_input_truncated": {
+      "ppo": 0,
+      "grpo": 0
+    },
+    "mean_rm": {
+      "ppo": 1.7359627463600853,
+      "grpo": 1.9049039898496685
+    },
+    "rm_mean": {
+      "point": 0.16894124348958317,
+      "ci_low": 0.06718332117254089,
+      "ci_high": 0.27748587579438183,
+      "n_resamples": 10000,
+      "n_nonfinite_resamples": 0,
+      "seed": 6304,
+      "method": "paired percentile bootstrap over prompt ids: the same resampled indices for both; difference = GRPO minus PPO"
+    },
+    "prompts": {
+      "path": "data/rl_prompt_pool_eval.jsonl",
+      "filter": {
+        "rule": "use a prompt only if len(apply_chat_template(messages, add_generation_prompt=True)) <= max_prompt_length; longer prompts are excluded, never truncated",
+        "max_prompt_length": 256,
+        "n_input": 200,
+        "n_kept": 165,
+        "n_excluded": 35,
+        "excluded": [
+          {
+            "index": 1,
+            "prompt_id": "01a4b2ed4479c8fa682c3466f7db16f277168d90c8450a729089f4527345ee8d",
+            "prompt_tokens": 739
+          },
+          {
+            "index": 4,
+            "prompt_id": "faff5c962224bd104f4c6eb8c00bcfd84c37b29d3de55e600ccc3cc3ea4c3f99",
+            "prompt_tokens": 390
+          },
+          {
+            "index": 11,
+            "prompt_id": "23bd8f99e8359f0052e16c65689eae80cb20bf937ea6ca5794d36d29734a560b",
+            "prompt_tokens": 521
+          },
+          {
+            "index": 34,
+            "prompt_id": "4ce02e37309b297c66d5aaa3b7f0182e38d4fadc65d68f8cb2ddfed9bc499253",
+            "prompt_tokens": 265
+          },
+          {
+            "index": 36,
+            "prompt_id": "d713c67df8ee6c3b6d3cd3ecce25cf7e68867632460d315cd1cee2a69886c07c",
+            "prompt_tokens": 485
+          },
+          {
+            "index": 41,
+            "prompt_id": "e943441f467478f47c86fa75b23d519b68adea52f38899de5ecc77c06fbbe529",
+            "prompt_tokens": 428
+          },
+          {
+            "index": 43,
+            "prompt_id": "5eb104ab2c65ab312f62e795f64d2f14ac0f2bb98a4558ac90395a1a7fb59b69",
+            "prompt_tokens": 437
+          },
+          {
+            "index": 48,
+            "prompt_id": "fd3207276f3378a596af245fbd89019e614e6ae0f52cb312ee3aa859aad5a9c6",
+            "prompt_tokens": 1084
+          },
+          {
+            "index": 53,
+            "prompt_id": "cba04afe1491bff2f9159cc15441b48170096ef4339e52d60e4e901b17141031",
+            "prompt_tokens": 1858
+          },
+          {
+            "index": 59,
+            "prompt_id": "1e9a1dfae5d6bfe05464466e784fe22def7fc3d9927291e513b3c8389e3873da",
+            "prompt_tokens": 700
+          },
+          {
+            "index": 72,
+            "prompt_id": "bc64faa4232d6d2220311b5972333ad14538cf82302dc18516ed46671fd2c7c2",
+            "prompt_tokens": 523
+          },
+          {
+            "index": 73,
+            "prompt_id": "ca953d65afaec8f63827ae649551c445c23e946945e0cc161caa4049f9cec9da",
+            "prompt_tokens": 266
+          },
+          {
+            "index": 80,
+            "prompt_id": "35a83108882fec52a6ca1424e81650ffff8cee65becbb68a1272fa0a508becfc",
+            "prompt_tokens": 545
+          },
+          {
+            "index": 81,
+            "prompt_id": "3f6816990d768e729ea9ede1e9fdbb5e9127ca8cdbf63ea12c8998246129a1c1",
+            "prompt_tokens": 613
+          },
+          {
+            "index": 89,
+            "prompt_id": "a6db48f47a99fb2745da8f40ad0e03533b758fa131282c6b0514f876c76550b3",
+            "prompt_tokens": 298
+          },
+          {
+            "index": 120,
+            "prompt_id": "d5eac3f1ed3833259dbe7f65f66d2d18d692faa7493b17dcff401e44572896a7",
+            "prompt_tokens": 307
+          },
+          {
+            "index": 129,
+            "prompt_id": "98a175e2680304c2513a0b33563d6aabf36f5ebb071027cbafee2833684bc5b8",
+            "prompt_tokens": 334
+          },
+          {
+            "index": 130,
+            "prompt_id": "4e4da235589d4153d6b9614f7d069f9b986257fcb10be059f1d4366a218ea183",
+            "prompt_tokens": 418
+          },
+          {
+            "index": 133,
+            "prompt_id": "03d68fc53b5c3ee9cd4d9437e868107d87a5e4e66cfe9234cf249c4c1347dffd",
+            "prompt_tokens": 662
+          },
+          {
+            "index": 136,
+            "prompt_id": "9ceea5b1aeedc15a79a010648379410f90cd898e7ba2e1b2b267e849a8b02816",
+            "prompt_tokens": 279
+          },
+          {
+            "index": 137,
+            "prompt_id": "60adf57b4a9532bc8e38b904d0eb6092de961c3d99cf22a1d80cabad7084a71d",
+            "prompt_tokens": 1078
+          },
+          {
+            "index": 149,
+            "prompt_id": "f7c9b3e29590943b38ff1b7fa5e8cb65e73d768907396029d5fe6855c963e9d9",
+            "prompt_tokens": 294
+          },
+          {
+            "index": 152,
+            "prompt_id": "3fd17ea1d995a1c424039e017b486f57eac2aee78e5fe18e6129f9611280ddd3",
+            "prompt_tokens": 970
+          },
+          {
+            "index": 158,
+            "prompt_id": "1877a654dd3df2175a7bbc88917a707430b88e129bd9cc261b575f445edba9df",
+            "prompt_tokens": 370
+          },
+          {
+            "index": 161,
+            "prompt_id": "1d83ac62e59d69e7731305afaca3033d45295e9a822e43f464babda998a642a3",
+            "prompt_tokens": 408
+          },
+          {
+            "index": 163,
+            "prompt_id": "1127ee833c972f00c1a9d1b005b725c4d99b0c67de5945c03f1f724a7db43780",
+            "prompt_tokens": 526
+          },
+          {
+            "index": 170,
+            "prompt_id": "ef2281473fa40ed980219dd1447f918cd9393b9e424005851a019c23c1503cef",
+            "prompt_tokens": 401
+          },
+          {
+            "index": 173,
+            "prompt_id": "1962a5cccf2313fb2c5098d3d8a5b31de615fb885568f93e1a1c70478dfef07a",
+            "prompt_tokens": 911
+          },
+          {
+            "index": 180,
+            "prompt_id": "db5029ae8131f72d2e26653560f82c993a365f30495b39f930687f60eee88720",
+            "prompt_tokens": 1781
+          },
+          {
+            "index": 183,
+            "prompt_id": "1d0765cc5f758f36b72ae8d00fefd2e3d81c23c750f99b0a67d1854f89ed09dc",
+            "prompt_tokens": 551
+          },
+          {
+            "index": 186,
+            "prompt_id": "46201d8af61d2d30859aefe704830c0a04aeca91aa519ecf3e935be8c82077df",
+            "prompt_tokens": 472
+          },
+          {
+            "index": 188,
+            "prompt_id": "1bc1bfb1626066c2377316ba20ab796716a80017f85721aaab9be5fb50dc78e3",
+            "prompt_tokens": 268
+          },
+          {
+            "index": 189,
+            "prompt_id": "c4053dc7fb2ba3bfe219c5302d384c6b714278b856b16dbe7868741ff25df843",
+            "prompt_tokens": 527
+          },
+          {
+            "index": 193,
+            "prompt_id": "4f09e0f0344b7d9beeae23def8573d1bb2ee89a922e57f6b48da7ff9307eec60",
+            "prompt_tokens": 598
+          },
+          {
+            "index": 197,
+            "prompt_id": "36b03c0667233a524c5db8fdd969f13e99ba6cbcac843e7e9c555bb3269f42cd",
+            "prompt_tokens": 263
+          }
+        ]
+      },
+      "n_evaluated": 165
+    },
+    "protocol_check": {
+      "fields": {
+        "samples_per_prompt": {
+          "ppo": 1,
+          "grpo": 1
+        },
+        "temperature": {
+          "ppo": 0.7,
+          "grpo": 0.7
+        },
+        "top_p": {
+          "ppo": 0.9,
+          "grpo": 0.9
+        },
+        "do_sample": {
+          "ppo": true,
+          "grpo": true
+        },
+        "max_prompt_length": {
+          "ppo": 256,
+          "grpo": 256
+        },
+        "max_new_tokens": {
+          "ppo": 768,
+          "grpo": 768
+        },
+        "seed_reset_before_generation": {
+          "ppo": 6304,
+          "grpo": 6304
+        },
+        "gen_batch_size": {
+          "ppo": 16,
+          "grpo": 16
+        },
+        "reward_model": {
+          "ppo": "yavuz-ai/qwen2.5-1.5b-rm-ultrafeedback",
+          "grpo": "yavuz-ai/qwen2.5-1.5b-rm-ultrafeedback"
+        },
+        "reward_max_length": {
+          "ppo": 1280,
+          "grpo": 1280
+        }
+      },
+      "fields_equal": true,
+      "seed_equal": true,
+      "prompt_filter_equal": true,
+      "completed_not_smoke": true,
+      "adapters": {
+        "ppo": "outputs/task2_ppo/standard/policy",
+        "grpo": "outputs/task3_grpo/standard/policy"
+      },
+      "adapters_standard": true,
+      "passed": true
+    },
+    "sources": {
+      "results/task2_ppo/eval_standard.json": "90fda9bd0f2f1eba173f063f115046480fd64aee234448bc990585a90b4b127e",
+      "results/task2_ppo/generations_eval_standard.jsonl": "646ac4cd39027c08b76e0e03a61ea60990271a6f534a9b2de123797cb51d9b60",
+      "results/task3_grpo/eval_standard.json": "e010686b4f5693dc6796fea663358bfaba1233ea46e577e53386fb23b2241072",
+      "results/task3_grpo/generations_eval_standard.jsonl": "bc9b769c16a2f8f69be22595cbdfa7f1b1756b159542ce791f5027eb20636a9d"
+    }
+  },
+  "dpo_minus_sft": {
+    "rm_mean": {
+      "point": 0.08832689482590239,
+      "ci_low": 0.010957851409912208,
+      "ci_high": 0.16953327244725716,
+      "n_resamples": 10000,
+      "n_nonfinite_resamples": 0,
+      "seed": 6304,
+      "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs)"
+    },
+    "source": "results/task1_dpo/summary_steps12.json uncertainty.standard_minus_sft.rm_mean",
+    "source_sha256": "fe7272acd12ae718c724d263224247ca0f7d9f3ec75f85074f06922e0aa19364",
+    "source_git": {
+      "commit": "d48135f38444f0a9263fdeb50ddf0e905192a21c",
+      "dirty": false
+    },
+    "n_prompts": {
+      "results/task1_dpo/eval_standard.json": 290,
+      "results/task1_dpo/eval_sft.json": 290
+    },
+    "prompts_path": {
+      "results/task1_dpo/eval_standard.json": "data/dpo_standard_eval.jsonl",
+      "results/task1_dpo/eval_sft.json": "data/dpo_standard_eval.jsonl"
+    },
+    "settings": {
+      "results/task1_dpo/eval_standard.json": {
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "do_sample": true,
+        "max_new_tokens": 256,
+        "max_prompt_length": 768,
+        "seed_reset_before_pass": 6304,
+        "rm_max_length": 1024,
+        "reward_model": "yavuz-ai/qwen2.5-1.5b-rm-ultrafeedback"
+      },
+      "results/task1_dpo/eval_sft.json": {
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "do_sample": true,
+        "max_new_tokens": 256,
+        "max_prompt_length": 768,
+        "seed_reset_before_pass": 6304,
+        "rm_max_length": 1024,
+        "reward_model": "yavuz-ai/qwen2.5-1.5b-rm-ultrafeedback"
+      }
+    }
+  },
+  "note": "the two differences use different prompt sets, response caps and RM caps; they are not on one scale"
+}
