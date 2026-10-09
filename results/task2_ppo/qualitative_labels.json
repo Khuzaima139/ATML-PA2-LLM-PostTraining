@@ -1,0 +1,46 @@
+{
+  "source": "results/task2_ppo/qualitative_blind.md",
+  "note": "labels fixed before the key was read",
+  "labels": [
+    {
+      "index": 1,
+      "prompt_id": "d995e3ae06848698448f0310c0956505e70240e048f520449e325f00ed1479a0",
+      "label": "same"
+    },
+    {
+      "index": 2,
+      "prompt_id": "bbb1f3edc97f55e9a504614eaf228ae71a726659d3fc5a7ede0a50272d82aa36",
+      "label": "A"
+    },
+    {
+      "index": 3,
+      "prompt_id": "31eece09e599e4f053971b2174e7dd890a4c35be0509484107026af462fd8ebe",
+      "label": "B"
+    },
+    {
+      "index": 4,
+      "prompt_id": "e06b63281f181fcbcf7f81edeed07c1708d023712f37120a53b450f3f1e8753e",
+      "label": "A"
+    },
+    {
+      "index": 5,
+      "prompt_id": "daca2da778735d6c998fbafab0580867cb0ade2edc54cdeb264f5da5d7897221",
+      "label": "same"
+    },
+    {
+      "index": 6,
+      "prompt_id": "93caf967eb5be0e7700fbec9176be10f6d09f64af8c32b691d1740c247f08269",
+      "label": "same"
+    },
+    {
+      "index": 7,
+      "prompt_id": "2894dbb726d3c81188346bf77db3eb5045e344df4eb774ecc9fbaa57f62f3e71",
+      "label": "B"
+    },
+    {
+      "index": 8,
+      "prompt_id": "2d2e242d24fd4b4f5085fa977b6e7a48ea54c216ce36a6b6197600cf018d3baf",
+      "label": "A"
+    }
+  ]
+}
