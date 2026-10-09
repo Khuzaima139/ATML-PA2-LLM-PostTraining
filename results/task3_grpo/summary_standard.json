@@ -1,0 +1,969 @@
+{
+  "script": "task3_grpo.summarize",
+  "git": {
+    "commit": "06c256b7b78ff2dc320a86512f1cb192fd25a89a",
+    "dirty": false
+  },
+  "seed": 6304,
+  "run": {
+    "peak_vram_bytes": 8928605184,
+    "peak_vram_gib": 8.315411567687988,
+    "wall_clock_seconds": 318.75231995699994,
+    "setup_seconds": 9.914247203999935,
+    "hardware": "Tesla T4",
+    "dtype": "float16"
+  },
+  "bootstrap": "10000 resamples, seed 6304, 95% percentile interval",
+  "protocol_checks": [
+    {
+      "check": "standard: train completed with 20 updates",
+      "passed": true,
+      "detail": [
+        "completed",
+        20,
+        20
+      ]
+    },
+    {
+      "check": "standard: eval completed, not smoke",
+      "passed": true,
+      "detail": [
+        "completed",
+        false
+      ]
+    },
+    {
+      "check": "fork_grpo: train completed with 8 updates",
+      "passed": true,
+      "detail": [
+        "completed",
+        8,
+        8
+      ]
+    },
+    {
+      "check": "fork_grpo: eval completed, not smoke",
+      "passed": true,
+      "detail": [
+        "completed",
+        false
+      ]
+    },
+    {
+      "check": "fork_dr_grpo: train completed with 8 updates",
+      "passed": true,
+      "detail": [
+        "completed",
+        8,
+        8
+      ]
+    },
+    {
+      "check": "fork_dr_grpo: eval completed, not smoke",
+      "passed": true,
+      "detail": [
+        "completed",
+        false
+      ]
+    },
+    {
+      "check": "standard train: commit in ('bf1fdc7', '7ced6a3') and clean tree",
+      "passed": true,
+      "detail": [
+        "7ced6a3",
+        false
+      ]
+    },
+    {
+      "check": "fork_grpo train: commit in ('bf1fdc7', '7ced6a3') and clean tree",
+      "passed": true,
+      "detail": [
+        "7ced6a3",
+        false
+      ]
+    },
+    {
+      "check": "fork_dr_grpo train: commit in ('bf1fdc7', '7ced6a3') and clean tree",
+      "passed": true,
+      "detail": [
+        "7ced6a3",
+        false
+      ]
+    },
+    {
+      "check": "standard eval: commit in ('bf1fdc7', '7ced6a3') and clean tree",
+      "passed": true,
+      "detail": [
+        "7ced6a3",
+        false
+      ]
+    },
+    {
+      "check": "fork_grpo eval: commit in ('bf1fdc7', '7ced6a3') and clean tree",
+      "passed": true,
+      "detail": [
+        "7ced6a3",
+        false
+      ]
+    },
+    {
+      "check": "fork_dr_grpo eval: commit in ('bf1fdc7', '7ced6a3') and clean tree",
+      "passed": true,
+      "detail": [
+        "7ced6a3",
+        false
+      ]
+    },
+    {
+      "check": "standard: training settings (cap 512, K 4, beta 0.1, eps 0.2, lr 5e-6, 1 epoch, masking)",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "check": "standard: seed 6304",
+      "passed": true,
+      "detail": [
+        6304,
+        6304
+      ]
+    },
+    {
+      "check": "standard: LoRA dropout 0.05 active in the training forward",
+      "passed": true,
+      "detail": "LoRA dropout 0.05 active in the training forward (train mode); generation, reference and metric forwards in eval mode (C)"
+    },
+    {
+      "check": "standard: training RM cap 1024 (release default, recorded)",
+      "passed": true,
+      "detail": 1024
+    },
+    {
+      "check": "standard: eval settings (cap 768, RM cap 1280, 1 sample, T 0.7, top_p 0.9)",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "check": "standard: 165 eval prompts",
+      "passed": true,
+      "detail": [
+        165,
+        165,
+        165
+      ]
+    },
+    {
+      "check": "standard: eval seed reset to 6304 before generation",
+      "passed": true,
+      "detail": 6304
+    },
+    {
+      "check": "standard: no non-finite steps",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "check": "standard: clip fraction 0 on every update",
+      "passed": true,
+      "detail": 0.0
+    },
+    {
+      "check": "fork_grpo: training settings (cap 512, K 4, beta 0.1, eps 0.2, lr 5e-6, 1 epoch, masking)",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "check": "fork_grpo: seed 6304",
+      "passed": true,
+      "detail": [
+        6304,
+        6304
+      ]
+    },
+    {
+      "check": "fork_grpo: LoRA dropout 0.05 active in the training forward",
+      "passed": true,
+      "detail": "LoRA dropout 0.05 active in the training forward (train mode); generation, reference and metric forwards in eval mode (C)"
+    },
+    {
+      "check": "fork_grpo: training RM cap 1024 (release default, recorded)",
+      "passed": true,
+      "detail": 1024
+    },
+    {
+      "check": "fork_grpo: eval settings (cap 768, RM cap 1280, 1 sample, T 0.7, top_p 0.9)",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "check": "fork_grpo: 165 eval prompts",
+      "passed": true,
+      "detail": [
+        165,
+        165,
+        165
+      ]
+    },
+    {
+      "check": "fork_grpo: eval seed reset to 6304 before generation",
+      "passed": true,
+      "detail": 6304
+    },
+    {
+      "check": "fork_grpo: no non-finite steps",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "check": "fork_grpo: clip fraction 0 on every update",
+      "passed": true,
+      "detail": 0.0
+    },
+    {
+      "check": "fork_dr_grpo: training settings (cap 512, K 4, beta 0.1, eps 0.2, lr 5e-6, 1 epoch, masking)",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "check": "fork_dr_grpo: seed 6304",
+      "passed": true,
+      "detail": [
+        6304,
+        6304
+      ]
+    },
+    {
+      "check": "fork_dr_grpo: LoRA dropout 0.05 active in the training forward",
+      "passed": true,
+      "detail": "LoRA dropout 0.05 active in the training forward (train mode); generation, reference and metric forwards in eval mode (C)"
+    },
+    {
+      "check": "fork_dr_grpo: training RM cap 1024 (release default, recorded)",
+      "passed": true,
+      "detail": 1024
+    },
+    {
+      "check": "fork_dr_grpo: eval settings (cap 768, RM cap 1280, 1 sample, T 0.7, top_p 0.9)",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "check": "fork_dr_grpo: 165 eval prompts",
+      "passed": true,
+      "detail": [
+        165,
+        165,
+        165
+      ]
+    },
+    {
+      "check": "fork_dr_grpo: eval seed reset to 6304 before generation",
+      "passed": true,
+      "detail": 6304
+    },
+    {
+      "check": "fork_dr_grpo: no non-finite steps",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "check": "fork_dr_grpo: clip fraction 0 on every update",
+      "passed": true,
+      "detail": 0.0
+    },
+    {
+      "check": "fork_grpo: length-diagnostic rows for every unmasked completion and finite term gradients",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "check": "fork_grpo: same prompt_ids as standard updates 1-8",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "fork_dr_grpo: length-diagnostic rows for every unmasked completion and finite term gradients",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "check": "fork_dr_grpo: same prompt_ids as standard updates 1-8",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "update-1 completions identical across the three runs (token-id sha256)",
+      "passed": true,
+      "detail": {
+        "standard": 4,
+        "fork_grpo": 4,
+        "fork_dr_grpo": 4
+      }
+    },
+    {
+      "check": "eval prompt_ids identical across the three evals (same order)",
+      "passed": true,
+      "detail": {
+        "standard": 165,
+        "fork_grpo": 165,
+        "fork_dr_grpo": 165
+      }
+    },
+    {
+      "check": "effective training generation settings recorded and identical",
+      "passed": true,
+      "detail": {
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": null,
+        "typical_p": 1.0,
+        "repetition_penalty": 1.1,
+        "no_repeat_ngram_size": 0,
+        "eos_token_id": 151645,
+        "pad_token_id": 151643,
+        "max_new_tokens": 512,
+        "from_model_generation_config": [
+          "min_p",
+          "no_repeat_ngram_size",
+          "repetition_penalty",
+          "top_k",
+          "typical_p"
+        ]
+      }
+    },
+    {
+      "check": "effective eval generation settings recorded and identical",
+      "passed": true,
+      "detail": {
+        "do_sample": true,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "top_k": 20,
+        "min_p": null,
+        "typical_p": 1.0,
+        "repetition_penalty": 1.1,
+        "no_repeat_ngram_size": 0,
+        "eos_token_id": 151645,
+        "pad_token_id": 151643,
+        "max_new_tokens": 768,
+        "from_model_generation_config": [
+          "min_p",
+          "no_repeat_ngram_size",
+          "repetition_penalty",
+          "top_k",
+          "typical_p"
+        ]
+      }
+    },
+    {
+      "check": "training and eval generation settings identical apart from the cap",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "RM-truncated inputs: 0 in every run",
+      "passed": true,
+      "detail": {
+        "standard train": 0,
+        "fork_grpo train": 0,
+        "fork_dr_grpo train": 0,
+        "standard eval": 0,
+        "fork_grpo eval": 0,
+        "fork_dr_grpo eval": 0
+      }
+    }
+  ],
+  "n_failed_checks": 0,
+  "per_update": [
+    {
+      "update": 1,
+      "prompt_id": "3eb6af1128a4e2b13381f31abd858f936db550a1ecde082a992138abcd68cd9e",
+      "reward_mean": -1.466796875,
+      "group_reward_std": 0.34238719940185547,
+      "informative": true,
+      "n_masked": 0,
+      "policy_loss": 1.5871567029535072e-06,
+      "surrogate_term": -0.0,
+      "beta_kl_term": 1.5871566574787723e-06,
+      "kl_k3": 1.587156657478772e-05,
+      "sampled_kl": -0.00012549813254736364,
+      "entropy": 0.6760707497596741,
+      "grad_norm_before_clip": 0.439911812543869,
+      "clip_fraction": 0.0,
+      "length_mean": 42.75,
+      "length_sd": 5.584576975922169,
+      "generated_tokens": 171,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 4.002595048999979
+    },
+    {
+      "update": 2,
+      "prompt_id": "ce74f1002974025d1c3d13bad87ded45b13951ea48d218d01a156d3e588c147d",
+      "reward_mean": -0.1922607421875,
+      "group_reward_std": 1.2597999572753906,
+      "informative": true,
+      "n_masked": 4,
+      "policy_loss": 0.0,
+      "surrogate_term": -0.0,
+      "beta_kl_term": 0.0,
+      "kl_k3": 0.0,
+      "sampled_kl": 6.49343419354409e-05,
+      "entropy": 0.7830483913421631,
+      "grad_norm_before_clip": 0.0,
+      "clip_fraction": 0.0,
+      "length_mean": 512.0,
+      "length_sd": 0.0,
+      "generated_tokens": 2048,
+      "zero_grad_masked_truncation_tokens": 2048,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 1.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 28.650316007000015
+    },
+    {
+      "update": 3,
+      "prompt_id": "108b1eac65d8a6ea8f4cc0ac367e236e01a85c57ba634318bc6a2888edf0726b",
+      "reward_mean": 2.447021484375,
+      "group_reward_std": 0.8513380289077759,
+      "informative": true,
+      "n_masked": 4,
+      "policy_loss": 0.0,
+      "surrogate_term": -0.0,
+      "beta_kl_term": 0.0,
+      "kl_k3": 0.0,
+      "sampled_kl": 0.00019410689128562808,
+      "entropy": 0.7825033664703369,
+      "grad_norm_before_clip": 0.0,
+      "clip_fraction": 0.0,
+      "length_mean": 512.0,
+      "length_sd": 0.0,
+      "generated_tokens": 2048,
+      "zero_grad_masked_truncation_tokens": 2048,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 1.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 29.267917931000056
+    },
+    {
+      "update": 4,
+      "prompt_id": "41bb924302264b14d32a24245a89b4b55b3edad96b5320b8c0f860236e39d162",
+      "reward_mean": 2.48828125,
+      "group_reward_std": 0.6654254198074341,
+      "informative": true,
+      "n_masked": 1,
+      "policy_loss": -0.36615869402885437,
+      "surrogate_term": -0.36616024374961853,
+      "beta_kl_term": 1.5424539014929906e-06,
+      "kl_k3": 1.5424539014929906e-05,
+      "sampled_kl": -0.0001304786856053397,
+      "entropy": 0.9570251107215881,
+      "grad_norm_before_clip": 0.10226619243621826,
+      "clip_fraction": 0.0,
+      "length_mean": 448.5,
+      "length_sd": 37.686204372422544,
+      "generated_tokens": 1794,
+      "zero_grad_masked_truncation_tokens": 512,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.2853957636566332,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 28.262866056999997
+    },
+    {
+      "update": 5,
+      "prompt_id": "5c12ca72ae1cb0f4c454b651e4989b3418162478a095070a021d26e4a93e9be4",
+      "reward_mean": -0.28125,
+      "group_reward_std": 2.4390077590942383,
+      "informative": true,
+      "n_masked": 1,
+      "policy_loss": 0.3179137706756592,
+      "surrogate_term": 0.31791234016418457,
+      "beta_kl_term": 1.4179461686580908e-06,
+      "kl_k3": 1.4179461686580908e-05,
+      "sampled_kl": 0.0001564681006129831,
+      "entropy": 0.9438748359680176,
+      "grad_norm_before_clip": 0.5680546164512634,
+      "clip_fraction": 0.0,
+      "length_mean": 183.5,
+      "length_sd": 198.13947108034785,
+      "generated_tokens": 734,
+      "zero_grad_masked_truncation_tokens": 512,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.6975476839237057,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 28.386638710999932
+    },
+    {
+      "update": 6,
+      "prompt_id": "ecc4cfc6c5ecb67306305fc1c282ebf29aff67f173472d6e644ff7d2ee7b5904",
+      "reward_mean": 2.603515625,
+      "group_reward_std": 0.0,
+      "informative": false,
+      "n_masked": 0,
+      "policy_loss": 1.9371510617816057e-08,
+      "surrogate_term": -0.0,
+      "beta_kl_term": 1.9371509552001954e-08,
+      "kl_k3": 1.9371509552001953e-07,
+      "sampled_kl": 0.0003777998499572277,
+      "entropy": 0.055670689791440964,
+      "grad_norm_before_clip": 0.00030827344744466245,
+      "clip_fraction": 0.0,
+      "length_mean": 2.0,
+      "length_sd": 0.0,
+      "generated_tokens": 8,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 8,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 1.0,
+      "seconds": 1.0353163270000323
+    },
+    {
+      "update": 7,
+      "prompt_id": "09a3b1eff71f4eafce9ba4d9cd7c5f05ec64d46f73e06f9c99a2070c6b5dae64",
+      "reward_mean": 1.418701171875,
+      "group_reward_std": 0.36837342381477356,
+      "informative": true,
+      "n_masked": 0,
+      "policy_loss": 1.5962262978064246e-06,
+      "surrogate_term": 2.9802322387695312e-08,
+      "beta_kl_term": 1.566423998156097e-06,
+      "kl_k3": 1.5664239981560968e-05,
+      "sampled_kl": -0.0002506483579054475,
+      "entropy": 0.953641414642334,
+      "grad_norm_before_clip": 0.28637900948524475,
+      "clip_fraction": 0.0,
+      "length_mean": 127.75,
+      "length_sd": 26.621185172715357,
+      "generated_tokens": 511,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 10.420789253999942
+    },
+    {
+      "update": 8,
+      "prompt_id": "8b12b2221a7ce4279de709740959a5ff726660dba4d5c73f83c098dbe555066e",
+      "reward_mean": -0.1353759765625,
+      "group_reward_std": 0.0,
+      "informative": false,
+      "n_masked": 0,
+      "policy_loss": 1.7136335017653437e-08,
+      "surrogate_term": -0.0,
+      "beta_kl_term": 1.7136335372924807e-08,
+      "kl_k3": 1.7136335372924805e-07,
+      "sampled_kl": 0.00012302301183808595,
+      "entropy": 0.02918526902794838,
+      "grad_norm_before_clip": 6.284813480306184e-06,
+      "clip_fraction": 0.0,
+      "length_mean": 4.0,
+      "length_sd": 0.0,
+      "generated_tokens": 16,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 16,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 1.0,
+      "seconds": 1.238860016999979
+    },
+    {
+      "update": 9,
+      "prompt_id": "80a3be5a0371d57e318f6ade30dec98079853ca535502a5a8137d4aee9155aa4",
+      "reward_mean": 0.161895751953125,
+      "group_reward_std": 0.4738009572029114,
+      "informative": true,
+      "n_masked": 4,
+      "policy_loss": 0.0,
+      "surrogate_term": -0.0,
+      "beta_kl_term": 0.0,
+      "kl_k3": 0.0,
+      "sampled_kl": 3.4200886148028076e-05,
+      "entropy": 0.1988062560558319,
+      "grad_norm_before_clip": 0.0,
+      "clip_fraction": 0.0,
+      "length_mean": 512.0,
+      "length_sd": 0.0,
+      "generated_tokens": 2048,
+      "zero_grad_masked_truncation_tokens": 2048,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 1.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 30.48082614300006
+    },
+    {
+      "update": 10,
+      "prompt_id": "97c93b3a4f2572853bca42c450a28f6bbbdb2a5996d1bc50b1138615e8f7135f",
+      "reward_mean": -1.4659423828125,
+      "group_reward_std": 0.5850322842597961,
+      "informative": true,
+      "n_masked": 0,
+      "policy_loss": 6.54770587971143e-07,
+      "surrogate_term": -5.960464477539063e-08,
+      "beta_kl_term": 7.143752100091661e-07,
+      "kl_k3": 7.14375210009166e-06,
+      "sampled_kl": 0.0007472559227608144,
+      "entropy": 0.21041350066661835,
+      "grad_norm_before_clip": 0.5956150889396667,
+      "clip_fraction": 0.0,
+      "length_mean": 22.0,
+      "length_sd": 15.588457268119896,
+      "generated_tokens": 88,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 3.2699105049999844
+    },
+    {
+      "update": 11,
+      "prompt_id": "441eaa66035da777d253aa728417f0636c3367c510a1e054c5fccb77c2b185f1",
+      "reward_mean": 0.9805908203125,
+      "group_reward_std": 0.1568000167608261,
+      "informative": true,
+      "n_masked": 0,
+      "policy_loss": 3.186908088537166e-06,
+      "surrogate_term": 2.9802322387695312e-08,
+      "beta_kl_term": 3.1571056752000007e-06,
+      "kl_k3": 3.1571056752000004e-05,
+      "sampled_kl": 0.00036535641993395984,
+      "entropy": 0.963923454284668,
+      "grad_norm_before_clip": 1.1183298826217651,
+      "clip_fraction": 0.0,
+      "length_mean": 10.75,
+      "length_sd": 3.960744879438715,
+      "generated_tokens": 43,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 2.5127891919999
+    },
+    {
+      "update": 12,
+      "prompt_id": "fcbfe08e6d55892368371504d579cc6945819fdee88968d810e4ff0cb3c200e0",
+      "reward_mean": -0.51568603515625,
+      "group_reward_std": 0.5712993144989014,
+      "informative": true,
+      "n_masked": 0,
+      "policy_loss": 1.989305019378662e-06,
+      "surrogate_term": 1.4901161193847656e-08,
+      "beta_kl_term": 1.9744038581848145e-06,
+      "kl_k3": 1.9744038581848145e-05,
+      "sampled_kl": -0.0005283071077428758,
+      "entropy": 1.013392448425293,
+      "grad_norm_before_clip": 0.8393619060516357,
+      "clip_fraction": 0.0,
+      "length_mean": 27.0,
+      "length_sd": 9.874208829065749,
+      "generated_tokens": 108,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 3.536647462000019
+    },
+    {
+      "update": 13,
+      "prompt_id": "83a5a7a92fb6addd39c9e86afb049b8892474b8d5987f4247dec89489b22d7bc",
+      "reward_mean": -0.1865234375,
+      "group_reward_std": 1.0703125,
+      "informative": true,
+      "n_masked": 0,
+      "policy_loss": 2.3990869522094727e-06,
+      "surrogate_term": -0.0,
+      "beta_kl_term": 2.3990869522094727e-06,
+      "kl_k3": 2.3990869522094727e-05,
+      "sampled_kl": -0.0006548140081577003,
+      "entropy": 0.6228424906730652,
+      "grad_norm_before_clip": 11.967400550842285,
+      "clip_fraction": 0.0,
+      "length_mean": 2.0,
+      "length_sd": 0.0,
+      "generated_tokens": 8,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 1.3131049959999928
+    },
+    {
+      "update": 14,
+      "prompt_id": "b8ed320a4c399dce8b95536984d222e88f884663675234261406eabb90efc817",
+      "reward_mean": 2.669677734375,
+      "group_reward_std": 0.5396761894226074,
+      "informative": true,
+      "n_masked": 1,
+      "policy_loss": -0.3767209053039551,
+      "surrogate_term": -0.37672239542007446,
+      "beta_kl_term": 1.484847416577395e-06,
+      "kl_k3": 1.484847416577395e-05,
+      "sampled_kl": 3.4012740798061714e-05,
+      "entropy": 0.8680812120437622,
+      "grad_norm_before_clip": 0.13534928858280182,
+      "clip_fraction": 0.0,
+      "length_mean": 459.75,
+      "length_sd": 54.43057504748595,
+      "generated_tokens": 1839,
+      "zero_grad_masked_truncation_tokens": 512,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.2784121805328983,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 29.244502112000077
+    },
+    {
+      "update": 15,
+      "prompt_id": "6baafd50645b584f2b17ed0efd9afec3dcfbdc92ef90867a09dbaa9abfd226df",
+      "reward_mean": 0.89923095703125,
+      "group_reward_std": 0.5858640074729919,
+      "informative": true,
+      "n_masked": 2,
+      "policy_loss": -0.05057797580957413,
+      "surrogate_term": -0.05057929456233978,
+      "beta_kl_term": 1.3200492503528949e-06,
+      "kl_k3": 1.3200492503528949e-05,
+      "sampled_kl": 0.00010407692025182769,
+      "entropy": 0.6932586431503296,
+      "grad_norm_before_clip": 0.09925365447998047,
+      "clip_fraction": 0.0,
+      "length_mean": 433.0,
+      "length_sd": 80.01874780324921,
+      "generated_tokens": 1732,
+      "zero_grad_masked_truncation_tokens": 1024,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.5912240184757506,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 30.026230175000023
+    },
+    {
+      "update": 16,
+      "prompt_id": "38d3195fb2def60a4e78478814a9007b5f24682935bf91cf3d309bff524be950",
+      "reward_mean": 1.90380859375,
+      "group_reward_std": 0.5615589022636414,
+      "informative": true,
+      "n_masked": 0,
+      "policy_loss": 1.228724954671634e-06,
+      "surrogate_term": -0.0,
+      "beta_kl_term": 1.2287248864595313e-06,
+      "kl_k3": 1.2287248864595313e-05,
+      "sampled_kl": -0.0001356349530396983,
+      "entropy": 0.6635092496871948,
+      "grad_norm_before_clip": 0.6543407440185547,
+      "clip_fraction": 0.0,
+      "length_mean": 84.0,
+      "length_sd": 40.36087214122113,
+      "generated_tokens": 336,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 9.300421227000015
+    },
+    {
+      "update": 17,
+      "prompt_id": "9c35c5475aa74a91610ce440ef8ce7bfd543084e6c1156a5ba233a9ac3c67b7a",
+      "reward_mean": 3.03662109375,
+      "group_reward_std": 0.24043823778629303,
+      "informative": true,
+      "n_masked": 0,
+      "policy_loss": 1.3132454341757693e-06,
+      "surrogate_term": -2.9802322387695312e-08,
+      "beta_kl_term": 1.3430477338260972e-06,
+      "kl_k3": 1.3430477338260971e-05,
+      "sampled_kl": 5.375388354877941e-06,
+      "entropy": 0.9659325480461121,
+      "grad_norm_before_clip": 0.12262509763240814,
+      "clip_fraction": 0.0,
+      "length_mean": 353.5,
+      "length_sd": 52.0792665078916,
+      "generated_tokens": 1414,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 24.85539506300006
+    },
+    {
+      "update": 18,
+      "prompt_id": "a1d7645f9eb58fab3a2cf8787ac367e0c5075f96f5308c60cbe49d3e117ac7d5",
+      "reward_mean": 2.053955078125,
+      "group_reward_std": 0.32107481360435486,
+      "informative": true,
+      "n_masked": 0,
+      "policy_loss": 1.8189128923040698e-06,
+      "surrogate_term": 2.9802322387695312e-08,
+      "beta_kl_term": 1.789110501704272e-06,
+      "kl_k3": 1.789110501704272e-05,
+      "sampled_kl": 0.00036283154622651637,
+      "entropy": 0.42043638229370117,
+      "grad_norm_before_clip": 0.17716290056705475,
+      "clip_fraction": 0.0,
+      "length_mean": 112.0,
+      "length_sd": 24.38237068047322,
+      "generated_tokens": 448,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 8.953213427999913
+    },
+    {
+      "update": 19,
+      "prompt_id": "0c3f78afabfe94b7ff784c8b550ef838d4e00404fb93f6601191480cf23c1041",
+      "reward_mean": 1.659423828125,
+      "group_reward_std": 0.3054903745651245,
+      "informative": true,
+      "n_masked": 0,
+      "policy_loss": 1.5915993571979925e-06,
+      "surrogate_term": -2.9802322387695312e-08,
+      "beta_kl_term": 1.6214016795856878e-06,
+      "kl_k3": 1.6214016795856878e-05,
+      "sampled_kl": 0.000358850957127288,
+      "entropy": 1.0897544622421265,
+      "grad_norm_before_clip": 0.16623041033744812,
+      "clip_fraction": 0.0,
+      "length_mean": 278.25,
+      "length_sd": 43.84275880918079,
+      "generated_tokens": 1113,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 19.069860017999986
+    },
+    {
+      "update": 20,
+      "prompt_id": "c0e012b9d2e0c1d77772502f0e09ee9983a9f39200c0e4c11bc9a820ea43f98f",
+      "reward_mean": 3.115234375,
+      "group_reward_std": 0.33397582173347473,
+      "informative": true,
+      "n_masked": 0,
+      "policy_loss": 1.2572606920002727e-06,
+      "surrogate_term": -0.0,
+      "beta_kl_term": 1.2572606465255378e-06,
+      "kl_k3": 1.2572606465255376e-05,
+      "sampled_kl": -6.704903353238478e-05,
+      "entropy": 0.7854517698287964,
+      "grad_norm_before_clip": 0.19555115699768066,
+      "clip_fraction": 0.0,
+      "length_mean": 221.25,
+      "length_sd": 31.283981524096323,
+      "generated_tokens": 885,
+      "zero_grad_masked_truncation_tokens": 0,
+      "zero_grad_uninformative_tokens": 0,
+      "zero_grad_masked_truncation_share": 0.0,
+      "zero_grad_uninformative_share": 0.0,
+      "seconds": 14.442248457999995
+    }
+  ],
+  "update_trends": {
+    "reward_mean": {
+      "point": 0.10329445286800987,
+      "ci_low": -0.007432546668388641,
+      "ci_high": 0.1960864118156165,
+      "n_resamples": 10000,
+      "n_nonfinite_resamples": 0,
+      "seed": 6304,
+      "method": "OLS slope vs update number, 10000 resamples of the 20 (update, value) pairs"
+    },
+    "sampled_kl": {
+      "point": 5.725317850076121e-07,
+      "ci_low": -1.8968717684205022e-05,
+      "ci_high": 1.6360485167462526e-05,
+      "n_resamples": 10000,
+      "n_nonfinite_resamples": 0,
+      "seed": 6304,
+      "method": "OLS slope vs update number, 10000 resamples of the 20 (update, value) pairs"
+    },
+    "entropy": {
+      "point": 0.007667622451943562,
+      "ci_low": -0.010537729142744371,
+      "ci_high": 0.032170128722156126,
+      "n_resamples": 10000,
+      "n_nonfinite_resamples": 0,
+      "seed": 6304,
+      "method": "OLS slope vs update number, 10000 resamples of the 20 (update, value) pairs"
+    },
+    "length_mean": {
+      "point": -3.1466165413533846,
+      "ci_low": -17.410136691994463,
+      "ci_high": 12.469784479251736,
+      "n_resamples": 10000,
+      "n_nonfinite_resamples": 0,
+      "seed": 6304,
+      "method": "OLS slope vs update number, 10000 resamples of the 20 (update, value) pairs"
+    }
+  },
+  "informative_updates": {
+    "n_informative": 18,
+    "n_updates": 20,
+    "uninformative_updates": [
+      6,
+      8
+    ]
+  },
+  "zero_gradient_tokens": {
+    "generated_tokens": 17392,
+    "generated_tokens_total_logged": 17392,
+    "zero_grad_masked_truncation_tokens": 8704,
+    "zero_grad_uninformative_tokens": 24,
+    "zero_grad_masked_truncation_share": 0.500459981600736,
+    "zero_grad_uninformative_share": 0.0013799448022079118,
+    "zero_grad_total_share": 0.5018399264029438,
+    "n_masked_completions": 17,
+    "n_completions": 80
+  },
+  "heldout": {
+    "rm_mean": 1.9049039898496685,
+    "rm_sd": 1.1612208730308442,
+    "kl": 9.675932956570788e-06,
+    "entropy": 0.7885122561804667,
+    "length_mean": 298.8848484848485,
+    "length_sd": 246.33055903782247,
+    "truncation_rate_at_768": 0.07272727272727272,
+    "n_truncated_at_768": 12,
+    "cap": 768,
+    "n_prompts": 165,
+    "bootstrap": {
+      "rm": {
+        "point": 1.9049039898496685,
+        "ci_low": 1.7256947095466384,
+        "ci_high": 2.080232261888909,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "rm"
+      },
+      "kl": {
+        "point": 9.675932956570788e-06,
+        "ci_low": -2.9586192594797702e-05,
+        "ci_high": 4.8240638468280116e-05,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "kl"
+      },
+      "entropy": {
+        "point": 0.7885122561804667,
+        "ci_low": 0.7410315648119843,
+        "ci_high": 0.8361469035259882,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "entropy"
+      },
+      "length": {
+        "point": 298.8848484848485,
+        "ci_low": 262.1575757575758,
+        "ci_high": 336.0487878787879,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "length"
+      }
+    },
+    "note": "for Task 4; not compared with forks (20 vs 8 updates)"
+  },
+  "wall_clock_seconds": 0.5793295839976054
+}
