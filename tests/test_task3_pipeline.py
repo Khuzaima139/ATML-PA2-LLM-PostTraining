@@ -5,12 +5,15 @@ Continuation loop:
    it (LoRA dropout on, non-reentrant gradient checkpointing on, as on Kaggle).
 2. The diagnostic gradient norm equals an independent per-completion gradient written from the
    manual's surrogate at ratio 1: grad of (A_k / N_k) * sum_t log pi(y_t), N_k = T_k or 512.
+   The term gradient norms equal independent gradients of the manual surrogate and of beta * k3 KL.
 3. Clip fraction 0 and ratio 1 (old = new.detach()); masked completions get no diagnostic row.
 4. Zero-gradient token shares; eval-mode log-probs restore train mode and match the reference.
 5. Effective generation settings take unset keys from the model's generation_config.
 Group-size study:
 6. Consecutive generation_index partition, subset enumeration, tertile binning with ties.
 7. Pooled advantage variance equals the informative rate; regrouping noise and sign flips on hand cases.
+8. Std-bias table (c4 values, Monte Carlo) and the uninformative-at-K8 qualitative selection.
+Normalization comparison: Spearman, bootstraps, protocol checks, term-gradient section.
 """
 from __future__ import annotations
 
@@ -111,6 +114,11 @@ def test_length_diagnostic_leaves_the_step_unchanged(loss_type):
     for key in ("policy_loss", "surrogate_term", "beta_kl_term", "kl_k3", "grad_norm_before_clip"):
         assert out0[key] == out1[key], key
     assert out0["length_diagnostic"] is None and len(out1["length_diagnostic"]) == 3
+    assert out0["term_gradients"] is None
+    tg = out1["term_gradients"]
+    assert tg["grad_norm_surrogate"] > 0 and tg["grad_norm_beta_kl"] > 0
+    assert tg["surrogate_value"] == pytest.approx(out1["surrogate_term"], abs=1e-6)
+    assert tg["beta_kl_value"] == pytest.approx(out1["beta_kl_term"], abs=1e-7)
     # the step actually moved the LoRA parameters
     ref = tiny_policy(0)
     moved = any(not torch.equal(p, q) for (n, p), (_, q) in zip(m0.named_parameters(), ref.named_parameters()) if "lora_" in n)
@@ -140,6 +148,36 @@ def test_diagnostic_grad_norm_matches_manual_surrogate_gradient(loss_type):
         assert row["T_k"] == t_k
         assert row["abs_advantage"] == pytest.approx(abs(float(adv[k])))
         assert row["analytic_token_weight"] == pytest.approx(abs(float(adv[k])) / n_k)
+
+
+@pytest.mark.parametrize("loss_type", ["grpo", "dr_grpo"])
+def test_term_gradient_norms_match_manual_terms(loss_type):
+    model = tiny_policy(0, dropout=0.0, checkpointing=False)
+    opt = torch.optim.AdamW(trainable_parameters(model), lr=0.0)
+    batch = with_ref(model, tiny_batch())
+    beta = 0.1
+    out = grpo_update(model, opt, batch, 0.2, beta, loss_type, MAXLEN, 1.0, length_diag=True)
+    params = trainable_parameters(model)
+    logp = response_token_logprobs(model, batch["sequences"], batch["attention_mask"], batch["prompt_width"], batch["response_ids"])[0]
+    keep = torch.tensor([0.0 if t else 1.0 for t in batch["truncated"]])[:, None]
+    mask = batch["response_mask"] * keep
+    adv = batch["advantages"]
+    K = mask.shape[0]
+    # manual surrogate at rho = 1: -(1/K) sum_k (A_k / N_k) sum_t log pi, masked rows contribute 0
+    n_k = mask.sum(-1).clamp_min(1.0) if loss_type == "grpo" else torch.full((K,), float(MAXLEN))
+    surrogate = -((adv / n_k) * (logp * mask).sum(-1)).sum() / K
+    # manual k3: exp(ref - logp) - (ref - logp) - 1, token mean over unmasked tokens
+    d = batch["ref_logp"] - logp
+    kl_term = beta * ((torch.exp(d) - d - 1.0) * mask).sum() / mask.sum()
+
+    def norm(t):
+        grads = torch.autograd.grad(t, params, retain_graph=True, allow_unused=True)
+        return math.sqrt(sum(float(g.double().pow(2).sum()) for g in grads if g is not None))
+
+    tg = out["term_gradients"]
+    assert tg["grad_norm_surrogate"] == pytest.approx(norm(surrogate), rel=1e-5)
+    assert tg["grad_norm_beta_kl"] == pytest.approx(norm(kl_term), rel=1e-5)
+    assert all(p.grad is None for p in params)
 
 
 def test_clip_fraction_zero_ratio_one_and_masked_rows_skipped():
@@ -321,6 +359,7 @@ from task3_grpo.compare_normalization import (  # noqa: E402
     length_section,
     protocol,
     spearman,
+    term_gradient_section,
     terms_section,
     two_sample_bootstrap,
     update1_identity,
@@ -344,11 +383,13 @@ def test_two_sample_bootstrap_point_is_b_minus_a():
     assert r["ci_low"] <= r["point"] <= r["ci_high"]
 
 
-def fake_train(loss_type, diag_rows, terms=((-0.1, 0.02),), prompt_ids=("p1", "p2")):
+def fake_train(loss_type, diag_rows, terms=((-0.1, 0.02),), prompt_ids=("p1", "p2"), grads=((0.4, 0.1),)):
     hist = []
     for u, rows in enumerate(diag_rows, start=1):
         s, k = terms[min(u - 1, len(terms) - 1)]
-        hist.append({"update": u, "length_diagnostic": rows, "surrogate_term": s, "beta_kl_term": k, "n_masked": 0, "informative": True})
+        gs, gk = grads[min(u - 1, len(grads) - 1)]
+        hist.append({"update": u, "length_diagnostic": rows, "surrogate_term": s, "beta_kl_term": k, "n_masked": 0, "informative": gs > 0,
+                     "term_gradients": {"grad_norm_surrogate": gs, "grad_norm_beta_kl": gk}})
     return {"status": "completed", "seed": 6304, "updates_completed": len(diag_rows), "generated_tokens_total": 100,
             "prompts": {"prompt_ids": list(prompt_ids)},
             "effective": {"loss_type": loss_type, "length_diagnostic": True, "updates": len(diag_rows), "kl_beta": 0.1},
@@ -374,10 +415,23 @@ def test_diagnostic_rows_exclude_zero_advantage_and_length_section():
     assert out["dr_grpo_minus_grpo"]["spearman_T_vs_grad_per_abs_adv"]["point"] == pytest.approx(2.0)
 
 
-def test_terms_ratio():
+def test_terms_section_keeps_values_without_ratio():
     t = terms_section({CANONICAL: fake_train("grpo", [[]], terms=((-0.1, 0.02),))})
-    assert t[CANONICAL][0]["surrogate_over_beta_kl"] == pytest.approx(-5.0)
-    assert t[CANONICAL][0]["abs_surrogate_over_beta_kl"] == pytest.approx(5.0)
+    assert t[CANONICAL][0]["surrogate_term"] == -0.1 and t[CANONICAL][0]["beta_kl_term"] == 0.02
+    assert not any("over" in key for key in t[CANONICAL][0])
+
+
+def test_term_gradient_section_ratio_of_means():
+    grads = ((0.4, 0.1), (0.0, 0.3), (0.2, 0.2))  # update 2 uninformative: surrogate grad exactly 0
+    out = term_gradient_section({CANONICAL: fake_train("grpo", [[]] * 3, grads=grads)}, seed=0, n_resamples=300)[CANONICAL]
+    assert out["n_updates"] == 3 and out["n_zero_surrogate_grad"] == 1
+    assert out["mean_grad_norm_surrogate"]["point"] == pytest.approx(0.2)
+    assert out["mean_grad_norm_beta_kl"]["point"] == pytest.approx(0.2)
+    assert out["ratio_beta_kl_over_surrogate"]["point"] == pytest.approx(1.0)
+    assert out["ratio_beta_kl_over_surrogate"]["n_nonfinite_resamples"] > 0  # resamples drawing only update 2
+    r = out["ratio_beta_kl_over_surrogate"]
+    assert r["ci_low"] <= r["point"] <= r["ci_high"]
+    assert [u["grad_norm_beta_kl"] for u in out["per_update"]] == [0.1, 0.3, 0.2]
 
 
 def roll(update, idx, sha, n, r):
@@ -400,6 +454,9 @@ def test_update1_identity_and_protocol_checks():
     trains[DR]["prompts"]["prompt_ids"] = ["p2", "p1"]
     failed = {c["check"] for c in protocol(trains, {CANONICAL: ev, DR: dict(ev)}, {CANONICAL: ra, DR: rb}) if not c["passed"]}
     assert failed == {"same effective settings apart from loss_type", "same prompt IDs and order"}
+    del trains[DR]["history"][0]["term_gradients"]
+    failed = {c["check"] for c in protocol(trains, {CANONICAL: ev, DR: dict(ev)}, {CANONICAL: ra, DR: rb}) if not c["passed"]}
+    assert f"{DR} term gradients logged at every update" in failed
 
 
 def test_length_section_survives_an_empty_bucket():
@@ -410,3 +467,48 @@ def test_length_section_survives_an_empty_bucket():
     assert math.isnan(gt["point"]) and gt["n_resamples"] == 0
     assert math.isnan(out["dr_grpo_minus_grpo"]["mean_grad_per_abs_adv_T_gt_256"]["ci_low"])
     assert np.isfinite(out["per_fork"][CANONICAL]["mean_grad_per_abs_adv_T_le_256"]["point"])
+
+
+# ---------------------------------------------------------------- group-size follow-ups
+
+from task3_grpo.group_size_followup import c4, expected_population_std_ratio, qualitative, std_bias  # noqa: E402
+
+
+def test_c4_known_values_and_monte_carlo():
+    assert c4(2) == pytest.approx(math.sqrt(2 / math.pi))
+    assert c4(4) == pytest.approx(0.921318, abs=1e-6)
+    assert c4(8) == pytest.approx(0.965030, abs=1e-6)
+    rng = np.random.default_rng(0)
+    for k in (2, 4, 8):
+        x = rng.normal(scale=2.0, size=(200_000, k))  # 200k x 8 float64 = 13 MB
+        assert x.std(axis=1).mean() / 2.0 == pytest.approx(expected_population_std_ratio(k), rel=5e-3)
+
+
+def test_std_bias_table_ratios():
+    def entry(v):
+        return {"mean_within_group_std": {"point": v}}
+    gs = {"group_sizes": [2, 4, 8], "results": {"all": {"K2": entry(0.3), "K4": entry(0.45), "K8": entry(0.6)}}}
+    out = std_bias(gs)
+    assert out["reference_K"] == 8
+    assert out["per_K"]["K8"]["expected_ratio_to_K8"] == pytest.approx(1.0)
+    assert out["per_K"]["K2"]["observed_ratio_to_K8"] == pytest.approx(0.5)
+    assert out["per_K"]["K2"]["expected_ratio_to_K8"] == pytest.approx(
+        math.sqrt(2 / math.pi) * math.sqrt(0.5) / (c4(8) * math.sqrt(7 / 8)))
+
+
+def test_qualitative_selects_uninformative_at_k8_and_dedups_texts():
+    by_prompt = fake_cache({"flat": [0.5] * 8, "varied": [0.1 * j for j in range(8)]})
+    for j, r in enumerate(by_prompt["0"]):
+        r["completion"] = "same text " * 50 if j < 6 else f"other {j % 2}"
+        r["completion_tokens"] = 100 + j
+    for r in by_prompt["1"]:
+        r["completion"], r["completion_tokens"] = "x", 1
+    per_prompt = [{"prompt_id": "flat", "bin": "bin1_low_reward"}, {"prompt_id": "varied", "bin": "bin3_high_reward"}]
+    out = qualitative(by_prompt, per_prompt)
+    assert [p["prompt_id"] for p in out] == ["flat"]
+    p = out[0]
+    assert p["tertile"] == "bin1_low_reward" and p["rewards"] == [0.5] * 8
+    assert not p["all_texts_identical"] and p["n_distinct_texts"] == 3
+    assert [d["generation_indices"] for d in p["distinct_completions"]] == [[0, 1, 2, 3, 4, 5], [6], [7]]
+    assert len(p["distinct_completions"][0]["first_chars"]) == 300
+    assert p["completion_tokens"] == list(range(100, 108)) and all(p["terminated_with_eos"])

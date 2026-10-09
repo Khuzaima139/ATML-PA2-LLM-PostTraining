@@ -10,7 +10,9 @@ AdamW step.
 
 --length-diagnostic (forks only): before the real backward, each unmasked completion's surrogate term
 alone is backpropagated through the same forward (retain_graph); its gradient norm over the trainable
-parameters is recorded and the gradients are discarded. The real step is unchanged (tested).
+parameters is recorded and the gradients are discarded. Two more backward passes through the same
+forward give ||grad of the surrogate term|| (all unmasked completions) and ||grad of the beta * KL term||.
+The real step is unchanged (tested).
 
 Run-level settings recorded in every run JSON (see DECISIONS).
 """
@@ -62,6 +64,7 @@ DECISIONS = {
     "metrics": "kl_sampled = common.metrics.sampled_kl(eval-mode policy, reference) and entropy_sampled = common.metrics.sample_entropy(eval-mode policy), token means over all K rollouts (masked ones included); kl_k3 = the estimator inside grpo_policy_loss (train-mode policy, truncation-masked tokens)",
     "zero_gradient_tokens": "share of generated tokens with zero surrogate gradient: masked truncation first, then all remaining tokens of an uninformative group",
     "length_diagnostic": "per unmasked completion k: grpo_policy_loss on row k alone with beta = 0 and reference = old (so the KL term and its gradient are exactly 0), backward(retain_graph=True) through the shared forward, ||g_k|| = L2 norm over all trainable parameters; gradients then discarded. Analytic per-token weight |A_k|/T_k (grpo) or |A_k|/max_completion_length (dr_grpo)",
+    "term_gradients": "per update (with --length-diagnostic): grpo_policy_loss on all K rows with beta = 0 and reference = old gives the surrogate term alone; with all advantages set to 0 and the run's beta and reference it gives the beta * KL (k3) term alone (the surrogate is then exactly 0). Each is backpropagated through the shared forward (retain_graph) and its L2 grad norm over all trainable parameters recorded; gradients then discarded",
     "non_finite": "the optimizer step is skipped (and counted) when the loss or the pre-clip grad norm is not finite",
 }
 
@@ -129,6 +132,31 @@ def length_diagnostic(new_logp, advantages, token_mask, response_mask, eps, loss
     return rows
 
 
+def term_gradient_norms(new_logp, advantages, token_mask, ref_logp, eps, beta, loss_type, max_completion_length, params) -> dict:
+    """||grad surrogate term|| and ||grad beta * KL term|| through the shared forward; leaves all grads at None.
+
+    Both terms come from the released grpo_policy_loss: beta = 0 with reference = old isolates the
+    surrogate; zero advantages isolate beta * KL, since min(rho * 0, clip(rho) * 0) = 0 for every token.
+    """
+    held = new_logp.detach()
+    terms = {
+        "surrogate": grpo_policy_loss(new_logp, held, advantages, token_mask, held, eps, 0.0,
+                                      loss_type=loss_type, max_completion_length=max_completion_length)[0],
+        "beta_kl": grpo_policy_loss(new_logp, held, torch.zeros_like(advantages), token_mask, ref_logp, eps, beta,
+                                    loss_type=loss_type, max_completion_length=max_completion_length)[0],
+    }
+    out = {}
+    for name, term in terms.items():
+        for p in params:
+            p.grad = None
+        term.backward(retain_graph=True)
+        out[f"grad_norm_{name}"] = _grad_norm(params)
+        out[f"{name}_value"] = float(term.detach())
+    for p in params:
+        p.grad = None
+    return out
+
+
 def grpo_update(policy, optimizer, batch: dict, eps: float, beta: float, loss_type: str, max_completion_length: int,
                 max_grad_norm: float, length_diag: bool = False) -> dict:
     """One training forward of the K completions, the released GRPO loss, one clipped AdamW step.
@@ -147,9 +175,11 @@ def grpo_update(policy, optimizer, batch: dict, eps: float, beta: float, loss_ty
                                    loss_type=loss_type, max_completion_length=max_completion_length)
     if float(stats["clip_fraction"]) != 0.0:
         raise AssertionError(f"clip fraction {float(stats['clip_fraction'])} with old = new.detach(); expected 0")
-    diag = None
+    diag = term_grads = None
     if length_diag:
         diag = length_diagnostic(new, batch["advantages"], token_mask, batch["response_mask"], eps, loss_type, max_completion_length, params)
+        term_grads = term_gradient_norms(new, batch["advantages"], token_mask, batch["ref_logp"], eps, beta, loss_type,
+                                         max_completion_length, params)
     loss.backward()
     norm = float(torch.nn.utils.clip_grad_norm_(params, max_grad_norm))
     ok = math.isfinite(float(loss.detach())) and math.isfinite(norm)
@@ -168,6 +198,7 @@ def grpo_update(policy, optimizer, batch: dict, eps: float, beta: float, loss_ty
         "step_taken": ok,
         "n_masked": int(sum(bool(t) for t in batch["truncated"])),
         "length_diagnostic": diag,
+        "term_gradients": term_grads,
     }
 
 
@@ -368,6 +399,7 @@ def run_grpo(config_path: str, output: str | None = None, updates: int | None = 
             finite_inputs = bool(torch.isfinite(rewards).all() and torch.isfinite(pol_eval).all() and torch.isfinite(batch["ref_logp"]).all())
             adv_list = advantages.cpu().tolist()
             diag = upd.pop("length_diagnostic")
+            term_grads = upd.pop("term_gradients")
             hist = {
                 "update": u,
                 "prompt_id": rec["prompt_id"],
@@ -397,6 +429,7 @@ def run_grpo(config_path: str, output: str | None = None, updates: int | None = 
             }
             if diag is not None:
                 hist["length_diagnostic"] = diag
+                hist["term_gradients"] = term_grads
             result["history"].append(hist)
             result["updates_completed"] = u
             for j, text in enumerate(g["responses"]):

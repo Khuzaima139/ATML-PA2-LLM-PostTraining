@@ -14,7 +14,11 @@ Outputs normalization.json and normalization.csv:
                Spearman(T_k, y_k) per fork with a bootstrap CI over completions, and the difference
                dr_grpo minus grpo (the two forks' completions resampled independently);
                mean y_k for T_k <= LENGTH_SPLIT and T_k > LENGTH_SPLIT; mean analytic per-token weight.
-  terms        per update: surrogate term, beta * KL term (k3) and their ratio, per fork.
+  terms        per update: surrogate term and beta * KL term (k3) values, per fork (logged only).
+  term_gradients  per update: ||grad surrogate term|| and ||grad beta * KL term|| over the trainable
+               parameters (from --length-diagnostic). Per fork: mean of each over updates and the ratio of
+               means mean(KL grad) / mean(surrogate grad), each with a bootstrap CI over updates. The ratio
+               of means is used because the surrogate gradient is exactly 0 on an uninformative update.
 Bootstrap: N_RESAMPLES resamples, numpy default_rng(seed), 95% percentile interval.
 """
 from __future__ import annotations
@@ -131,14 +135,30 @@ def length_section(trains: dict[str, dict], seed: int, n_resamples: int = N_RESA
 def terms_section(trains: dict[str, dict]) -> dict:
     out = {}
     for name, train in trains.items():
-        rows = []
-        for h in train["history"]:
-            s, k = h["surrogate_term"], h["beta_kl_term"]
-            rows.append({"update": h["update"], "surrogate_term": s, "beta_kl_term": k,
-                         "surrogate_over_beta_kl": s / k if k != 0 else float("nan"),
-                         "abs_surrogate_over_beta_kl": abs(s) / k if k != 0 else float("nan"),
-                         "n_masked": h["n_masked"], "informative": h["informative"]})
-        out[name] = rows
+        out[name] = [{"update": h["update"], "surrogate_term": h["surrogate_term"], "beta_kl_term": h["beta_kl_term"],
+                      "n_masked": h["n_masked"], "informative": h["informative"]} for h in train["history"]]
+    return out
+
+
+def term_gradient_section(trains: dict[str, dict], seed: int, n_resamples: int = N_RESAMPLES) -> dict:
+    out = {}
+    for name, train in trains.items():
+        per_update = [{"update": h["update"], "informative": h["informative"], "n_masked": h["n_masked"],
+                       "grad_norm_surrogate": h["term_gradients"]["grad_norm_surrogate"],
+                       "grad_norm_beta_kl": h["term_gradients"]["grad_norm_beta_kl"]} for h in train["history"]]
+        s = np.array([r["grad_norm_surrogate"] for r in per_update], dtype=float)
+        k = np.array([r["grad_norm_beta_kl"] for r in per_update], dtype=float)
+        n = len(per_update)
+        method = f"bootstrap over {n} updates"
+        out[name] = {
+            "n_updates": n,
+            "n_zero_surrogate_grad": int((s == 0.0).sum()),
+            "mean_grad_norm_surrogate": boot(lambda idx: float(s[idx].mean()), n, seed, n_resamples, method),
+            "mean_grad_norm_beta_kl": boot(lambda idx: float(k[idx].mean()), n, seed, n_resamples, method),
+            "ratio_beta_kl_over_surrogate": boot(lambda idx: float(k[idx].mean() / s[idx].mean()) if s[idx].mean() > 0 else float("nan"),
+                                                 n, seed, n_resamples, method + "; ratio of means"),
+            "per_update": per_update,
+        }
     return out
 
 
@@ -177,6 +197,9 @@ def protocol(trains: dict, evals: dict, rollouts: dict) -> list[dict]:
     check("same evaluated prompts", evals[CANONICAL]["prompts"] == evals[DR]["prompts"])
     ident = update1_identity(rollouts)
     check("update-1 completions identical (token ids)", ident["token_ids_identical"], ident)
+    for name, t in trains.items():
+        missing = [h["update"] for h in t["history"] if not h.get("term_gradients")]
+        check(f"{name} term gradients logged at every update", not missing, missing)
     return checks
 
 
@@ -201,8 +224,15 @@ def csv_rows(result: dict) -> list[dict]:
         rows.append({"section": "length_difference", "condition": "dr_grpo-grpo", "metric": m, "point": v["point"], "ci_low": v["ci_low"], "ci_high": v["ci_high"]})
     for cond, us in result["terms"].items():
         for u in us:
-            for m in ("surrogate_term", "beta_kl_term", "surrogate_over_beta_kl"):
+            for m in ("surrogate_term", "beta_kl_term"):
                 rows.append({"section": "terms", "condition": cond, "update": u["update"], "metric": m, "point": u[m]})
+    for cond, block in result["term_gradients"].items():
+        for m, v in block.items():
+            if isinstance(v, dict):
+                rows.append({"section": "term_gradients", "condition": cond, "metric": m, "point": v["point"], "ci_low": v["ci_low"], "ci_high": v["ci_high"]})
+        for u in block["per_update"]:
+            for m in ("grad_norm_surrogate", "grad_norm_beta_kl"):
+                rows.append({"section": "term_gradients", "condition": cond, "update": u["update"], "metric": m, "point": u[m]})
     return rows
 
 
@@ -239,6 +269,7 @@ def main():
         "heldout": heldout_block(gens, {"grpo": CANONICAL, "dr_grpo": DR}, [("dr_grpo", "grpo")], seed),
         "length": length_section(trains, seed),
         "terms": terms_section(trains),
+        "term_gradients": term_gradient_section(trains, seed),
     }
     result["wall_clock_seconds"] = elapsed()
     save_json(out_json, result)
