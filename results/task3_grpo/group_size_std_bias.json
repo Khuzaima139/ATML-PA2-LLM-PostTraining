@@ -1,0 +1,46 @@
+{
+  "script": "task3_grpo.group_size_followup",
+  "git": {
+    "commit": "e41fc7592be4170831a5c53d710888bcd71c33b2",
+    "dirty": true
+  },
+  "seed": 6304,
+  "source": "results/task3_grpo/group_size.json",
+  "cache": {
+    "path": "cached/grpo_k_cache.jsonl",
+    "n_prompts": 24,
+    "n_completions": 192,
+    "n_clipped_at_max": 29,
+    "n_terminated_with_eos": 163
+  },
+  "formula": "E[population std of K i.i.d. normal samples] / sigma = c4(K) * sqrt((K-1)/K)",
+  "reference_K": 8,
+  "per_K": {
+    "K2": {
+      "c4": 0.7978845608028651,
+      "sqrt_(K-1)/K": 0.7071067811865476,
+      "expected_pop_std_over_sigma": 0.5641895835477562,
+      "expected_ratio_to_K8": 0.6249999999999997,
+      "observed_mean_within_group_std": 0.3845672607421875,
+      "observed_ratio_to_K8": 0.6212172183519785
+    },
+    "K4": {
+      "c4": 0.9213177319235615,
+      "sqrt_(K-1)/K": 0.8660254037844386,
+      "expected_pop_std_over_sigma": 0.7978845608028655,
+      "expected_ratio_to_K8": 0.8838834764831842,
+      "observed_mean_within_group_std": 0.5410043647319412,
+      "observed_ratio_to_K8": 0.8739205358418781
+    },
+    "K8": {
+      "c4": 0.9650304561473723,
+      "sqrt_(K-1)/K": 0.9354143466934853,
+      "expected_pop_std_over_sigma": 0.9027033336764104,
+      "expected_ratio_to_K8": 1.0,
+      "observed_mean_within_group_std": 0.6190544134665206,
+      "observed_ratio_to_K8": 1.0
+    }
+  },
+  "observed_source": "group_size.json results.all.K*.mean_within_group_std.point",
+  "note": "regroup noise and sign-flip at K=8 are 0 by construction (reference = the same 8 completions), so that measure applies to K=2 and K=4 only"
+}

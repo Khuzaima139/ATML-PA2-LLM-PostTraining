@@ -1,0 +1,73 @@
+{
+  "script": "task3_grpo.group_size_followup",
+  "git": {
+    "commit": "e41fc7592be4170831a5c53d710888bcd71c33b2",
+    "dirty": true
+  },
+  "seed": 6304,
+  "source": "results/task3_grpo/group_size.json",
+  "cache": {
+    "path": "cached/grpo_k_cache.jsonl",
+    "n_prompts": 24,
+    "n_completions": 192,
+    "n_clipped_at_max": 29,
+    "n_terminated_with_eos": 163
+  },
+  "rule": "every cached prompt uninformative at K=8 (informative iff population std of the group's rewards > 1e-06); fixed before reading any text",
+  "chars_per_completion": 300,
+  "n_prompts": 1,
+  "prompts": [
+    {
+      "prompt_id": "be78486affffe4f57015a153c5529c949aeb7511e1f30ed76da522452f245bed",
+      "source_index": 280,
+      "tertile": "bin1_low_reward",
+      "rewards": [
+        1.2734375,
+        1.2734375,
+        1.2734375,
+        1.2734375,
+        1.2734375,
+        1.2734375,
+        1.2734375,
+        1.2734375
+      ],
+      "completion_tokens": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "terminated_with_eos": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "all_texts_identical": true,
+      "n_distinct_texts": 1,
+      "distinct_completions": [
+        {
+          "generation_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "first_chars": "0"
+        }
+      ]
+    }
+  ]
+}
