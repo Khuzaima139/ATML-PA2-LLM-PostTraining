@@ -1,0 +1,175 @@
+{
+  "script": "task1_dpo.ablate_beta",
+  "name": "ablate_beta_0p03_0p10_0p30",
+  "status": "completed",
+  "config_path": "configs/dpo.yaml",
+  "config": {
+    "seed": 6304,
+    "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "reward_model": "yavuz-ai/qwen2.5-1.5b-rm-ultrafeedback",
+    "reward_tokenizer": "Qwen/Qwen2.5-1.5B-Instruct",
+    "ai_judge_model": "Qwen/Qwen2.5-3B-Instruct",
+    "value_model_init": "Qwen/Qwen2.5-0.5B-Instruct",
+    "dtype": "float16",
+    "quantize_frozen_models": true,
+    "lora": {
+      "r": 8,
+      "alpha": 16,
+      "dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "v_proj"
+      ]
+    },
+    "value_lora": {
+      "r": 8,
+      "alpha": 16,
+      "dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "v_proj"
+      ]
+    },
+    "generation": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "do_sample": true
+    },
+    "paths": {
+      "dpo_standard_train": "data/dpo_standard_train.jsonl",
+      "dpo_standard_eval": "data/dpo_standard_eval.jsonl",
+      "dpo_length_train": "data/dpo_length_balanced_train.jsonl",
+      "dpo_length_eval": "data/dpo_length_stratified_eval.jsonl",
+      "word_limit_prompts": "data/word_limit_prompts.jsonl",
+      "rl_prompt_train": "data/rl_prompt_pool_train.jsonl",
+      "rl_prompt_eval": "data/rl_prompt_pool_eval.jsonl",
+      "xstest": "data/xstest_safety_prompts.csv",
+      "gsm_train": "data/gsm8k_rl_train.jsonl",
+      "gsm_eval": "data/gsm8k_eval.jsonl",
+      "math_transfer_eval": "data/math_transfer_eval.jsonl",
+      "task5_diagnostics": "data/task5_controlled_reward_diagnostics.jsonl",
+      "ppo_rollout_cache": "cached/ppo_rollout.pt",
+      "grpo_k_cache": "cached/grpo_k_cache.jsonl",
+      "ppo_midpoint_policy": "checkpoints/ppo_midpoint_policy",
+      "ppo_midpoint_value": "checkpoints/ppo_midpoint_value",
+      "grpo_midpoint_policy": "checkpoints/grpo_midpoint_policy",
+      "rlvr_policy": "checkpoints/rlvr_policy",
+      "rlaif_policy": "checkpoints/rlaif_policy"
+    },
+    "beta": 0.1,
+    "betas": [
+      0.03,
+      0.1,
+      0.3
+    ],
+    "learning_rate": 2e-05,
+    "weight_decay": 0.0,
+    "batch_size": 2,
+    "grad_accum_steps": 8,
+    "epochs": 1,
+    "short_ablation_examples": 600,
+    "max_sequence_length": 768,
+    "max_generation_tokens": 256,
+    "max_grad_norm": 1.0,
+    "standard_output": "outputs/task1_dpo/standard",
+    "length_output": "outputs/task1_dpo/length_balanced",
+    "results_dir": "results/task1_dpo"
+  },
+  "cli": {
+    "betas": [
+      0.03,
+      0.1,
+      0.3
+    ],
+    "smoke": false,
+    "max_examples": 600,
+    "eval_limit": null
+  },
+  "git": {
+    "commit": "2d5f6df71c63e98d301c32182cae29be40b5050c",
+    "dirty": false
+  },
+  "seed": 6304,
+  "hardware": {
+    "device": "Tesla T4",
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "transformers": "4.57.1",
+    "peft": "0.17.1"
+  },
+  "dtype": "float16",
+  "start_time": "2026-10-09T11:11:14",
+  "expected_lora_A_sha256": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e",
+  "wall_clock_seconds": 3806.486888951,
+  "runs": [
+    {
+      "run_name": "beta_0p03",
+      "train_kwargs": {
+        "beta": 0.03,
+        "max_examples": 600
+      },
+      "train_json": "results/task1_dpo/beta_0p03_train.json",
+      "eval_json": "results/task1_dpo/eval_beta_0p03.json",
+      "eval_modes": [
+        "pairs",
+        "generate"
+      ],
+      "eval_beta": 0.03,
+      "eval_limit": null,
+      "status": "completed",
+      "first_step_passed": true,
+      "lora_digest_check": {
+        "expected": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e",
+        "observed": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e",
+        "match": true
+      },
+      "adapter_path": "outputs/task1_dpo/beta_0p03"
+    },
+    {
+      "run_name": "beta_0p10",
+      "train_kwargs": {
+        "beta": 0.1,
+        "max_examples": 600
+      },
+      "train_json": "results/task1_dpo/beta_0p10_train.json",
+      "eval_json": "results/task1_dpo/eval_beta_0p10.json",
+      "eval_modes": [
+        "pairs",
+        "generate"
+      ],
+      "eval_beta": 0.1,
+      "eval_limit": null,
+      "status": "completed",
+      "first_step_passed": true,
+      "lora_digest_check": {
+        "expected": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e",
+        "observed": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e",
+        "match": true
+      },
+      "adapter_path": "outputs/task1_dpo/beta_0p10"
+    },
+    {
+      "run_name": "beta_0p30",
+      "train_kwargs": {
+        "beta": 0.3,
+        "max_examples": 600
+      },
+      "train_json": "results/task1_dpo/beta_0p30_train.json",
+      "eval_json": "results/task1_dpo/eval_beta_0p30.json",
+      "eval_modes": [
+        "pairs",
+        "generate"
+      ],
+      "eval_beta": 0.3,
+      "eval_limit": null,
+      "status": "completed",
+      "first_step_passed": true,
+      "lora_digest_check": {
+        "expected": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e",
+        "observed": "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e",
+        "match": true
+      },
+      "adapter_path": "outputs/task1_dpo/beta_0p30"
+    }
+  ]
+}
