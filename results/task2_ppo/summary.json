@@ -1,0 +1,2821 @@
+{
+  "script": "task2_ppo.summarize",
+  "config_path": "configs/ppo.yaml",
+  "results_dir": "results/task2_ppo",
+  "git": {
+    "commit": "ade4541e08e58f07724cd279dab669f9d1a9a225",
+    "dirty": false
+  },
+  "seed": 6304,
+  "bootstrap": {
+    "n_resamples": 10000,
+    "seed": 6304,
+    "interval": "95% percentile (2.5th, 97.5th)",
+    "paired_over": "165 held-out prompt IDs",
+    "rng": "a fresh numpy.random.default_rng(seed) for every quantity",
+    "kl_entropy": "per resample: sum of per-prompt token sums / sum of token counts"
+  },
+  "definitions": {
+    "ols": "slope of the per-update value against update number 1..n, 95% t interval with df n-2",
+    "value_loss": "value_loss_ep1 is the critic loss on fresh rollouts before any critic step of that update; ep2 after one step",
+    "first_constant_sign_update": "first update u such that the sign of (beta 0 minus beta 0.20) is constant and non-zero for u..8",
+    "fork_equality": "max absolute difference over all tensors of the final adapters, and over all numeric per-update logged values except timing and memory"
+  },
+  "protocol": {
+    "n_checks": 71,
+    "n_passed": 71,
+    "n_failed": 0,
+    "failed": [],
+    "effective_generation_settings": {
+      "effective": {
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "do_sample": true,
+        "top_k": 20,
+        "repetition_penalty": 1.1
+      },
+      "passed_by_code": {
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "do_sample": true
+      },
+      "model_generation_config": {
+        "bos_token_id": 151643,
+        "do_sample": true,
+        "eos_token_id": [
+          151645,
+          151643
+        ],
+        "pad_token_id": 151643,
+        "repetition_penalty": 1.1,
+        "temperature": 0.7,
+        "top_k": 20,
+        "top_p": 0.8,
+        "transformers_version": "4.57.1"
+      },
+      "note": "top_k and repetition_penalty are not passed by common.generation.batch_generate, so generate() keeps the model generation_config values; identical across all runs"
+    },
+    "rm_input_truncated": {
+      "eval": {
+        "standard": 0,
+        "fork_eps0p05_kl0p10": 0,
+        "fork_eps0p20_kl0p00": 0,
+        "fork_eps0p20_kl0p10": 0,
+        "fork_eps0p20_kl0p20": 0,
+        "fork_eps0p50_kl0p10": 0
+      },
+      "train": {
+        "standard": 0,
+        "fork_eps0p05_kl0p10": 0,
+        "fork_eps0p20_kl0p00": 0,
+        "fork_eps0p20_kl0p10": 0,
+        "fork_eps0p20_kl0p20": 0,
+        "fork_eps0p50_kl0p10": 0
+      }
+    },
+    "commit": [
+      "c33f27d5cf9d1237d0dbd612e64b47640a4fd168"
+    ]
+  },
+  "standard": {
+    "per_update": [
+      {
+        "update": 1,
+        "prompt_id": "3eb6af1128a4e2b13381f31abd858f936db550a1ecde082a992138abcd68cd9e",
+        "reward_raw_mean": -1.466796875,
+        "reward_effective_mean": -1.466796875,
+        "kl": 0.0006471792585216463,
+        "entropy": 0.6752979755401611,
+        "policy_loss_ep1": 0.32510408107191324,
+        "policy_loss_ep2": 0.32412215415388346,
+        "value_loss_ep1": 2.7820324301719666,
+        "value_loss_ep2": 2.315174877643585,
+        "policy_grad_norm_ep1": 0.8811705708503723,
+        "policy_grad_norm_ep2": 0.8775317668914795,
+        "value_grad_norm_ep1": 89.76697540283203,
+        "value_grad_norm_ep2": 96.6240463256836,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.029089689254760742,
+        "length_mean": 42.75,
+        "length_sd": 5.584576975922169,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 171,
+        "explained_variance": -11.313976660832244,
+        "stability_statistic": 1.7760915446523927e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 2,
+        "prompt_id": "ce74f1002974025d1c3d13bad87ded45b13951ea48d218d01a156d3e588c147d",
+        "reward_raw_mean": 1.0025978088378906,
+        "reward_effective_mean": 0.002597808837890625,
+        "kl": 0.00013866827066522092,
+        "entropy": 0.9331202507019043,
+        "policy_loss_ep1": -0.09317319933325052,
+        "policy_loss_ep2": -0.09301497600972652,
+        "value_loss_ep1": 3.822741210460663,
+        "value_loss_ep2": 3.6346031427383423,
+        "policy_grad_norm_ep1": 0.21779151260852814,
+        "policy_grad_norm_ep2": 0.21762044727802277,
+        "value_grad_norm_ep1": 46.64582443237305,
+        "value_grad_norm_ep2": 43.05144119262695,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.03330373764038086,
+        "length_mean": 512.0,
+        "length_sd": 0.0,
+        "n_eos": 0,
+        "n_truncated": 4,
+        "generated_tokens": 2048,
+        "explained_variance": -4.747838114872513,
+        "stability_statistic": 1.3557026619397866e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 3,
+        "prompt_id": "108b1eac65d8a6ea8f4cc0ac367e236e01a85c57ba634318bc6a2888edf0726b",
+        "reward_raw_mean": 2.422607421875,
+        "reward_effective_mean": 1.422607421875,
+        "kl": 2.4412460334133357e-05,
+        "entropy": 0.8360539674758911,
+        "policy_loss_ep1": -0.1451135315001011,
+        "policy_loss_ep2": -0.1453663967549801,
+        "value_loss_ep1": 6.065149545669556,
+        "value_loss_ep2": 5.687732100486755,
+        "policy_grad_norm_ep1": 0.2405043989419937,
+        "policy_grad_norm_ep2": 0.24047408998012543,
+        "value_grad_norm_ep1": 93.41437530517578,
+        "value_grad_norm_ep2": 86.54756927490234,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.030520915985107422,
+        "length_mean": 512.0,
+        "length_sd": 0.0,
+        "n_eos": 0,
+        "n_truncated": 4,
+        "generated_tokens": 2048,
+        "explained_variance": -5.592192802808077,
+        "stability_statistic": 1.1894603221928778e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 4,
+        "prompt_id": "41bb924302264b14d32a24245a89b4b55b3edad96b5320b8c0f860236e39d162",
+        "reward_raw_mean": 2.077880859375,
+        "reward_effective_mean": 2.077880859375,
+        "kl": 0.00019449745013844222,
+        "entropy": 1.003289818763733,
+        "policy_loss_ep1": -0.24235142394900322,
+        "policy_loss_ep2": -0.24235086888074875,
+        "value_loss_ep1": 5.734161704778671,
+        "value_loss_ep2": 5.406151592731476,
+        "policy_grad_norm_ep1": 0.3428753912448883,
+        "policy_grad_norm_ep2": 0.3429635465145111,
+        "value_grad_norm_ep1": 134.09609985351562,
+        "value_grad_norm_ep2": 114.13623809814453,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.029427289962768555,
+        "length_mean": 348.0,
+        "length_sd": 134.49349426645142,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 1392,
+        "explained_variance": -4.040682519265,
+        "stability_statistic": 1.457990813559994e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 5,
+        "prompt_id": "5c12ca72ae1cb0f4c454b651e4989b3418162478a095070a021d26e4a93e9be4",
+        "reward_raw_mean": 2.3701171875,
+        "reward_effective_mean": 2.3701171875,
+        "kl": -8.084194632829167e-06,
+        "entropy": 1.066690444946289,
+        "policy_loss_ep1": -0.17948922142386436,
+        "policy_loss_ep2": -0.1797030009329319,
+        "value_loss_ep1": 3.7623918652534485,
+        "value_loss_ep2": 3.538767397403717,
+        "policy_grad_norm_ep1": 0.2662154734134674,
+        "policy_grad_norm_ep2": 0.26630258560180664,
+        "value_grad_norm_ep1": 58.41944885253906,
+        "value_grad_norm_ep2": 38.01995086669922,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.025826454162597656,
+        "length_mean": 405.75,
+        "length_sd": 47.99153571203989,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 1623,
+        "explained_variance": -5.163160748112316,
+        "stability_statistic": 1.2729409507637506e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 6,
+        "prompt_id": "ecc4cfc6c5ecb67306305fc1c282ebf29aff67f173472d6e644ff7d2ee7b5904",
+        "reward_raw_mean": 2.603515625,
+        "reward_effective_mean": 2.603515625,
+        "kl": 0.00027724041137844324,
+        "entropy": 0.055771250277757645,
+        "policy_loss_ep1": -1.0380985736846924,
+        "policy_loss_ep2": -1.0379345417022705,
+        "value_loss_ep1": 8.872208595275879,
+        "value_loss_ep2": 6.471323013305664,
+        "policy_grad_norm_ep1": 0.6871413588523865,
+        "policy_grad_norm_ep2": 0.6865833401679993,
+        "value_grad_norm_ep1": 464.9242858886719,
+        "value_grad_norm_ep2": 396.6476745605469,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.00017703324556350708,
+        "length_mean": 2.0,
+        "length_sd": 0.0,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 8,
+        "explained_variance": -848.7697484119703,
+        "stability_statistic": 3.6551137587673173e-07,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 7,
+        "prompt_id": "09a3b1eff71f4eafce9ba4d9cd7c5f05ec64d46f73e06f9c99a2070c6b5dae64",
+        "reward_raw_mean": 1.05218505859375,
+        "reward_effective_mean": 1.05218505859375,
+        "kl": 0.00015467846242245287,
+        "entropy": 0.8958244919776917,
+        "policy_loss_ep1": -0.7056079339236021,
+        "policy_loss_ep2": -0.7045000195503235,
+        "value_loss_ep1": 2.9770830795168877,
+        "value_loss_ep2": 2.6961125545203686,
+        "policy_grad_norm_ep1": 0.9575150012969971,
+        "policy_grad_norm_ep2": 0.9573652148246765,
+        "value_grad_norm_ep1": 135.6713409423828,
+        "value_grad_norm_ep2": 101.43856048583984,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.027240276336669922,
+        "length_mean": 54.75,
+        "length_sd": 54.181985013471035,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 219,
+        "explained_variance": -1.9783546261550748,
+        "stability_statistic": 1.4793564175636801e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 8,
+        "prompt_id": "8b12b2221a7ce4279de709740959a5ff726660dba4d5c73f83c098dbe555066e",
+        "reward_raw_mean": -0.1353759765625,
+        "reward_effective_mean": -0.1353759765625,
+        "kl": 0.00014246483624447137,
+        "entropy": 0.029165828600525856,
+        "policy_loss_ep1": -0.4741004705429077,
+        "policy_loss_ep2": -0.4745774269104004,
+        "value_loss_ep1": 0.9653082489967346,
+        "value_loss_ep2": 0.7884212136268616,
+        "policy_grad_norm_ep1": 0.3192972242832184,
+        "policy_grad_norm_ep2": 0.3163667917251587,
+        "value_grad_norm_ep1": 113.56010437011719,
+        "value_grad_norm_ep2": 84.04393005371094,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.0021135658025741577,
+        "length_mean": 4.0,
+        "length_sd": 0.0,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 16,
+        "explained_variance": -772.8941305317483,
+        "stability_statistic": 4.343096593996752e-08,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 9,
+        "prompt_id": "80a3be5a0371d57e318f6ade30dec98079853ca535502a5a8137d4aee9155aa4",
+        "reward_raw_mean": 0.314300537109375,
+        "reward_effective_mean": -0.685699462890625,
+        "kl": 6.188868155732052e-06,
+        "entropy": 0.29129984974861145,
+        "policy_loss_ep1": -0.029973365366458893,
+        "policy_loss_ep2": -0.03007370326668024,
+        "value_loss_ep1": 3.28558212518692,
+        "value_loss_ep2": 3.2154667377471924,
+        "policy_grad_norm_ep1": 0.11990780383348465,
+        "policy_grad_norm_ep2": 0.11983003467321396,
+        "value_grad_norm_ep1": 37.11415481567383,
+        "value_grad_norm_ep2": 37.14186477661133,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.04397785663604736,
+        "length_mean": 512.0,
+        "length_sd": 0.0,
+        "n_eos": 0,
+        "n_truncated": 4,
+        "generated_tokens": 2048,
+        "explained_variance": -5.520364164750727,
+        "stability_statistic": 4.368392005526729e-06,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 10,
+        "prompt_id": "97c93b3a4f2572853bca42c450a28f6bbbdb2a5996d1bc50b1138615e8f7135f",
+        "reward_raw_mean": -0.833740234375,
+        "reward_effective_mean": -0.833740234375,
+        "kl": 0.0004491449217312038,
+        "entropy": 0.24175934493541718,
+        "policy_loss_ep1": 0.6551037235185504,
+        "policy_loss_ep2": 0.6528106229379773,
+        "value_loss_ep1": 4.837321519851685,
+        "value_loss_ep2": 4.527788043022156,
+        "policy_grad_norm_ep1": 3.4287917613983154,
+        "policy_grad_norm_ep2": 3.357754707336426,
+        "value_grad_norm_ep1": 157.7583770751953,
+        "value_grad_norm_ep2": 144.58367919921875,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.0397031307220459,
+        "length_mean": 38.0,
+        "length_sd": 12.12435565298214,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 152,
+        "explained_variance": -13.856168700276756,
+        "stability_statistic": 1.8526741602719103e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 11,
+        "prompt_id": "441eaa66035da777d253aa728417f0636c3367c510a1e054c5fccb77c2b185f1",
+        "reward_raw_mean": 1.1187744140625,
+        "reward_effective_mean": 1.1187744140625,
+        "kl": 0.0005760385538451374,
+        "entropy": 0.911540687084198,
+        "policy_loss_ep1": -0.22683370485901833,
+        "policy_loss_ep2": -0.22513639740645885,
+        "value_loss_ep1": 2.2421411871910095,
+        "value_loss_ep2": 1.947658821940422,
+        "policy_grad_norm_ep1": 3.8969008922576904,
+        "policy_grad_norm_ep2": 3.9227471351623535,
+        "value_grad_norm_ep1": 90.77982330322266,
+        "value_grad_norm_ep2": 83.72457885742188,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.017022907733917236,
+        "length_mean": 9.75,
+        "length_sd": 2.5860201081971503,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 39,
+        "explained_variance": -4.624033922336512,
+        "stability_statistic": 3.3674633082633744e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 12,
+        "prompt_id": "fcbfe08e6d55892368371504d579cc6945819fdee88968d810e4ff0cb3c200e0",
+        "reward_raw_mean": -0.3857421875,
+        "reward_effective_mean": -0.3857421875,
+        "kl": -0.00010833601845661178,
+        "entropy": 0.9624353051185608,
+        "policy_loss_ep1": -0.39877500012516975,
+        "policy_loss_ep2": -0.39775848016142845,
+        "value_loss_ep1": 3.0504101514816284,
+        "value_loss_ep2": 2.910670757293701,
+        "policy_grad_norm_ep1": 0.7182735800743103,
+        "policy_grad_norm_ep2": 0.7196767926216125,
+        "value_grad_norm_ep1": 83.7418441772461,
+        "value_grad_norm_ep2": 71.70207977294922,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.02585434913635254,
+        "length_mean": 53.5,
+        "length_sd": 59.54200198179433,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 214,
+        "explained_variance": -1.7467502936077328,
+        "stability_statistic": 1.7823725459509277e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 13,
+        "prompt_id": "83a5a7a92fb6addd39c9e86afb049b8892474b8d5987f4247dec89489b22d7bc",
+        "reward_raw_mean": 0.3486328125,
+        "reward_effective_mean": 0.3486328125,
+        "kl": -0.00035640093847177923,
+        "entropy": 0.42908984422683716,
+        "policy_loss_ep1": 1.836995542049408,
+        "policy_loss_ep2": 1.8354161381721497,
+        "value_loss_ep1": 4.402758061885834,
+        "value_loss_ep2": 3.406428426504135,
+        "policy_grad_norm_ep1": 9.737902641296387,
+        "policy_grad_norm_ep2": 9.928722381591797,
+        "value_grad_norm_ep1": 374.3898010253906,
+        "value_grad_norm_ep2": 320.17041015625,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.0014162659645080566,
+        "length_mean": 2.0,
+        "length_sd": 0.0,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 8,
+        "explained_variance": -0.2596083451233302,
+        "stability_statistic": 0.00010357185834252148,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 14,
+        "prompt_id": "b8ed320a4c399dce8b95536984d222e88f884663675234261406eabb90efc817",
+        "reward_raw_mean": 1.9962158203125,
+        "reward_effective_mean": 1.7462158203125,
+        "kl": 0.00018332009494770318,
+        "entropy": 0.8414380550384521,
+        "policy_loss_ep1": -0.07446594536304474,
+        "policy_loss_ep2": -0.07448016852140427,
+        "value_loss_ep1": 3.227164924144745,
+        "value_loss_ep2": 3.1614968180656433,
+        "policy_grad_norm_ep1": 0.21199262142181396,
+        "policy_grad_norm_ep2": 0.2117459923028946,
+        "value_grad_norm_ep1": 37.17384338378906,
+        "value_grad_norm_ep2": 35.73112106323242,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.03769421577453613,
+        "length_mean": 426.5,
+        "length_sd": 50.03248944436005,
+        "n_eos": 3,
+        "n_truncated": 1,
+        "generated_tokens": 1706,
+        "explained_variance": -1.8028747707220396,
+        "stability_statistic": 1.2353349661160666e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 15,
+        "prompt_id": "6baafd50645b584f2b17ed0efd9afec3dcfbdc92ef90867a09dbaa9abfd226df",
+        "reward_raw_mean": -0.27239227294921875,
+        "reward_effective_mean": -1.0223922729492188,
+        "kl": -0.00010866917727980763,
+        "entropy": 0.6224126815795898,
+        "policy_loss_ep1": -0.031095912505406886,
+        "policy_loss_ep2": -0.030827657436020672,
+        "value_loss_ep1": 3.743657499551773,
+        "value_loss_ep2": 3.668457865715027,
+        "policy_grad_norm_ep1": 0.18002548813819885,
+        "policy_grad_norm_ep2": 0.18010768294334412,
+        "value_grad_norm_ep1": 58.72025680541992,
+        "value_grad_norm_ep2": 56.96364974975586,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.028264522552490234,
+        "length_mean": 469.0,
+        "length_sd": 74.47818472546173,
+        "n_eos": 1,
+        "n_truncated": 3,
+        "generated_tokens": 1876,
+        "explained_variance": -5.559061746346782,
+        "stability_statistic": 8.995489275906167e-06,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 16,
+        "prompt_id": "38d3195fb2def60a4e78478814a9007b5f24682935bf91cf3d309bff524be950",
+        "reward_raw_mean": 1.9970703125,
+        "reward_effective_mean": 1.9970703125,
+        "kl": -0.000563435023650527,
+        "entropy": 0.6635974049568176,
+        "policy_loss_ep1": -0.6519400104880333,
+        "policy_loss_ep2": -0.6529306769371033,
+        "value_loss_ep1": 3.7209029495716095,
+        "value_loss_ep2": 3.6142354011535645,
+        "policy_grad_norm_ep1": 0.8917472958564758,
+        "policy_grad_norm_ep2": 0.8895269632339478,
+        "value_grad_norm_ep1": 154.81898498535156,
+        "value_grad_norm_ep2": 143.39096069335938,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.035419762134552,
+        "length_mean": 53.25,
+        "length_sd": 32.61422235773835,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 213,
+        "explained_variance": -3.5809310164976225,
+        "stability_statistic": 1.958985583329747e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 17,
+        "prompt_id": "9c35c5475aa74a91610ce440ef8ce7bfd543084e6c1156a5ba233a9ac3c67b7a",
+        "reward_raw_mean": 3.08056640625,
+        "reward_effective_mean": 3.08056640625,
+        "kl": -3.933320112992078e-05,
+        "entropy": 0.9179955124855042,
+        "policy_loss_ep1": -0.22466005012392998,
+        "policy_loss_ep2": -0.2249082662165165,
+        "value_loss_ep1": 2.1965176463127136,
+        "value_loss_ep2": 2.116198867559433,
+        "policy_grad_norm_ep1": 0.19227439165115356,
+        "policy_grad_norm_ep2": 0.19237056374549866,
+        "value_grad_norm_ep1": 47.68634796142578,
+        "value_grad_norm_ep2": 25.070226669311523,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.029468059539794922,
+        "length_mean": 374.25,
+        "length_sd": 39.251592324388575,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 1497,
+        "explained_variance": -2.199824658126053,
+        "stability_statistic": 1.3475127062434007e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 18,
+        "prompt_id": "a1d7645f9eb58fab3a2cf8787ac367e0c5075f96f5308c60cbe49d3e117ac7d5",
+        "reward_raw_mean": 1.0006103515625,
+        "reward_effective_mean": 1.0006103515625,
+        "kl": 0.0001100225854315795,
+        "entropy": 0.5563220977783203,
+        "policy_loss_ep1": -0.3161148987710476,
+        "policy_loss_ep2": -0.3161172941327095,
+        "value_loss_ep1": 2.2703208923339844,
+        "value_loss_ep2": 2.15011665225029,
+        "policy_grad_norm_ep1": 0.298353910446167,
+        "policy_grad_norm_ep2": 0.29873159527778625,
+        "value_grad_norm_ep1": 69.07257080078125,
+        "value_grad_norm_ep2": 40.17645263671875,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.027635812759399414,
+        "length_mean": 140.75,
+        "length_sd": 61.848100213345276,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 563,
+        "explained_variance": -2.6139384623227384,
+        "stability_statistic": 1.0193615280193665e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 19,
+        "prompt_id": "0c3f78afabfe94b7ff784c8b550ef838d4e00404fb93f6601191480cf23c1041",
+        "reward_raw_mean": 0.80291748046875,
+        "reward_effective_mean": 0.80291748046875,
+        "kl": -0.00015161166083998978,
+        "entropy": 0.9164464473724365,
+        "policy_loss_ep1": -0.003844690043479204,
+        "policy_loss_ep2": -0.003739686915650964,
+        "value_loss_ep1": 1.7947331964969635,
+        "value_loss_ep2": 1.715636357665062,
+        "policy_grad_norm_ep1": 0.2863074243068695,
+        "policy_grad_norm_ep2": 0.28650426864624023,
+        "value_grad_norm_ep1": 18.998872756958008,
+        "value_grad_norm_ep2": 34.16365432739258,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.025982141494750977,
+        "length_mean": 174.0,
+        "length_sd": 57.810033731178535,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 696,
+        "explained_variance": -11.041045063274838,
+        "stability_statistic": 1.4529351592068986e-05,
+        "n_rm_input_truncated": 0
+      },
+      {
+        "update": 20,
+        "prompt_id": "c0e012b9d2e0c1d77772502f0e09ee9983a9f39200c0e4c11bc9a820ea43f98f",
+        "reward_raw_mean": 3.13720703125,
+        "reward_effective_mean": 3.13720703125,
+        "kl": -0.0002516437089070678,
+        "entropy": 0.9153944253921509,
+        "policy_loss_ep1": -0.1505245715379715,
+        "policy_loss_ep2": -0.1501380205154419,
+        "value_loss_ep1": 1.7645428478717804,
+        "value_loss_ep2": 1.681793063879013,
+        "policy_grad_norm_ep1": 0.2350616306066513,
+        "policy_grad_norm_ep2": 0.23555375635623932,
+        "value_grad_norm_ep1": 28.99773597717285,
+        "value_grad_norm_ep2": 24.34806251525879,
+        "clip_fraction_ep1": 0.0,
+        "clip_fraction_ep2": 0.0,
+        "max_abs_log_ratio_ep2": 0.029728412628173828,
+        "length_mean": 222.0,
+        "length_sd": 46.151923036857305,
+        "n_eos": 4,
+        "n_truncated": 0,
+        "generated_tokens": 888,
+        "explained_variance": -6.506250494200997,
+        "stability_statistic": 1.3777715227897446e-05,
+        "n_rm_input_truncated": 0
+      }
+    ],
+    "peak_vram_bytes": 7673649152,
+    "peak_vram_gib": 7.146642684936523,
+    "wall_clock_seconds": 388.793126581,
+    "setup_seconds": 11.90319699600002,
+    "generated_tokens_total": 17425,
+    "kl_trend": {
+      "slope": -2.6962861426697525e-05,
+      "se": 9.855850955372044e-06,
+      "ci_low": -4.7669235924168575e-05,
+      "ci_high": -6.256486929226475e-06,
+      "df": 18,
+      "n": 20
+    },
+    "critic_trends": {
+      "value_loss_ep1": {
+        "ols": {
+          "slope": -0.14112515268581255,
+          "se": 0.06346082992509351,
+          "ci_low": -0.2744514089674246,
+          "ci_high": -0.007798896404200506,
+          "df": 18,
+          "n": 20
+        },
+        "mean_updates_1_5": 4.433295351266861,
+        "mean_updates_16_20": 2.3494035065174104
+      },
+      "value_loss_ep2": {
+        "ols": {
+          "slope": -0.11431032819463346,
+          "se": 0.05075735790499654,
+          "ci_low": -0.2209475801216394,
+          "ci_high": -0.007673076267627518,
+          "df": 18,
+          "n": 20
+        },
+        "mean_updates_1_5": 4.116485822200775,
+        "mean_updates_16_20": 2.2555960685014727
+      },
+      "explained_variance": {
+        "ols": {
+          "slope": 8.679866089997097,
+          "se": 9.679558635641513,
+          "ci_low": -11.656131987426873,
+          "ci_high": 29.015864167421064,
+          "df": 18,
+          "n": 20
+        },
+        "mean_updates_1_5": -6.17157016917803,
+        "mean_updates_16_20": -5.1883979388844494
+      }
+    },
+    "max_epoch2_clip_fraction": {
+      "max": 0.0,
+      "update": 1,
+      "max_epoch1_clip_fraction": 0.0,
+      "max_abs_log_ratio_ep2": 0.04397785663604736
+    }
+  },
+  "cached_study": {
+    "eps_results": [
+      {
+        "eps": 0.05,
+        "clip_fraction": 0.15429997444152832,
+        "affected_fraction": 0.07658270932607215,
+        "clipped_surrogate": 0.14575450836735038,
+        "unclipped_surrogate": 0.17481737088821536
+      },
+      {
+        "eps": 0.2,
+        "clip_fraction": 0.04129793494939804,
+        "affected_fraction": 0.019854776491944632,
+        "clipped_surrogate": 0.15397347175355672,
+        "unclipped_surrogate": 0.17481737088821536
+      },
+      {
+        "eps": 0.5,
+        "clip_fraction": 0.021102791652083397,
+        "affected_fraction": 0.009984116178806445,
+        "clipped_surrogate": 0.15981412829668756,
+        "unclipped_surrogate": 0.17481737088821536
+      }
+    ],
+    "rule": {
+      "threshold_nats": 0.02,
+      "mean_abs_diff": 0.06620996956472537,
+      "cache_is_midpoint": false,
+      "branch": "old=cached old_logprobs, new=recomputed midpoint, no step"
+    },
+    "branch_fired": "old=cached old_logprobs, new=recomputed midpoint, no step",
+    "log_prob_difference": {
+      "mean_abs_token_pooled": 0.06620996956472537,
+      "max_abs": 19.91828680038452,
+      "n_tokens": 8814
+    },
+    "long_prompt_diagnostic": [
+      {
+        "row": 1,
+        "prompt_id": "01a4b2ed4479c8fa682c3466f7db16f277168d90c8450a729089f4527345ee8d",
+        "prompt_tokens": 739,
+        "full_prompt_mean_abs_diff": 0.44224759262212365,
+        "left_truncated_mean_abs_diff": 0.5378885459760052,
+        "right_truncated_mean_abs_diff": 0.022505387299170697
+      },
+      {
+        "row": 4,
+        "prompt_id": "faff5c962224bd104f4c6eb8c00bcfd84c37b29d3de55e600ccc3cc3ea4c3f99",
+        "prompt_tokens": 390,
+        "full_prompt_mean_abs_diff": 0.30212067581412405,
+        "left_truncated_mean_abs_diff": 0.6401696798656127,
+        "right_truncated_mean_abs_diff": 0.17360340009100228
+      },
+      {
+        "row": 11,
+        "prompt_id": "23bd8f99e8359f0052e16c65689eae80cb20bf937ea6ca5794d36d29734a560b",
+        "prompt_tokens": 521,
+        "full_prompt_mean_abs_diff": 0.32509651860969563,
+        "left_truncated_mean_abs_diff": 0.4515288444055669,
+        "right_truncated_mean_abs_diff": 0.020920034125429962
+      }
+    ],
+    "token_rebuild": {
+      "n_rows": 32,
+      "n_count_match": 32,
+      "n_excluded_mismatch": 0,
+      "mismatched": []
+    },
+    "identity_checks": {
+      "clip_fraction_non_increasing_in_eps": true,
+      "clipped_surrogate_non_decreasing_in_eps": true,
+      "affected_not_above_clip_fraction": true
+    }
+  },
+  "clipping_forks": {
+    "per_update": {
+      "0.05": {
+        "stability_statistic": [
+          1.7760915446523927e-05,
+          1.3557026619397866e-05,
+          1.1894603221928778e-05,
+          1.457990813559994e-05,
+          1.2729409507637506e-05,
+          3.6551137587673173e-07,
+          1.4793564175636801e-05,
+          4.343096593996752e-08
+        ],
+        "clip_fraction_ep2": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_abs_log_ratio_ep2": [
+          0.029089689254760742,
+          0.03330373764038086,
+          0.030520915985107422,
+          0.029427289962768555,
+          0.025826454162597656,
+          0.00017703324556350708,
+          0.027240276336669922,
+          0.0021135658025741577
+        ]
+      },
+      "0.2": {
+        "stability_statistic": [
+          1.7760915446523927e-05,
+          1.3557026619397866e-05,
+          1.1894603221928778e-05,
+          1.457990813559994e-05,
+          1.2729409507637506e-05,
+          3.6551137587673173e-07,
+          1.4793564175636801e-05,
+          4.343096593996752e-08
+        ],
+        "clip_fraction_ep2": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_abs_log_ratio_ep2": [
+          0.029089689254760742,
+          0.03330373764038086,
+          0.030520915985107422,
+          0.029427289962768555,
+          0.025826454162597656,
+          0.00017703324556350708,
+          0.027240276336669922,
+          0.0021135658025741577
+        ]
+      },
+      "0.5": {
+        "stability_statistic": [
+          1.7760915446523927e-05,
+          1.3557026619397866e-05,
+          1.1894603221928778e-05,
+          1.457990813559994e-05,
+          1.2729409507637506e-05,
+          3.6551137587673173e-07,
+          1.4793564175636801e-05,
+          4.343096593996752e-08
+        ],
+        "clip_fraction_ep2": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_abs_log_ratio_ep2": [
+          0.029089689254760742,
+          0.03330373764038086,
+          0.030520915985107422,
+          0.029427289962768555,
+          0.025826454162597656,
+          0.00017703324556350708,
+          0.027240276336669922,
+          0.0021135658025741577
+        ]
+      }
+    },
+    "stability_summary": {
+      "0.05": {
+        "max": 1.7760915446523927e-05,
+        "mean": 1.071554618106769e-05
+      },
+      "0.2": {
+        "max": 1.7760915446523927e-05,
+        "mean": 1.071554618106769e-05
+      },
+      "0.5": {
+        "max": 1.7760915446523927e-05,
+        "mean": 1.071554618106769e-05
+      }
+    },
+    "equality": {
+      "0.05-0.2": {
+        "policy_lora": {
+          "same_tensor_names": true,
+          "n_tensors": 112,
+          "max_abs_diff": 0.0,
+          "argmax": "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight",
+          "n_tensors_differing": 0,
+          "per_tensor": {
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_B.weight": 0.0
+          }
+        },
+        "value_lora": {
+          "same_tensor_names": true,
+          "n_tensors": 97,
+          "max_abs_diff": 0.0,
+          "argmax": "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight",
+          "n_tensors_differing": 0,
+          "per_tensor": {
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.score.weight": 0.0
+          }
+        },
+        "history": {
+          "same_keys": true,
+          "n_values": 416,
+          "max_abs_diff": 0.0,
+          "argmax": "[0].advantage_token_mean",
+          "n_values_differing": 0
+        },
+        "heldout_generations_identical_text": true
+      },
+      "0.05-0.5": {
+        "policy_lora": {
+          "same_tensor_names": true,
+          "n_tensors": 112,
+          "max_abs_diff": 0.0,
+          "argmax": "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight",
+          "n_tensors_differing": 0,
+          "per_tensor": {
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_B.weight": 0.0
+          }
+        },
+        "value_lora": {
+          "same_tensor_names": true,
+          "n_tensors": 97,
+          "max_abs_diff": 0.0,
+          "argmax": "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight",
+          "n_tensors_differing": 0,
+          "per_tensor": {
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.score.weight": 0.0
+          }
+        },
+        "history": {
+          "same_keys": true,
+          "n_values": 416,
+          "max_abs_diff": 0.0,
+          "argmax": "[0].advantage_token_mean",
+          "n_values_differing": 0
+        },
+        "heldout_generations_identical_text": true
+      },
+      "0.2-0.5": {
+        "policy_lora": {
+          "same_tensor_names": true,
+          "n_tensors": 112,
+          "max_abs_diff": 0.0,
+          "argmax": "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight",
+          "n_tensors_differing": 0,
+          "per_tensor": {
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.24.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.25.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.26.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.27.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_B.weight": 0.0
+          }
+        },
+        "value_lora": {
+          "same_tensor_names": true,
+          "n_tensors": 97,
+          "max_abs_diff": 0.0,
+          "argmax": "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight",
+          "n_tensors_differing": 0,
+          "per_tensor": {
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.0.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.1.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.10.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.11.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.12.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.13.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.14.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.15.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.16.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.17.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.18.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.19.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.2.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.20.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.21.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.22.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.23.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.3.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.4.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.5.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.6.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.7.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.8.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.q_proj.lora_B.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_A.weight": 0.0,
+            "base_model.model.model.layers.9.self_attn.v_proj.lora_B.weight": 0.0,
+            "base_model.model.score.weight": 0.0
+          }
+        },
+        "history": {
+          "same_keys": true,
+          "n_values": 416,
+          "max_abs_diff": 0.0,
+          "argmax": "[0].advantage_token_mean",
+          "n_values_differing": 0
+        },
+        "heldout_generations_identical_text": true
+      }
+    },
+    "heldout": {
+      "n_prompts": 165,
+      "conditions": {
+        "0.05": "fork_eps0p05_kl0p10",
+        "0.2": "fork_eps0p20_kl0p10",
+        "0.5": "fork_eps0p50_kl0p10"
+      },
+      "per_condition": {
+        "0.05": {
+          "rm": {
+            "point": 1.8605002663352272,
+            "ci_low": 1.6673123076467802,
+            "ci_high": 2.0403960811730584,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "rm, 10000 prompt resamples"
+          },
+          "kl": {
+            "point": 1.565782137376505e-05,
+            "ci_low": -2.6282731284465383e-05,
+            "ci_high": 5.565465465993016e-05,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "kl, 10000 prompt resamples"
+          },
+          "entropy": {
+            "point": 0.7893553358824258,
+            "ci_low": 0.7420748291450098,
+            "ci_high": 0.837245713562104,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "entropy, 10000 prompt resamples"
+          },
+          "length": {
+            "point": 297.1757575757576,
+            "ci_low": 259.80560606060607,
+            "ci_high": 335.46090909090907,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "length, 10000 prompt resamples"
+          }
+        },
+        "0.2": {
+          "rm": {
+            "point": 1.8605002663352272,
+            "ci_low": 1.6673123076467802,
+            "ci_high": 2.0403960811730584,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "rm, 10000 prompt resamples"
+          },
+          "kl": {
+            "point": 1.565782137376505e-05,
+            "ci_low": -2.6282731284465383e-05,
+            "ci_high": 5.565465465993016e-05,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "kl, 10000 prompt resamples"
+          },
+          "entropy": {
+            "point": 0.7893553358824258,
+            "ci_low": 0.7420748291450098,
+            "ci_high": 0.837245713562104,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "entropy, 10000 prompt resamples"
+          },
+          "length": {
+            "point": 297.1757575757576,
+            "ci_low": 259.80560606060607,
+            "ci_high": 335.46090909090907,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "length, 10000 prompt resamples"
+          }
+        },
+        "0.5": {
+          "rm": {
+            "point": 1.8605002663352272,
+            "ci_low": 1.6673123076467802,
+            "ci_high": 2.0403960811730584,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "rm, 10000 prompt resamples"
+          },
+          "kl": {
+            "point": 1.565782137376505e-05,
+            "ci_low": -2.6282731284465383e-05,
+            "ci_high": 5.565465465993016e-05,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "kl, 10000 prompt resamples"
+          },
+          "entropy": {
+            "point": 0.7893553358824258,
+            "ci_low": 0.7420748291450098,
+            "ci_high": 0.837245713562104,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "entropy, 10000 prompt resamples"
+          },
+          "length": {
+            "point": 297.1757575757576,
+            "ci_low": 259.80560606060607,
+            "ci_high": 335.46090909090907,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "length, 10000 prompt resamples"
+          }
+        }
+      },
+      "paired_differences": {
+        "0.05-0.2": {
+          "rm": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired rm difference"
+          },
+          "kl": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired kl difference"
+          },
+          "entropy": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired entropy difference"
+          },
+          "length": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired length difference"
+          }
+        },
+        "0.05-0.5": {
+          "rm": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired rm difference"
+          },
+          "kl": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired kl difference"
+          },
+          "entropy": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired entropy difference"
+          },
+          "length": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired length difference"
+          }
+        },
+        "0.2-0.5": {
+          "rm": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired rm difference"
+          },
+          "kl": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired kl difference"
+          },
+          "entropy": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired entropy difference"
+          },
+          "length": {
+            "point": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired length difference"
+          }
+        }
+      }
+    }
+  },
+  "kl_forks": {
+    "per_update": {
+      "0.0": {
+        "kl": [
+          0.0006471792585216463,
+          -0.00016397834406234324,
+          -0.0001947045384440571,
+          0.0002179576113121584,
+          -2.913347452704329e-05,
+          0.00022185617126524448,
+          0.0001064470925484784,
+          0.0006821264396421611
+        ],
+        "reward_raw_mean": [
+          -1.466796875,
+          0.860137939453125,
+          2.562744140625,
+          2.101318359375,
+          2.3740234375,
+          2.603515625,
+          1.05218505859375,
+          -0.1353759765625
+        ],
+        "entropy": [
+          0.6752979755401611,
+          0.9014431238174438,
+          0.8187199831008911,
+          0.9595155715942383,
+          1.098865270614624,
+          0.05582663416862488,
+          0.8958727717399597,
+          0.02862616628408432
+        ],
+        "length_mean": [
+          42.75,
+          512.0,
+          512.0,
+          341.25,
+          384.0,
+          2.0,
+          54.75,
+          4.0
+        ]
+      },
+      "0.1": {
+        "kl": [
+          0.0006471792585216463,
+          0.00013866827066522092,
+          2.4412460334133357e-05,
+          0.00019449745013844222,
+          -8.084194632829167e-06,
+          0.00027724041137844324,
+          0.00015467846242245287,
+          0.00014246483624447137
+        ],
+        "reward_raw_mean": [
+          -1.466796875,
+          1.0025978088378906,
+          2.422607421875,
+          2.077880859375,
+          2.3701171875,
+          2.603515625,
+          1.05218505859375,
+          -0.1353759765625
+        ],
+        "entropy": [
+          0.6752979755401611,
+          0.9331202507019043,
+          0.8360539674758911,
+          1.003289818763733,
+          1.066690444946289,
+          0.055771250277757645,
+          0.8958244919776917,
+          0.029165828600525856
+        ],
+        "length_mean": [
+          42.75,
+          512.0,
+          512.0,
+          348.0,
+          405.75,
+          2.0,
+          54.75,
+          4.0
+        ]
+      },
+      "0.2": {
+        "kl": [
+          0.0006471792585216463,
+          -5.721104389522225e-05,
+          -6.0549777117557824e-05,
+          0.00010066579125123098,
+          0.00022754358360543847,
+          -0.00027355924248695374,
+          -0.00017061049584299326,
+          0.00032092630863189697
+        ],
+        "reward_raw_mean": [
+          -1.466796875,
+          0.77032470703125,
+          2.58349609375,
+          1.861572265625,
+          2.17724609375,
+          2.603515625,
+          1.087860107421875,
+          -0.1353759765625
+        ],
+        "entropy": [
+          0.6752979755401611,
+          0.9004930257797241,
+          0.8489012122154236,
+          0.9923681020736694,
+          1.0615726709365845,
+          0.05632204934954643,
+          0.9775852560997009,
+          0.02898736670613289
+        ],
+        "length_mean": [
+          42.75,
+          512.0,
+          512.0,
+          345.25,
+          367.5,
+          2.0,
+          62.75,
+          4.0
+        ]
+      }
+    },
+    "beta0_vs_beta0p20": {
+      "kl": {
+        "diff_beta0_minus_beta0p20": [
+          0.0,
+          -0.00010676730016712099,
+          -0.00013415476132649928,
+          0.00011729182006092742,
+          -0.00025667705813248176,
+          0.0004954154137521982,
+          0.00027705758839147165,
+          0.00036120013101026416
+        ],
+        "first_update": 6,
+        "sign": 1
+      },
+      "reward_raw_mean": {
+        "diff_beta0_minus_beta0p20": [
+          0.0,
+          0.089813232421875,
+          -0.020751953125,
+          0.23974609375,
+          0.19677734375,
+          0.0,
+          -0.035675048828125,
+          0.0
+        ],
+        "first_update": "none",
+        "sign": null
+      },
+      "entropy": {
+        "diff_beta0_minus_beta0p20": [
+          0.0,
+          0.0009500980377197266,
+          -0.03018122911453247,
+          -0.03285253047943115,
+          0.03729259967803955,
+          -0.0004954151809215546,
+          -0.08171248435974121,
+          -0.0003612004220485687
+        ],
+        "first_update": 6,
+        "sign": -1
+      },
+      "length_mean": {
+        "diff_beta0_minus_beta0p20": [
+          0.0,
+          0.0,
+          0.0,
+          -4.0,
+          16.5,
+          0.0,
+          -8.0,
+          0.0
+        ],
+        "first_update": "none",
+        "sign": null
+      }
+    },
+    "heldout": {
+      "n_prompts": 165,
+      "conditions": {
+        "0.0": "fork_eps0p20_kl0p00",
+        "0.1": "fork_eps0p20_kl0p10",
+        "0.2": "fork_eps0p20_kl0p20"
+      },
+      "per_condition": {
+        "0.0": {
+          "rm": {
+            "point": 1.8260509144176136,
+            "ci_low": 1.651113456957268,
+            "ci_high": 2.0001376712683476,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "rm, 10000 prompt resamples"
+          },
+          "kl": {
+            "point": 4.11282459704473e-05,
+            "ci_low": -2.411745796580312e-06,
+            "ci_high": 8.512419184697263e-05,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "kl, 10000 prompt resamples"
+          },
+          "entropy": {
+            "point": 0.7813132068654574,
+            "ci_low": 0.7338177742514872,
+            "ci_high": 0.8292735902330441,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "entropy, 10000 prompt resamples"
+          },
+          "length": {
+            "point": 298.5030303030303,
+            "ci_low": 260.8180303030303,
+            "ci_high": 337.17,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "length, 10000 prompt resamples"
+          }
+        },
+        "0.1": {
+          "rm": {
+            "point": 1.8605002663352272,
+            "ci_low": 1.6673123076467802,
+            "ci_high": 2.0403960811730584,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "rm, 10000 prompt resamples"
+          },
+          "kl": {
+            "point": 1.565782137376505e-05,
+            "ci_low": -2.6282731284465383e-05,
+            "ci_high": 5.565465465993016e-05,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "kl, 10000 prompt resamples"
+          },
+          "entropy": {
+            "point": 0.7893553358824258,
+            "ci_low": 0.7420748291450098,
+            "ci_high": 0.837245713562104,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "entropy, 10000 prompt resamples"
+          },
+          "length": {
+            "point": 297.1757575757576,
+            "ci_low": 259.80560606060607,
+            "ci_high": 335.46090909090907,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "length, 10000 prompt resamples"
+          }
+        },
+        "0.2": {
+          "rm": {
+            "point": 1.9361701734138257,
+            "ci_low": 1.7514205192797112,
+            "ci_high": 2.1084213349313448,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "rm, 10000 prompt resamples"
+          },
+          "kl": {
+            "point": 2.7337153215350793e-05,
+            "ci_low": -2.1636758822725532e-05,
+            "ci_high": 7.668600210137856e-05,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "kl, 10000 prompt resamples"
+          },
+          "entropy": {
+            "point": 0.7838557779733069,
+            "ci_low": 0.7365227241752446,
+            "ci_high": 0.8313123231178007,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "entropy, 10000 prompt resamples"
+          },
+          "length": {
+            "point": 303.6787878787879,
+            "ci_low": 265.7090909090909,
+            "ci_high": 342.6609090909091,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "length, 10000 prompt resamples"
+          }
+        }
+      },
+      "paired_differences": {
+        "0.0-0.2": {
+          "rm": {
+            "point": -0.11011925899621211,
+            "ci_low": -0.2080389034386837,
+            "ci_high": -0.010022518273555988,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired rm difference"
+          },
+          "kl": {
+            "point": 1.3791092755096508e-05,
+            "ci_low": -4.26516291050138e-05,
+            "ci_high": 7.049786076669676e-05,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired kl difference"
+          },
+          "entropy": {
+            "point": -0.0025425711078495006,
+            "ci_low": -0.023768866373576617,
+            "ci_high": 0.019096445264817328,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired entropy difference"
+          },
+          "length": {
+            "point": -5.175757575757586,
+            "ci_low": -17.915757575757596,
+            "ci_high": 6.788030303030322,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired length difference"
+          }
+        },
+        "0.0-0.1": {
+          "rm": {
+            "point": -0.03444935191761367,
+            "ci_low": -0.15962852709221126,
+            "ci_high": 0.10278201016512771,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired rm difference"
+          },
+          "kl": {
+            "point": 2.547042459668225e-05,
+            "ci_low": -2.6638498295444354e-05,
+            "ci_high": 7.939646244422514e-05,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired kl difference"
+          },
+          "entropy": {
+            "point": -0.008042129016968436,
+            "ci_low": -0.029799408882176706,
+            "ci_high": 0.013605497727534022,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired entropy difference"
+          },
+          "length": {
+            "point": 1.3272727272727138,
+            "ci_low": -11.975757575757543,
+            "ci_high": 14.806363636363638,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired length difference"
+          }
+        },
+        "0.1-0.2": {
+          "rm": {
+            "point": -0.07566990707859844,
+            "ci_low": -0.20064805464311083,
+            "ci_high": 0.03343861897786451,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired rm difference"
+          },
+          "kl": {
+            "point": -1.1679331841585743e-05,
+            "ci_low": -6.944049292095979e-05,
+            "ci_high": 4.448252232865423e-05,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired kl difference"
+          },
+          "entropy": {
+            "point": 0.005499557909118935,
+            "ci_low": -0.010429047898197982,
+            "ci_high": 0.022985244753505787,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired entropy difference"
+          },
+          "length": {
+            "point": -6.5030303030303,
+            "ci_low": -17.394242424242407,
+            "ci_high": 3.1280303030302905,
+            "n_resamples": 10000,
+            "n_nonfinite_resamples": 0,
+            "seed": 6304,
+            "method": "paired length difference"
+          }
+        }
+      }
+    }
+  },
+  "standard_heldout": {
+    "rm_mean": 1.7359627463600853,
+    "rm_sd": 1.2402705184740164,
+    "kl": 3.924534477826926e-05,
+    "entropy": 0.7993554162859617,
+    "length_mean": 291.04848484848486,
+    "length_sd": 254.382575305221,
+    "truncation_rate_at_768": 0.08484848484848485,
+    "n_truncated_at_768": 14,
+    "cap": 768,
+    "n_prompts": 165,
+    "bootstrap": {
+      "rm": {
+        "point": 1.7359627463600853,
+        "ci_low": 1.5427724289171625,
+        "ci_high": 1.9226538062818121,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "rm"
+      },
+      "kl": {
+        "point": 3.924534477826926e-05,
+        "ci_low": -8.387528058987007e-06,
+        "ci_high": 8.645707137403769e-05,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "kl"
+      },
+      "entropy": {
+        "point": 0.7993554162859615,
+        "ci_low": 0.7512937498594139,
+        "ci_high": 0.8471591680839334,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "entropy"
+      },
+      "length": {
+        "point": 291.04848484848486,
+        "ci_low": 253.31469696969697,
+        "ci_high": 330.0978787878788,
+        "n_resamples": 10000,
+        "n_nonfinite_resamples": 0,
+        "seed": 6304,
+        "method": "length"
+      }
+    },
+    "note": "for Task 4; not compared with forks (20 vs 8 updates)"
+  },
+  "budget": {
+    "standard": {
+      "updates_completed": 20,
+      "generated_tokens_total": 17425,
+      "prompts_per_update": 1,
+      "responses_per_prompt": 4,
+      "ppo_epochs": 2
+    },
+    "fork_eps0p05_kl0p10": {
+      "updates_completed": 8,
+      "generated_tokens_total": 7525,
+      "prompts_per_update": 1,
+      "responses_per_prompt": 4,
+      "ppo_epochs": 2
+    },
+    "fork_eps0p20_kl0p00": {
+      "updates_completed": 8,
+      "generated_tokens_total": 7411,
+      "prompts_per_update": 1,
+      "responses_per_prompt": 4,
+      "ppo_epochs": 2
+    },
+    "fork_eps0p20_kl0p10": {
+      "updates_completed": 8,
+      "generated_tokens_total": 7525,
+      "prompts_per_update": 1,
+      "responses_per_prompt": 4,
+      "ppo_epochs": 2
+    },
+    "fork_eps0p20_kl0p20": {
+      "updates_completed": 8,
+      "generated_tokens_total": 7393,
+      "prompts_per_update": 1,
+      "responses_per_prompt": 4,
+      "ppo_epochs": 2
+    },
+    "fork_eps0p50_kl0p10": {
+      "updates_completed": 8,
+      "generated_tokens_total": 7525,
+      "prompts_per_update": 1,
+      "responses_per_prompt": 4,
+      "ppo_epochs": 2
+    }
+  },
+  "checks": [
+    {
+      "check": "standard: training completed",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "updates_completed": 20
+      }
+    },
+    {
+      "check": "standard: no skipped optimizer steps",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "check": "standard: reference adapter base matches config",
+      "passed": true,
+      "detail": {
+        "adapter_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "config_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "match": true
+      }
+    },
+    {
+      "check": "fork_eps0p05_kl0p10: training completed",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "updates_completed": 8
+      }
+    },
+    {
+      "check": "fork_eps0p05_kl0p10: no skipped optimizer steps",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "check": "fork_eps0p05_kl0p10: reference adapter base matches config",
+      "passed": true,
+      "detail": {
+        "adapter_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "config_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "match": true
+      }
+    },
+    {
+      "check": "fork_eps0p20_kl0p00: training completed",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "updates_completed": 8
+      }
+    },
+    {
+      "check": "fork_eps0p20_kl0p00: no skipped optimizer steps",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "check": "fork_eps0p20_kl0p00: reference adapter base matches config",
+      "passed": true,
+      "detail": {
+        "adapter_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "config_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "match": true
+      }
+    },
+    {
+      "check": "fork_eps0p20_kl0p10: training completed",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "updates_completed": 8
+      }
+    },
+    {
+      "check": "fork_eps0p20_kl0p10: no skipped optimizer steps",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "check": "fork_eps0p20_kl0p10: reference adapter base matches config",
+      "passed": true,
+      "detail": {
+        "adapter_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "config_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "match": true
+      }
+    },
+    {
+      "check": "fork_eps0p20_kl0p20: training completed",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "updates_completed": 8
+      }
+    },
+    {
+      "check": "fork_eps0p20_kl0p20: no skipped optimizer steps",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "check": "fork_eps0p20_kl0p20: reference adapter base matches config",
+      "passed": true,
+      "detail": {
+        "adapter_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "config_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "match": true
+      }
+    },
+    {
+      "check": "fork_eps0p50_kl0p10: training completed",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "updates_completed": 8
+      }
+    },
+    {
+      "check": "fork_eps0p50_kl0p10: no skipped optimizer steps",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "check": "fork_eps0p50_kl0p10: reference adapter base matches config",
+      "passed": true,
+      "detail": {
+        "adapter_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "config_base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+        "match": true
+      }
+    },
+    {
+      "check": "fork_eps0p05_kl0p10: update budget equals fork_updates",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "check": "fork_eps0p20_kl0p00: update budget equals fork_updates",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "check": "fork_eps0p20_kl0p10: update budget equals fork_updates",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "check": "fork_eps0p20_kl0p20: update budget equals fork_updates",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "check": "fork_eps0p50_kl0p10: update budget equals fork_updates",
+      "passed": true,
+      "detail": 8
+    },
+    {
+      "check": "eval standard: completed full run",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "n": 165
+      }
+    },
+    {
+      "check": "eval standard: adapter is the trained standard policy",
+      "passed": true,
+      "detail": "outputs/task2_ppo/standard/policy"
+    },
+    {
+      "check": "eval fork_eps0p05_kl0p10: completed full run",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "n": 165
+      }
+    },
+    {
+      "check": "eval fork_eps0p05_kl0p10: adapter is the trained fork_eps0p05_kl0p10 policy",
+      "passed": true,
+      "detail": "outputs/task2_ppo/fork_eps0p05_kl0p10/policy"
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p00: completed full run",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "n": 165
+      }
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p00: adapter is the trained fork_eps0p20_kl0p00 policy",
+      "passed": true,
+      "detail": "outputs/task2_ppo/fork_eps0p20_kl0p00/policy"
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p10: completed full run",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "n": 165
+      }
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p10: adapter is the trained fork_eps0p20_kl0p10 policy",
+      "passed": true,
+      "detail": "outputs/task2_ppo/fork_eps0p20_kl0p10/policy"
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p20: completed full run",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "n": 165
+      }
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p20: adapter is the trained fork_eps0p20_kl0p20 policy",
+      "passed": true,
+      "detail": "outputs/task2_ppo/fork_eps0p20_kl0p20/policy"
+    },
+    {
+      "check": "eval fork_eps0p50_kl0p10: completed full run",
+      "passed": true,
+      "detail": {
+        "status": "completed",
+        "n": 165
+      }
+    },
+    {
+      "check": "eval fork_eps0p50_kl0p10: adapter is the trained fork_eps0p50_kl0p10 policy",
+      "passed": true,
+      "detail": "outputs/task2_ppo/fork_eps0p50_kl0p10/policy"
+    },
+    {
+      "check": "cached study: completed",
+      "passed": true,
+      "detail": "completed"
+    },
+    {
+      "check": "standard: logged prompt IDs match history",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "fork_eps0p05_kl0p10: prompt-ID sequence equals standard updates 1-8",
+      "passed": true,
+      "detail": {
+        "n_mismatch": 0
+      }
+    },
+    {
+      "check": "fork_eps0p20_kl0p00: prompt-ID sequence equals standard updates 1-8",
+      "passed": true,
+      "detail": {
+        "n_mismatch": 0
+      }
+    },
+    {
+      "check": "fork_eps0p20_kl0p10: prompt-ID sequence equals standard updates 1-8",
+      "passed": true,
+      "detail": {
+        "n_mismatch": 0
+      }
+    },
+    {
+      "check": "fork_eps0p20_kl0p20: prompt-ID sequence equals standard updates 1-8",
+      "passed": true,
+      "detail": {
+        "n_mismatch": 0
+      }
+    },
+    {
+      "check": "fork_eps0p50_kl0p10: prompt-ID sequence equals standard updates 1-8",
+      "passed": true,
+      "detail": {
+        "n_mismatch": 0
+      }
+    },
+    {
+      "check": "eval fork_eps0p05_kl0p10: same 165 prompt IDs in the same order as standard",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p00: same 165 prompt IDs in the same order as standard",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p10: same 165 prompt IDs in the same order as standard",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p20: same 165 prompt IDs in the same order as standard",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p50_kl0p10: same 165 prompt IDs in the same order as standard",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval: 165 unique prompt IDs",
+      "passed": true,
+      "detail": 165
+    },
+    {
+      "check": "eval: identical seed and seed reset across evaluations",
+      "passed": true,
+      "detail": {
+        "standard": [
+          6304,
+          6304
+        ],
+        "fork_eps0p05_kl0p10": [
+          6304,
+          6304
+        ],
+        "fork_eps0p20_kl0p00": [
+          6304,
+          6304
+        ],
+        "fork_eps0p20_kl0p10": [
+          6304,
+          6304
+        ],
+        "fork_eps0p20_kl0p20": [
+          6304,
+          6304
+        ],
+        "fork_eps0p50_kl0p10": [
+          6304,
+          6304
+        ]
+      }
+    },
+    {
+      "check": "eval: identical settings across evaluations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "training: identical generation settings across runs",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "same commit across all runs",
+      "passed": true,
+      "detail": [
+        "c33f27d5cf9d1237d0dbd612e64b47640a4fd168"
+      ]
+    },
+    {
+      "check": "no run from a dirty tree",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval standard: KL recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval standard: entropy recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval standard: RM mean recomputed",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p05_kl0p10: KL recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p05_kl0p10: entropy recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p05_kl0p10: RM mean recomputed",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p00: KL recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p00: entropy recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p00: RM mean recomputed",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p10: KL recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p10: entropy recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p10: RM mean recomputed",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p20: KL recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p20: entropy recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p20_kl0p20: RM mean recomputed",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p50_kl0p10: KL recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p50_kl0p10: entropy recomputed from per-prompt sums",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "eval fork_eps0p50_kl0p10: RM mean recomputed",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "input_sha256": {
+    "results/task2_ppo/train_standard.json": "15a066da3eeb63a92be3e815774f87a6ed897be4122ec97a7f74f76ff381942f",
+    "results/task2_ppo/train_fork_eps0p05_kl0p10.json": "535ce367601d4ac836bd80171a3af62050f6da210ad60e1f6f070ba8279940f2",
+    "results/task2_ppo/train_fork_eps0p20_kl0p00.json": "5319192d51d614c0c33db993e84ad645516ad6558874eb0888286c68c786e39c",
+    "results/task2_ppo/train_fork_eps0p20_kl0p10.json": "134c66c0a43ea8389a23c0a978acff2c475afb6066c055b7084dc1ff178a4bd6",
+    "results/task2_ppo/train_fork_eps0p20_kl0p20.json": "36ec9c2c4d3103000b22530a6da63e28cfd7b0ba354ea85894d7ea4bb0bdec1a",
+    "results/task2_ppo/train_fork_eps0p50_kl0p10.json": "962dfa3e2993a8a048b6aa722102bef60a16c3dd2e757032debb3794aaef99b0",
+    "results/task2_ppo/eval_standard.json": "90fda9bd0f2f1eba173f063f115046480fd64aee234448bc990585a90b4b127e",
+    "results/task2_ppo/eval_fork_eps0p05_kl0p10.json": "b7a67827d56fbd7d376aadbc3dcb0d06ea7de2d4acdcbd1e0870522a88543d9b",
+    "results/task2_ppo/eval_fork_eps0p20_kl0p00.json": "99bd2f58a6e0c131b6cfe3cf76f4088561e3dc7c3178d86424babcbd927d2fce",
+    "results/task2_ppo/eval_fork_eps0p20_kl0p10.json": "d5b466ebf98a65e2802f654fa2d972383de0ccbb3760b80af8ca5a2b8e74a705",
+    "results/task2_ppo/eval_fork_eps0p20_kl0p20.json": "7a3124d230e1dd997e353a740948e5eb1b4dd23f1b80bb7b444e5c0eadbd12f2",
+    "results/task2_ppo/eval_fork_eps0p50_kl0p10.json": "ac5892f32a7fd264ed46e694dec778663ea2a407c34517b1b953fb7d30026c84",
+    "results/task2_ppo/generations_eval_standard.jsonl": "646ac4cd39027c08b76e0e03a61ea60990271a6f534a9b2de123797cb51d9b60",
+    "results/task2_ppo/generations_eval_fork_eps0p05_kl0p10.jsonl": "4db4ec83967d120074bb79629f68b0058f4990463d9d49950159d63c315b0cfc",
+    "results/task2_ppo/generations_eval_fork_eps0p20_kl0p00.jsonl": "2e6c13b0538b1977166c8fb2049eab4ed78c723f4cb3a67692a2d4a2135c08c7",
+    "results/task2_ppo/generations_eval_fork_eps0p20_kl0p10.jsonl": "4db4ec83967d120074bb79629f68b0058f4990463d9d49950159d63c315b0cfc",
+    "results/task2_ppo/generations_eval_fork_eps0p20_kl0p20.jsonl": "f0c9deaa8ce830aaf4567e6f92a2c7580f1f56e8a1cb40df8cf526020612c127",
+    "results/task2_ppo/generations_eval_fork_eps0p50_kl0p10.jsonl": "4db4ec83967d120074bb79629f68b0058f4990463d9d49950159d63c315b0cfc",
+    "results/task2_ppo/cached_clip_study.json": "74f9ecb42fc51cb88328ffd119eccb9d87f6d0f345409f7fc28e44a77bb44032"
+  },
+  "wall_clock_seconds": 3.2419434159819502
+}
