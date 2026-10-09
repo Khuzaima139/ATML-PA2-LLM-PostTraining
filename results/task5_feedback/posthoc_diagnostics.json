@@ -1,0 +1,723 @@
+{
+  "script": "task5_feedback.posthoc",
+  "part": "mac",
+  "post_hoc": true,
+  "note": "post-hoc diagnostics on saved notebook 6 files; no reported number changed; no generation or judge call",
+  "config_path": "configs/feedback.yaml",
+  "git": {
+    "commit": "884ac747c8566569955c4cf6190b273bfcd202b3",
+    "dirty": false
+  },
+  "seed": 6304,
+  "hardware": {
+    "device": "cpu (macOS-27.0.1-arm64-arm-64bit)",
+    "python": "3.11.17",
+    "torch": "2.14.1",
+    "transformers": "4.57.1",
+    "peft": "0.17.1"
+  },
+  "dtype": "float16",
+  "start_time": "2026-10-10T04:54:48",
+  "item1_rlvr_loading_audit": {
+    "code_trace": [
+      "queue cell: one python process per (dataset, policy); loop ds in gsm transfer, p in sft rlvr rlaif",
+      "evaluate_math.run_generate: args.dataset only selects dataset_path, data sha assert, row count, prompt_id, output path",
+      "adapter = policy_specs(cfg)[args.policy] -> cfg['policies']['rlvr'] = checkpoints/rlvr_policy for both datasets",
+      "P.assert_sha(adapter_model.safetensors) before loading; load_frozen_policy(cfg, 'rlvr') -> common.models.load_policy(cfg, adapter_path, trainable=False) -> PeftModel.from_pretrained(base, path, is_trainable=False); no dataset argument reaches model loading",
+      "generation: task1_dpo.evaluate.generate_responses(model, ...) -> common.generation.batch_generate -> model.generate; no disable_adapter / reference_mode call on this path (with_kl=False)"
+    ],
+    "rlvr_gsm_vs_transfer_recorded_fields_equal": {
+      "adapter": true,
+      "adapter_sha256": true,
+      "config_policy_path": true,
+      "git": true,
+      "hardware": true,
+      "dtype": true
+    },
+    "not_recorded": "no gen JSON records the active adapter name, PEFT flags (disable_adapters, merged) or the model class",
+    "runs": {
+      "gsm_sft": {
+        "adapter": "none (base model)",
+        "adapter_sha256": null,
+        "status": "completed",
+        "git": {
+          "commit": "eaf23d88ccdb22ef92381edd209062582c57da2f",
+          "dirty": false
+        },
+        "start_time": "2026-10-09T22:36:27",
+        "hardware": {
+          "device": "Tesla T4",
+          "python": "3.13.15",
+          "torch": "2.11.0+cu128",
+          "transformers": "4.57.1",
+          "peft": "0.17.1"
+        },
+        "dtype": "float16",
+        "config_policy_path": null,
+        "setup_seconds": 4.6881883170000265,
+        "generation_seconds": 405.49611834000007,
+        "decode_steps_sum_of_batch_max_length": 8670,
+        "seconds_per_decode_step": 0.04677002518339101,
+        "fields_about_active_adapter_or_peft_flags": []
+      },
+      "gsm_rlvr": {
+        "adapter": "checkpoints/rlvr_policy",
+        "adapter_sha256": "b309564b45c0268e4e5ffb0db5cb100e557a2c407a68ea3fa3de91fe964d92c8",
+        "status": "completed",
+        "git": {
+          "commit": "eaf23d88ccdb22ef92381edd209062582c57da2f",
+          "dirty": false
+        },
+        "start_time": "2026-10-09T22:43:30",
+        "hardware": {
+          "device": "Tesla T4",
+          "python": "3.13.15",
+          "torch": "2.11.0+cu128",
+          "transformers": "4.57.1",
+          "peft": "0.17.1"
+        },
+        "dtype": "float16",
+        "config_policy_path": "checkpoints/rlvr_policy",
+        "setup_seconds": 5.614172947000043,
+        "generation_seconds": 481.795027258,
+        "decode_steps_sum_of_batch_max_length": 9042,
+        "seconds_per_decode_step": 0.053284121572439724,
+        "fields_about_active_adapter_or_peft_flags": []
+      },
+      "gsm_rlaif": {
+        "adapter": "checkpoints/rlaif_policy",
+        "adapter_sha256": "e5a0eaacb3ce32a73fe86fd6a823be21c60a460eee8682493e5cc0f2e1019713",
+        "status": "completed",
+        "git": {
+          "commit": "eaf23d88ccdb22ef92381edd209062582c57da2f",
+          "dirty": false
+        },
+        "start_time": "2026-10-09T22:51:50",
+        "hardware": {
+          "device": "Tesla T4",
+          "python": "3.13.15",
+          "torch": "2.11.0+cu128",
+          "transformers": "4.57.1",
+          "peft": "0.17.1"
+        },
+        "dtype": "float16",
+        "config_policy_path": "checkpoints/rlaif_policy",
+        "setup_seconds": 5.451169467,
+        "generation_seconds": 479.17866123299996,
+        "decode_steps_sum_of_batch_max_length": 8934,
+        "seconds_per_decode_step": 0.05363539973505708,
+        "fields_about_active_adapter_or_peft_flags": []
+      },
+      "transfer_sft": {
+        "adapter": "none (base model)",
+        "adapter_sha256": null,
+        "status": "completed",
+        "git": {
+          "commit": "eaf23d88ccdb22ef92381edd209062582c57da2f",
+          "dirty": false
+        },
+        "start_time": "2026-10-09T23:00:08",
+        "hardware": {
+          "device": "Tesla T4",
+          "python": "3.13.15",
+          "torch": "2.11.0+cu128",
+          "transformers": "4.57.1",
+          "peft": "0.17.1"
+        },
+        "dtype": "float16",
+        "config_policy_path": null,
+        "setup_seconds": 4.479164890999982,
+        "generation_seconds": 103.73209307100001,
+        "decode_steps_sum_of_batch_max_length": 2362,
+        "seconds_per_decode_step": 0.04391705887849281,
+        "fields_about_active_adapter_or_peft_flags": []
+      },
+      "transfer_rlvr": {
+        "adapter": "checkpoints/rlvr_policy",
+        "adapter_sha256": "b309564b45c0268e4e5ffb0db5cb100e557a2c407a68ea3fa3de91fe964d92c8",
+        "status": "completed",
+        "git": {
+          "commit": "eaf23d88ccdb22ef92381edd209062582c57da2f",
+          "dirty": false
+        },
+        "start_time": "2026-10-09T23:02:09",
+        "hardware": {
+          "device": "Tesla T4",
+          "python": "3.13.15",
+          "torch": "2.11.0+cu128",
+          "transformers": "4.57.1",
+          "peft": "0.17.1"
+        },
+        "dtype": "float16",
+        "config_policy_path": "checkpoints/rlvr_policy",
+        "setup_seconds": 5.39682269900004,
+        "generation_seconds": 122.932497023,
+        "decode_steps_sum_of_batch_max_length": 2362,
+        "seconds_per_decode_step": 0.05204593438738357,
+        "fields_about_active_adapter_or_peft_flags": []
+      },
+      "transfer_rlaif": {
+        "adapter": "checkpoints/rlaif_policy",
+        "adapter_sha256": "e5a0eaacb3ce32a73fe86fd6a823be21c60a460eee8682493e5cc0f2e1019713",
+        "status": "completed",
+        "git": {
+          "commit": "eaf23d88ccdb22ef92381edd209062582c57da2f",
+          "dirty": false
+        },
+        "start_time": "2026-10-09T23:04:30",
+        "hardware": {
+          "device": "Tesla T4",
+          "python": "3.13.15",
+          "torch": "2.11.0+cu128",
+          "transformers": "4.57.1",
+          "peft": "0.17.1"
+        },
+        "dtype": "float16",
+        "config_policy_path": "checkpoints/rlaif_policy",
+        "setup_seconds": 5.392176952000227,
+        "generation_seconds": 104.04827049899995,
+        "decode_steps_sum_of_batch_max_length": 2045,
+        "seconds_per_decode_step": 0.050879349877261594,
+        "fields_about_active_adapter_or_peft_flags": []
+      }
+    },
+    "log_file": "results/task5_feedback/logs/task5_queue_gpu0.log",
+    "log_n_lines": 90,
+    "log_result_lines": [
+      "[gen gsm sft] status=completed n=300 eos=288 truncated_at_cap=12 t=410s s_per_prompt=1.35 peak_vram=3.33GiB; wrote results/task5_feedback/gen_gsm_sft.json",
+      "===== results/task5_feedback/gen_gsm_sft.json: completed",
+      "[gen gsm rlvr] status=completed n=300 eos=289 truncated_at_cap=11 t=487s s_per_prompt=1.61 peak_vram=3.36GiB; wrote results/task5_feedback/gen_gsm_rlvr.json",
+      "===== results/task5_feedback/gen_gsm_rlvr.json: completed",
+      "[gen gsm rlaif] status=completed n=300 eos=293 truncated_at_cap=7 t=485s s_per_prompt=1.60 peak_vram=3.34GiB; wrote results/task5_feedback/gen_gsm_rlaif.json",
+      "===== results/task5_feedback/gen_gsm_rlaif.json: completed",
+      "[gen transfer sft] status=completed n=100 eos=100 truncated_at_cap=0 t=108s s_per_prompt=1.04 peak_vram=3.28GiB; wrote results/task5_feedback/gen_transfer_sft.json",
+      "===== results/task5_feedback/gen_transfer_sft.json: completed",
+      "[gen transfer rlvr] status=completed n=100 eos=100 truncated_at_cap=0 t=128s s_per_prompt=1.23 peak_vram=3.29GiB; wrote results/task5_feedback/gen_transfer_rlvr.json",
+      "===== results/task5_feedback/gen_transfer_rlvr.json: completed",
+      "[gen transfer rlaif] status=completed n=100 eos=100 truncated_at_cap=0 t=109s s_per_prompt=1.04 peak_vram=3.25GiB; wrote results/task5_feedback/gen_transfer_rlaif.json",
+      "===== results/task5_feedback/gen_transfer_rlaif.json: completed"
+    ],
+    "log_lines_other_than_progress_result_status": [],
+    "log_note": "stderr was teed into the log (2>&1); it holds no adapter load message and no warning for any of the six runs"
+  },
+  "item2_identity_divergence": {
+    "tokenizer": "policy tokenizer (base_model), response text re-tokenized without special tokens",
+    "pairs": {
+      "gsm:sft-rlvr": {
+        "n_prompts": 300,
+        "n_identical_text": 10,
+        "n_nonidentical": 290,
+        "first_divergent_token_index": {
+          "n": 290,
+          "min": 0,
+          "median": 1.0,
+          "max": 246
+        },
+        "first_divergent_token_index_buckets": {
+          ">=10": 46,
+          "2-9": 75,
+          "0": 130,
+          "1": 39
+        },
+        "n_nonidentical_text_but_identical_tokens": 0
+      },
+      "gsm:sft-rlaif": {
+        "n_prompts": 300,
+        "n_identical_text": 51,
+        "n_nonidentical": 249,
+        "first_divergent_token_index": {
+          "n": 249,
+          "min": 0,
+          "median": 1,
+          "max": 286
+        },
+        "first_divergent_token_index_buckets": {
+          "2-9": 59,
+          ">=10": 41,
+          "1": 36,
+          "0": 113
+        },
+        "n_nonidentical_text_but_identical_tokens": 0
+      },
+      "gsm:rlvr-rlaif": {
+        "n_prompts": 300,
+        "n_identical_text": 9,
+        "n_nonidentical": 291,
+        "first_divergent_token_index": {
+          "n": 291,
+          "min": 0,
+          "median": 1,
+          "max": 246
+        },
+        "first_divergent_token_index_buckets": {
+          ">=10": 38,
+          "2-9": 91,
+          "0": 127,
+          "1": 35
+        },
+        "n_nonidentical_text_but_identical_tokens": 0
+      },
+      "transfer:sft-rlvr": {
+        "n_prompts": 100,
+        "n_identical_text": 95,
+        "n_nonidentical": 5,
+        "first_divergent_token_index": {
+          "n": 5,
+          "min": 14,
+          "median": 37,
+          "max": 221
+        },
+        "first_divergent_token_index_buckets": {
+          ">=10": 5
+        },
+        "n_nonidentical_text_but_identical_tokens": 0
+      },
+      "transfer:sft-rlaif": {
+        "n_prompts": 100,
+        "n_identical_text": 43,
+        "n_nonidentical": 57,
+        "first_divergent_token_index": {
+          "n": 57,
+          "min": 0,
+          "median": 7,
+          "max": 44
+        },
+        "first_divergent_token_index_buckets": {
+          ">=10": 22,
+          "0": 16,
+          "1": 7,
+          "2-9": 12
+        },
+        "n_nonidentical_text_but_identical_tokens": 0
+      },
+      "transfer:rlvr-rlaif": {
+        "n_prompts": 100,
+        "n_identical_text": 43,
+        "n_nonidentical": 57,
+        "first_divergent_token_index": {
+          "n": 57,
+          "min": 0,
+          "median": 7,
+          "max": 44
+        },
+        "first_divergent_token_index_buckets": {
+          ">=10": 22,
+          "0": 16,
+          "1": 7,
+          "2-9": 12
+        },
+        "n_nonidentical_text_but_identical_tokens": 0
+      }
+    }
+  },
+  "item3a_adapters": {
+    "method": "adapter attached to a meta-device base built from the base config; no base weights read; norms from adapter_model.safetensors",
+    "adapters": {
+      "rlvr": {
+        "path": "checkpoints/rlvr_policy",
+        "sha256": "b309564b45c0268e4e5ffb0db5cb100e557a2c407a68ea3fa3de91fe964d92c8",
+        "active_adapter": "default",
+        "active_adapters": [
+          "default"
+        ],
+        "peft_config_names": [
+          "default"
+        ],
+        "inference_mode": true,
+        "n_lora_layers": 56,
+        "layers_active_adapters": [
+          [
+            "default"
+          ]
+        ],
+        "layers_disable_adapters_any": false,
+        "layers_merged_any": false,
+        "scaling": [
+          2.0
+        ],
+        "file_keys_not_injected": [],
+        "injected_not_in_file": [],
+        "n_lora_B": 56,
+        "lora_B_frobenius_total": 0.020608805119991302,
+        "lora_B_frobenius_per_module": {
+          "n": 56,
+          "min": 0.001295750611461699,
+          "median": 0.0024736691848374903,
+          "max": 0.004195425193756819
+        },
+        "n_lora_B_all_zero": 0,
+        "lora_A_frobenius_total": 12.224398612976074,
+        "lora_B_frobenius_by_target": {
+          "q_proj": 0.01904391683638096,
+          "v_proj": 0.007877317257225513
+        }
+      },
+      "rlaif": {
+        "path": "checkpoints/rlaif_policy",
+        "sha256": "e5a0eaacb3ce32a73fe86fd6a823be21c60a460eee8682493e5cc0f2e1019713",
+        "active_adapter": "default",
+        "active_adapters": [
+          "default"
+        ],
+        "peft_config_names": [
+          "default"
+        ],
+        "inference_mode": true,
+        "n_lora_layers": 56,
+        "layers_active_adapters": [
+          [
+            "default"
+          ]
+        ],
+        "layers_disable_adapters_any": false,
+        "layers_merged_any": false,
+        "scaling": [
+          2.0
+        ],
+        "file_keys_not_injected": [],
+        "injected_not_in_file": [],
+        "n_lora_B": 56,
+        "lora_B_frobenius_total": 0.01581152342259884,
+        "lora_B_frobenius_per_module": {
+          "n": 56,
+          "min": 0.0010850409744307399,
+          "median": 0.0018924607429653406,
+          "max": 0.002931780880317092
+        },
+        "n_lora_B_all_zero": 0,
+        "lora_A_frobenius_total": 12.209107398986816,
+        "lora_B_frobenius_by_target": {
+          "q_proj": 0.01463520061224699,
+          "v_proj": 0.005984577815979719
+        }
+      }
+    }
+  },
+  "item3b_adapter_effect": "pending: notebook 7, python -m task5_feedback.posthoc --part adapter_effect",
+  "item4_judge_raw_outputs": {
+    "diagnostics_released": {
+      "n_calls": 80,
+      "raw_counts": {
+        "TIE": 69,
+        "B": 7,
+        "A, B": 4
+      },
+      "n_raw_multiple_labels": 4,
+      "raw_counts_by_category": {
+        "reasoning_corrupt": {
+          "TIE": 20
+        },
+        "wrong_final": {
+          "TIE": 20
+        },
+        "filler": {
+          "TIE": 15,
+          "A, B": 4,
+          "B": 1
+        },
+        "gold_distractor": {
+          "TIE": 14,
+          "B": 6
+        }
+      }
+    },
+    "diagnostics_swapped": {
+      "n_calls": 80,
+      "raw_counts": {
+        "TIE": 66,
+        "B": 10,
+        "A, B": 4
+      },
+      "n_raw_multiple_labels": 4,
+      "raw_counts_by_category": {
+        "reasoning_corrupt": {
+          "TIE": 20
+        },
+        "wrong_final": {
+          "TIE": 17,
+          "B": 3
+        },
+        "filler": {
+          "TIE": 16,
+          "A, B": 4
+        },
+        "gold_distractor": {
+          "TIE": 13,
+          "B": 7
+        }
+      }
+    },
+    "judge_gsm": {
+      "n_calls": 600,
+      "raw_counts": {
+        "TIE": 513,
+        "B": 33,
+        "A": 26,
+        "A, B,": 16,
+        "A, B": 7,
+        "A,B,TIE": 3,
+        "A, B T": 1,
+        "A,A,TIE": 1
+      },
+      "n_raw_multiple_labels": 28,
+      "raw_counts_by_comparison": {
+        "rlvr_vs_sft": {
+          "TIE": 249,
+          "B": 21,
+          "A": 15,
+          "A, B,": 10,
+          "A,B,TIE": 3,
+          "A, B": 2
+        },
+        "rlaif_vs_sft": {
+          "TIE": 264,
+          "B": 12,
+          "A": 11,
+          "A, B,": 6,
+          "A, B": 5,
+          "A, B T": 1,
+          "A,A,TIE": 1
+        }
+      }
+    },
+    "judge_transfer": {
+      "n_calls": 200,
+      "raw_counts": {
+        "TIE": 150,
+        "A, B,": 21,
+        "A, B": 15,
+        "A": 6,
+        "B": 4,
+        "A,B,TIE": 2,
+        "A, B T": 1,
+        "A,A,TIE": 1
+      },
+      "n_raw_multiple_labels": 40,
+      "raw_counts_by_comparison": {
+        "rlvr_vs_sft": {
+          "TIE": 78,
+          "A, B,": 10,
+          "A, B": 8,
+          "A": 2,
+          "B": 1,
+          "A, B T": 1
+        },
+        "rlaif_vs_sft": {
+          "TIE": 72,
+          "A, B,": 11,
+          "A, B": 7,
+          "A": 4,
+          "B": 3,
+          "A,B,TIE": 2,
+          "A,A,TIE": 1
+        }
+      }
+    }
+  },
+  "item5_swap_restricted": {
+    "definition": "content label (A = clean, B = perturbed, TIE) compared across released and swapped order; slot-A share = physical Candidate A picks / parsed non-tie decisions",
+    "by_category": {
+      "reasoning_corrupt": {
+        "n_pairs": 20,
+        "n_with_a_nontie_decision": 0,
+        "n_consistent_content_label": 0,
+        "consistency_restricted": null,
+        "n_both_nontie": 0,
+        "n_both_nontie_opposite": 0,
+        "n_one_tie_one_nontie": 0,
+        "slot_A": {
+          "released": {
+            "n_nontie": 0,
+            "n_slot_A": 0,
+            "slot_A_share": null
+          },
+          "swapped": {
+            "n_nontie": 0,
+            "n_slot_A": 0,
+            "slot_A_share": null
+          }
+        }
+      },
+      "wrong_final": {
+        "n_pairs": 20,
+        "n_with_a_nontie_decision": 3,
+        "n_consistent_content_label": 0,
+        "consistency_restricted": 0.0,
+        "n_both_nontie": 0,
+        "n_both_nontie_opposite": 0,
+        "n_one_tie_one_nontie": 3,
+        "slot_A": {
+          "released": {
+            "n_nontie": 0,
+            "n_slot_A": 0,
+            "slot_A_share": null
+          },
+          "swapped": {
+            "n_nontie": 3,
+            "n_slot_A": 0,
+            "slot_A_share": 0.0
+          }
+        }
+      },
+      "filler": {
+        "n_pairs": 20,
+        "n_with_a_nontie_decision": 6,
+        "n_consistent_content_label": 1,
+        "consistency_restricted": 0.16666666666666666,
+        "n_both_nontie": 3,
+        "n_both_nontie_opposite": 2,
+        "n_one_tie_one_nontie": 3,
+        "slot_A": {
+          "released": {
+            "n_nontie": 5,
+            "n_slot_A": 4,
+            "slot_A_share": 0.8
+          },
+          "swapped": {
+            "n_nontie": 4,
+            "n_slot_A": 4,
+            "slot_A_share": 1.0
+          }
+        }
+      },
+      "gold_distractor": {
+        "n_pairs": 20,
+        "n_with_a_nontie_decision": 12,
+        "n_consistent_content_label": 0,
+        "consistency_restricted": 0.0,
+        "n_both_nontie": 1,
+        "n_both_nontie_opposite": 1,
+        "n_one_tie_one_nontie": 11,
+        "slot_A": {
+          "released": {
+            "n_nontie": 6,
+            "n_slot_A": 0,
+            "slot_A_share": 0.0
+          },
+          "swapped": {
+            "n_nontie": 7,
+            "n_slot_A": 0,
+            "slot_A_share": 0.0
+          }
+        }
+      },
+      "all": {
+        "n_pairs": 80,
+        "n_with_a_nontie_decision": 21,
+        "n_consistent_content_label": 1,
+        "consistency_restricted": 0.047619047619047616,
+        "n_both_nontie": 4,
+        "n_both_nontie_opposite": 3,
+        "n_one_tie_one_nontie": 17,
+        "slot_A": {
+          "released": {
+            "n_nontie": 11,
+            "n_slot_A": 4,
+            "slot_A_share": 0.36363636363636365
+          },
+          "swapped": {
+            "n_nontie": 14,
+            "n_slot_A": 4,
+            "slot_A_share": 0.2857142857142857
+          }
+        }
+      }
+    }
+  },
+  "item6_verifier_coverage": {
+    "rule": "last number token in the text (protocol._NUMBER_RE: signed unless the minus follows a digit or ')'), commas stripped, numerically_equal to gold_final; non-compliant = extract_designated_final is None",
+    "by_run": {
+      "gsm_sft": {
+        "n_responses": 300,
+        "n_noncompliant": 161,
+        "n_last_number_equals_gold": 103,
+        "by_failure_type": {
+          "noncompliant_truncated": {
+            "n": 11,
+            "n_last_number_equals_gold": 0
+          },
+          "noncompliant_ended": {
+            "n": 150,
+            "n_last_number_equals_gold": 103
+          }
+        }
+      },
+      "gsm_rlvr": {
+        "n_responses": 300,
+        "n_noncompliant": 177,
+        "n_last_number_equals_gold": 115,
+        "by_failure_type": {
+          "noncompliant_truncated": {
+            "n": 11,
+            "n_last_number_equals_gold": 1
+          },
+          "noncompliant_ended": {
+            "n": 166,
+            "n_last_number_equals_gold": 114
+          }
+        }
+      },
+      "gsm_rlaif": {
+        "n_responses": 300,
+        "n_noncompliant": 173,
+        "n_last_number_equals_gold": 117,
+        "by_failure_type": {
+          "noncompliant_truncated": {
+            "n": 7,
+            "n_last_number_equals_gold": 2
+          },
+          "noncompliant_ended": {
+            "n": 166,
+            "n_last_number_equals_gold": 115
+          }
+        }
+      },
+      "transfer_sft": {
+        "n_responses": 100,
+        "n_noncompliant": 37,
+        "n_last_number_equals_gold": 30,
+        "by_failure_type": {
+          "noncompliant_truncated": {
+            "n": 0,
+            "n_last_number_equals_gold": 0
+          },
+          "noncompliant_ended": {
+            "n": 37,
+            "n_last_number_equals_gold": 30
+          }
+        }
+      },
+      "transfer_rlvr": {
+        "n_responses": 100,
+        "n_noncompliant": 37,
+        "n_last_number_equals_gold": 30,
+        "by_failure_type": {
+          "noncompliant_truncated": {
+            "n": 0,
+            "n_last_number_equals_gold": 0
+          },
+          "noncompliant_ended": {
+            "n": 37,
+            "n_last_number_equals_gold": 30
+          }
+        }
+      },
+      "transfer_rlaif": {
+        "n_responses": 100,
+        "n_noncompliant": 35,
+        "n_last_number_equals_gold": 31,
+        "by_failure_type": {
+          "noncompliant_truncated": {
+            "n": 0,
+            "n_last_number_equals_gold": 0
+          },
+          "noncompliant_ended": {
+            "n": 35,
+            "n_last_number_equals_gold": 31
+          }
+        }
+      }
+    }
+  },
+  "wall_clock_seconds": 1.8520185829838738
+}

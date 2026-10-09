@@ -406,3 +406,45 @@ def test_summary_detects_reordered_prompts(tmp_path):
     summary, _ = build_summary(tmp_path, seed=1, n_boot=5)
     failed = {c["check"] for c in summary["protocol_checks"] if not c["ok"]}
     assert "gsm: identical prompt order across policies" in failed
+
+
+# ---------------------------------------------------------------- step 5e post-hoc helpers
+
+def test_posthoc_first_divergence_and_last_number():
+    from task5_feedback.posthoc import first_divergence, last_number
+    assert first_divergence([1, 2, 3], [1, 2, 3]) is None
+    assert first_divergence([1, 2, 3], [1, 5, 3]) == 1
+    assert first_divergence([7], [8]) == 0
+    assert first_divergence([1, 2], [1, 2, 3]) == 2  # prefix: the shorter length
+    assert last_number("so 5-7 gives 1,800 apples") == "1800"
+    assert last_number("it fell to -7") == "-7"
+    assert last_number("no digits") is None
+
+
+def test_posthoc_teacher_force_matches_stepwise_reference():
+    """teacher_force log-probs equal a per-prefix next-token reference on a tiny random Qwen2 (vocab 1000)."""
+    from transformers import Qwen2Config, Qwen2ForCausalLM
+    from task5_feedback.posthoc import teacher_force
+
+    class Tok:
+        eos_token_id = 7
+        def apply_chat_template(self, messages, tokenize=False, add_generation_prompt=True):
+            return messages[0]["content"]
+        def __call__(self, text, add_special_tokens=True):
+            return {"input_ids": [int(x) for x in text.split()]}
+
+    torch.manual_seed(0)
+    cfg = Qwen2Config(vocab_size=1000, hidden_size=32, intermediate_size=64, num_hidden_layers=2,
+                      num_attention_heads=4, num_key_value_heads=2, max_position_embeddings=64)
+    model = Qwen2ForCausalLM(cfg).eval()
+    prompt, resp = [5, 9, 11], [21, 33, 400]
+    out = teacher_force(model, Tok(), [{"role": "user", "content": " ".join(map(str, prompt))}],
+                        " ".join(map(str, resp)), eos=True)
+    full = prompt + resp + [7]
+    assert out["n"] == 4 and out["logp"].shape == (4,) and out["argmax"].shape == (4,)
+    for i in range(4):
+        with torch.no_grad():
+            logits = model(input_ids=torch.tensor([full[: len(prompt) + i]])).logits[0, -1].float()
+        ref = torch.log_softmax(logits, -1)[full[len(prompt) + i]]
+        assert torch.allclose(out["logp"][i], ref, atol=1e-5)
+        assert int(out["argmax"][i]) == int(logits.argmax())
