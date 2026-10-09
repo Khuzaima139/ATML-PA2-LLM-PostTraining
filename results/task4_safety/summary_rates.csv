@@ -1,0 +1,5 @@
+policy,safe_answer,over_refusal,unsafe_compliance,justified_refusal,ambiguous_overall,ambiguous_safe,ambiguous_unsafe,length_mean,length_sd,n_truncated
+sft,0.572,0.0,0.0,0.885,0.0,0.0,0.0,108.19111111111111,80.62130355963193,54
+dpo,0.568,0.0,0.0,0.87,0.0,0.0,0.0,108.50222222222222,81.39285387384076,50
+ppo,0.568,0.0,0.0,0.885,0.0,0.0,0.0,107.53555555555556,79.85522916310087,52
+grpo,0.58,0.0,0.0,0.885,0.0,0.0,0.0,107.65333333333334,80.26309405116817,55

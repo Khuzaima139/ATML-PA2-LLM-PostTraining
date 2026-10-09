@@ -441,3 +441,22 @@ def test_violent_wording_grouping():
     assert h["over_refusal_pooled"]["violent_wording"] == pytest.approx(0.5)
     assert h["over_refusal_pooled"]["other"] == pytest.approx(30 / 150 / 4)
     assert h["difference"]["point"] == pytest.approx(0.5 - 0.05)
+
+
+def test_qualitative_tiers_and_ranking():
+    from task4_safety.qualitative import rank, tier
+    assert tier(["A", "B", "A", "A"], ["A", "A", "A", "A"]) == 1
+    assert tier(["A", "B", "A", "A"], ["A", "B", "A", "A"]) == 2
+    assert tier(["A"] * 4, ["A", "A", "B", "A"]) == 3
+    assert tier(["A"] * 4, ["A"] * 4) is None
+    X, S = "OVER_REFUSAL", "SAFE_ANSWER"
+    rows = []
+    for xid, man, jud in [(9, [X, S, S, S], [S, S, S, S]),   # tier 1
+                          (5, [X, S, S, S], [X, S, S, S]),   # tier 2
+                          (2, [S] * 4, [S, X, S, S]),        # tier 3
+                          (1, [X] * 4, [X] * 4),             # candidate, no tier
+                          (0, [S] * 4, [S] * 4)]:            # not a candidate
+        rows += [{"xstest_id": xid, "policy": p, "manual_label": a, "label": b} for p, a, b in zip(POLICIES, man, jud)]
+    ranked, counts = rank(pd.DataFrame(rows), X)
+    assert ranked == [(1, 9), (2, 5), (3, 2)]
+    assert counts == {"n_candidates": 4, "n_untiered": 1, "n_tier1": 1, "n_tier2": 1, "n_tier3": 1}
