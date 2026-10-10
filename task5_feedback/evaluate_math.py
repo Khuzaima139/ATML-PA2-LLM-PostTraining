@@ -20,10 +20,9 @@ import torch
 from common.data import load_yaml, prompt_messages, read_jsonl, repo_path, write_jsonl
 from common.logging_utils import append_jsonl, load_json, save_json, set_seed, wall_timer
 from common.models import load_policy, load_tokenizer
-from task1_dpo.dataset_stats import describe
-from task1_dpo.evaluate import generate_responses
-from task1_dpo.train import display_path, peak_vram_bytes, run_metadata
-from task3_grpo.grpo_utils import effective_generation_settings
+from common.rollouts import effective_generation_settings, generate_responses
+from common.run_info import display_path, peak_vram_bytes, run_metadata
+from common.stats import describe
 from task5_feedback import protocol as P
 from task5_feedback.judge_wrapper import enforce_parity, judge_call, judge_generation_settings, parity_check
 from task5_feedback.rlaif import PairwiseAIJudge

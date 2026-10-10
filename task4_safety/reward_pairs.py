@@ -2,7 +2,7 @@
 
 GRPO standard minus PPO standard: both evaluated on the same held-out RL prompts (task2_ppo.evaluate and
 task3_grpo.evaluate). The script first checks the same prompt ids and identical protocol fields, then
-computes a paired percentile bootstrap over prompts (task1_dpo.summarize.bootstrap).
+computes a paired percentile bootstrap over prompts (common.stats.bootstrap).
 
 DPO standard minus SFT: copied from the Task 1 summary (its own prompt set and caps), cited by path and hash.
 The two differences use different prompt sets and caps and are stored side by side, not combined.
@@ -17,8 +17,8 @@ import numpy as np
 
 from common.data import load_yaml, read_jsonl, repo_path
 from common.logging_utils import load_json, save_json
-from task1_dpo.summarize import N_RESAMPLES, bootstrap, diff_stat, iid_resampler, mean_stat
-from task1_dpo.train import git_state
+from common.run_info import git_state
+from common.stats import N_RESAMPLES, bootstrap, diff_stat, iid_resampler, mean_stat
 from task4_safety.protocol import sha256_file, task_dir
 
 PPO_EVAL, PPO_GEN = "results/task2_ppo/eval_standard.json", "results/task2_ppo/generations_eval_standard.jsonl"

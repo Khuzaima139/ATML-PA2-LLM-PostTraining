@@ -22,28 +22,6 @@ def is_informative(rewards: torch.Tensor) -> bool:
     return bool(group_population_std(rewards) > INFORMATIVE_TOL)
 
 
-GENERATION_KEYS = ("do_sample", "temperature", "top_p", "top_k", "min_p", "typical_p", "repetition_penalty",
-                   "no_repeat_ngram_size", "eos_token_id", "pad_token_id")
-
-
-def effective_generation_settings(model, tokenizer, gen_cfg: dict, max_new_tokens: int) -> dict:
-    """Settings model.generate actually uses with common.generation.batch_generate.
-
-    batch_generate passes do_sample, temperature, top_p (when sampling), pad/eos ids and
-    max_new_tokens; every other key (top_k, repetition_penalty, ...) comes from the model's own
-    generation_config and is recorded here, never overridden.
-    """
-    gc = model.generation_config
-    passed = {"do_sample": bool(gen_cfg["do_sample"]), "max_new_tokens": int(max_new_tokens),
-              "pad_token_id": tokenizer.pad_token_id, "eos_token_id": tokenizer.eos_token_id}
-    if passed["do_sample"]:
-        passed.update({"temperature": float(gen_cfg["temperature"]), "top_p": float(gen_cfg["top_p"])})
-    out = {k: passed.get(k, getattr(gc, k, None)) for k in GENERATION_KEYS}
-    out["max_new_tokens"] = int(max_new_tokens)
-    out["from_model_generation_config"] = sorted(k for k in GENERATION_KEYS if k not in passed)
-    return out
-
-
 def zero_gradient_token_shares(lengths, truncated, informative: bool) -> dict:
     """Share of the update's generated tokens whose surrogate (advantage) gradient is zero, by cause.
 

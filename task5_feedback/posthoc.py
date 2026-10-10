@@ -25,7 +25,7 @@ import torch
 
 from common.data import load_yaml, prompt_messages, read_jsonl, repo_path
 from common.logging_utils import load_json, save_json, wall_timer
-from task1_dpo.train import display_path, peak_vram_bytes, run_metadata
+from common.run_info import display_path, peak_vram_bytes, run_metadata
 from task5_feedback import protocol as P
 from task5_feedback.evaluate_math import dataset_path, gen_paths, load_frozen_policy, out_dir, policy_specs
 from task5_feedback.rlvr import numerically_equal

@@ -12,7 +12,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 from common.data import load_yaml, read_jsonl, repo_path
 from common.logging_utils import save_json, set_seed, wall_timer
 from common.models import resolve_dtype
-from task1_dpo.train import display_path, peak_vram_bytes, run_metadata
+from common.run_info import display_path, peak_vram_bytes, run_metadata
 from task4_safety.protocol import POLICIES, generated_name, judge_name, sealed_dir, sha256_file, task_dir
 
 LABELS = {

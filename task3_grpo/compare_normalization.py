@@ -7,7 +7,7 @@ Outputs normalization.json and normalization.csv:
   protocol     checks that the forks differ only in loss_type (same midpoint settings, seed, prompts,
                generation settings, update count, evaluation settings) and that the update-1 completions
                are identical (same parameters, same seed); generated tokens per fork.
-  heldout      paired bootstrap over held-out prompts (task2_ppo.summarize.heldout_block): reward, KL,
+  heldout      paired bootstrap over held-out prompts (common.stats.heldout_block): reward, KL,
                entropy, length per fork and dr_grpo minus grpo.
   length       from the --length-diagnostic rows (unmasked completions, all updates); completions with
                A_k = 0 are excluded (counted). y_k = ||g_k|| / |A_k|.
@@ -31,9 +31,8 @@ import pandas as pd
 from common.data import load_yaml, read_jsonl, repo_path
 from common.logging_utils import load_json, save_json, wall_timer
 from common.metrics import safe_corr
-from task1_dpo.summarize import bootstrap, iid_resampler, write_csv
-from task1_dpo.train import git_state
-from task2_ppo.summarize import heldout_block
+from common.run_info import git_state
+from common.stats import bootstrap, heldout_block, iid_resampler, two_sample_bootstrap, write_csv
 
 N_RESAMPLES = 10_000
 LENGTH_SPLIT = 256
@@ -49,24 +48,8 @@ def spearman(x, y) -> float:
     return safe_corr(pd.Series(np.asarray(x, dtype=float)).rank().to_numpy(), pd.Series(np.asarray(y, dtype=float)).rank().to_numpy())
 
 
-def two_sample_bootstrap(stat_a, n_a: int, stat_b, n_b: int, seed: int, n_resamples: int = N_RESAMPLES, method: str = "") -> dict:
-    """stat_b - stat_a with each sample resampled independently; 95% percentile interval."""
-    rng = np.random.default_rng(seed)
-    point = float(stat_b(np.arange(n_b)) - stat_a(np.arange(n_a)))
-    draws = []
-    for _ in range(n_resamples):
-        ia = rng.integers(0, n_a, size=n_a)
-        ib = rng.integers(0, n_b, size=n_b)
-        draws.append(stat_b(ib) - stat_a(ia))
-    draws = np.asarray(draws, dtype=float)
-    finite = draws[np.isfinite(draws)]
-    lo, hi = np.percentile(finite, [2.5, 97.5]) if finite.size else (float("nan"), float("nan"))
-    return {"point": point, "ci_low": float(lo), "ci_high": float(hi), "n_resamples": n_resamples,
-            "n_nonfinite_resamples": int(draws.size - finite.size), "seed": seed, "method": method}
-
-
 def boot(stat, n: int, seed: int, n_resamples: int, method: str) -> dict:
-    """task1_dpo.summarize.bootstrap, or NaN (with the reason) when the statistic is undefined on the full
+    """common.stats.bootstrap, or NaN (with the reason) when the statistic is undefined on the full
     sample, e.g. an empty length bucket or a constant input to Spearman."""
     point = stat(np.arange(n)) if n else float("nan")
     if not np.isfinite(point):

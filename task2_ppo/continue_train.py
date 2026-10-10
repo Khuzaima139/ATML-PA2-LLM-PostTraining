@@ -5,7 +5,7 @@ policy and one critic optimizer step each (micro-batches of one response, losses
 accumulated gradient equals the token mean over all responses of the update).
 
 Run-level settings recorded in every run JSON (see DECISIONS):
-  - Rule P (task2_ppo.ppo_utils): prompts longer than max_prompt_length are excluded from the sampler.
+  - Rule P (common.rollouts): prompts longer than max_prompt_length are excluded from the sampler.
   - Rule D (task2_ppo.ppo_utils): dropout disabled in policy and critic.
   - Fresh AdamW optimizers (the bundle carries no optimizer state); no scheduler; no whitening.
   - Critic head trained in float32 (LoRA weights are float32 already; frozen base stays float16).
@@ -32,8 +32,9 @@ from common.models import (
     trainable_parameters,
     value_parameter_groups,
 )
-from task1_dpo.dataset_stats import describe
-from task1_dpo.train import display_path, dtype_report, peak_vram_bytes, run_metadata
+from common.rollouts import plan_prompts, reward_with_lengths
+from common.run_info import display_path, dtype_report, optimizer_report, peak_vram_bytes, run_metadata
+from common.stats import describe
 from task2_ppo.ppo import ppo_policy_loss, value_mse_loss
 from task2_ppo.ppo_utils import (
     DROPOUT_RULE,
@@ -42,10 +43,7 @@ from task2_ppo.ppo_utils import (
     disable_dropout,
     effective_terminal_rewards,
     explained_variance,
-    fitting_prompts,
-    prompt_order,
     response_slice,
-    reward_with_lengths,
     stability_statistic,
 )
 
@@ -70,21 +68,6 @@ DECISIONS = {
     "explained_variance": "1 - Var(returns - values) / Var(returns) over valid tokens, values from before the update",
     "non_finite": "an optimizer step is skipped (and counted) when its loss or pre-clip grad norm is not finite",
 }
-
-
-# ---------------------------------------------------------------- planning
-
-def plan_prompts(cfg: dict, tokenizer, rows: list[dict]) -> dict:
-    """Rule P filter and the seeded prompt order. Depends only on seed, updates and the prompt cap."""
-    kept, records, report = fitting_prompts(tokenizer, rows, int(cfg["max_prompt_length"]), prompt_messages)
-    order = prompt_order(len(kept), int(cfg["updates"]), int(cfg["seed"]))
-    return {
-        "rows": kept,
-        "records": records,
-        "filter": report,
-        "order": order,
-        "prompt_ids": [records[i]["prompt_id"] for i in order],
-    }
 
 
 # ---------------------------------------------------------------- rollout scoring and PPO update
@@ -248,14 +231,6 @@ def reference_check(cfg: dict) -> dict:
     if not ok:
         raise RuntimeError(f"midpoint adapter base {meta.get('base_model_name_or_path')!r} != base_model {cfg['base_model']!r}")
     return {"adapter_base_model": meta.get("base_model_name_or_path"), "config_base_model": cfg["base_model"], "match": ok}
-
-
-def optimizer_report(opt) -> list[dict]:
-    return [
-        {"name": g.get("name"), "lr": g["lr"], "weight_decay": g["weight_decay"], "n_tensors": len(g["params"]),
-         "n_params": sum(p.numel() for p in g["params"]), "dtypes": sorted({str(p.dtype) for p in g["params"]})}
-        for g in opt.param_groups
-    ]
 
 
 # ---------------------------------------------------------------- run

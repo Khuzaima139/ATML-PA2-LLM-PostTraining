@@ -12,61 +12,23 @@ Paired differences resample the same item indices for both conditions.
 from __future__ import annotations
 
 import argparse
-import csv
-import hashlib
 import math
 
 import numpy as np
 
-from common.data import load_yaml, read_jsonl, repo_path
+from common.data import load_yaml, repo_path
 from common.logging_utils import load_json, save_json, wall_timer
+from common.run_info import git_state
+from common.stats import (N_RESAMPLES, Inputs, align, bootstrap, cluster_resampler, describe, diff_stat, iid_resampler,
+                          mean_stat, pooled_ratio_stat, prompt_key, stratified_resampler, write_csv)
 from task1_dpo.ablate_beta import EXPECTED_LORA_A_SHA256
-from task1_dpo.dataset_stats import describe
-from task1_dpo.train import display_path, git_state
 
 STRATA = ("preferred_longer", "length_matched", "rejected_longer")
 FORKS = ("beta_0p03", "beta_0p10", "beta_0p30")
 FORK_PAIRS = (("beta_0p03", "beta_0p10"), ("beta_0p10", "beta_0p30"), ("beta_0p03", "beta_0p30"))
-N_RESAMPLES = 10_000
 N_TOP_RM_GAIN = 10
 N_WORDLIMIT_VIOLATIONS = 5
 TOL = 1.0e-8  # recomputed point estimates must match the evaluation JSON
-
-
-# ---------------------------------------------------------------- bootstrap core
-
-def iid_resampler(n: int):
-    """Resample n items with replacement."""
-    return lambda rng: rng.integers(0, n, size=n)
-
-
-def stratified_resampler(strata):
-    """Resample with replacement inside each stratum; every stratum keeps its size."""
-    strata = np.asarray(strata)
-    groups = [np.flatnonzero(strata == s) for s in sorted(set(strata.tolist()))]
-    return lambda rng: np.concatenate([g[rng.integers(0, len(g), size=len(g))] for g in groups])
-
-
-def cluster_resampler(clusters):
-    """Resample whole clusters with replacement; every item of a drawn cluster is kept together."""
-    clusters = np.asarray(clusters)
-    members = [np.flatnonzero(clusters == c) for c in sorted(set(clusters.tolist()))]
-
-    def draw(rng):
-        pick = rng.integers(0, len(members), size=len(members))
-        return np.concatenate([members[k] for k in pick])
-    return draw
-
-
-def bootstrap(stat, n_items: int, resampler, seed: int, n_resamples: int = N_RESAMPLES, method: str = "") -> dict:
-    """Point estimate on all items plus a 95% percentile interval. stat(index_array) -> float."""
-    rng = np.random.default_rng(seed)
-    point = float(stat(np.arange(n_items)))
-    draws = np.array([stat(resampler(rng)) for _ in range(n_resamples)], dtype=float)
-    finite = draws[np.isfinite(draws)]
-    lo, hi = np.percentile(finite, [2.5, 97.5])
-    return {"point": point, "ci_low": float(lo), "ci_high": float(hi), "n_resamples": n_resamples,
-            "n_nonfinite_resamples": int(draws.size - finite.size), "seed": seed, "method": method}
 
 
 # ---------------------------------------------------------------- statistics on index arrays
@@ -74,17 +36,6 @@ def bootstrap(stat, n_items: int, resampler, seed: int, n_resamples: int = N_RES
 def accuracy_stat(m):
     m = np.asarray(m, dtype=float)
     return lambda idx: float(np.mean(m[idx] > 0))
-
-
-def mean_stat(x):
-    x = np.asarray(x, dtype=float)
-    return lambda idx: float(np.mean(x[idx]))
-
-
-def pooled_ratio_stat(num, den):
-    """Token-level pooled mean: sum of per-response summed log-ratios / sum of response lengths."""
-    num, den = np.asarray(num, dtype=float), np.asarray(den, dtype=float)
-    return lambda idx: float(num[idx].sum() / den[idx].sum())
 
 
 def gap_stat(m, strata, hi: str = "preferred_longer", lo: str = "rejected_longer"):
@@ -97,29 +48,10 @@ def gap_stat(m, strata, hi: str = "preferred_longer", lo: str = "rejected_longer
     return f
 
 
-def diff_stat(stat_a, stat_b):
-    return lambda idx: stat_a(idx) - stat_b(idx)
-
-
 # ---------------------------------------------------------------- alignment
-
-def align(rows_a: list[dict], rows_b: list[dict], key, what: str):
-    """Pair rows by key, in rows_a order. Fails unless both sides hold exactly the same unique keys."""
-    ka, kb = [key(r) for r in rows_a], [key(r) for r in rows_b]
-    if len(set(ka)) != len(ka) or len(set(kb)) != len(kb):
-        raise SystemExit(f"{what}: duplicate IDs")
-    if set(ka) != set(kb):
-        raise SystemExit(f"{what}: ID sets differ ({len(set(ka) - set(kb))} only in first, {len(set(kb) - set(ka))} only in second)")
-    by_b = {key(r): r for r in rows_b}
-    return rows_a, [by_b[k] for k in ka]
-
 
 def pair_key(r):
     return r["id"]
-
-
-def prompt_key(r):
-    return r["prompt_id"]
 
 
 def sample_key(r):
@@ -169,43 +101,6 @@ def largest_compliance_gap(std_rows: list[dict], bal_rows: list[dict]) -> dict:
 
 
 # ---------------------------------------------------------------- loading and protocol checks
-
-class Inputs:
-    """Reads result files, records their SHA-256, and fails clearly on anything missing or inconsistent."""
-
-    def __init__(self, results_dir: str):
-        self.dir = results_dir
-        self.hashes: dict[str, str] = {}
-        self.checks: list[dict] = []
-
-    def path(self, name: str):
-        return repo_path(f"{self.dir}/{name}")
-
-    def require(self, names: list[str]):
-        missing = [n for n in names if not self.path(n).exists()]
-        if missing:
-            raise SystemExit("missing required result files in " + self.dir + ":\n  " + "\n  ".join(missing))
-
-    def _hash(self, p):
-        self.hashes[display_path(p)] = hashlib.sha256(p.read_bytes()).hexdigest()
-
-    def json(self, name: str):
-        p = self.path(name)
-        self._hash(p)
-        return load_json(p)
-
-    def jsonl(self, path: str):
-        p = repo_path(path)
-        if not p.exists():
-            raise SystemExit(f"missing required file {path}")
-        self._hash(p)
-        return read_jsonl(p)
-
-    def check(self, name: str, ok: bool, detail=None):
-        self.checks.append({"check": name, "passed": bool(ok), "detail": detail})
-        if not ok:
-            raise SystemExit(f"check failed: {name}: {detail}")
-
 
 def check_train(inp: Inputs, run: str, train: dict):
     inp.check(f"{run}: training completed", train["status"] == "completed", train["status"])
@@ -269,16 +164,6 @@ def generation_columns(gen: dict) -> dict:
         "truncated_fraction": m["length"]["truncated_fraction"],
         "n_rm_input_truncated": m["n_rm_input_truncated"],
     }
-
-
-def write_csv(path, rows: list[dict]):
-    cols = []
-    for r in rows:
-        cols += [c for c in r if c not in cols]
-    with path.open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=cols)
-        w.writeheader()
-        w.writerows(rows)
 
 
 def steps12(inp: Inputs, cfg: dict, seed: int, std_name: str, sft_name: str) -> tuple[dict, list[dict], dict]:

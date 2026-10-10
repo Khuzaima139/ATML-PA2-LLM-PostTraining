@@ -1,10 +1,10 @@
 """Task 3 held-out evaluation, identical for the standard adapter and both fork adapters.
 
-Prompts: rl_prompt_pool_eval.jsonl under rule P (task2_ppo.ppo_utils.fitting_prompts: prompts longer
+Prompts: rl_prompt_pool_eval.jsonl under rule P (common.rollouts.fitting_prompts: prompts longer
 than max_prompt_length are excluded and listed). One sampled response per prompt, seed reset right
 before generation, generation settings from the config (temperature 0.7, top_p 0.9; other keys from
 the model's generation_config, recorded), response cap EVAL_MAX_NEW_TOKENS. Generation and teacher
-forcing reuse task1_dpo.evaluate.generate_responses (fixed batch sizes), in eval mode.
+forcing reuse common.rollouts.generate_responses (fixed batch sizes), in eval mode.
 
 Metrics: RM score (cap EVAL_RM_MAX_LENGTH; truncated inputs counted), common.metrics.sampled_kl
 against the adapter-disabled reference and sample_entropy, both pooled over all response tokens
@@ -20,11 +20,10 @@ import torch
 from common.data import load_yaml, prompt_messages, read_jsonl, repo_path, write_jsonl
 from common.logging_utils import save_json, set_seed, wall_timer
 from common.models import clear_gpu, load_policy, load_reward_model, load_tokenizer
-from task1_dpo.dataset_stats import describe
-from task1_dpo.evaluate import GEN_BATCH_SIZE, TF_BATCH_SIZE, generate_responses
-from task1_dpo.train import display_path, peak_vram_bytes, run_metadata
-from task2_ppo.ppo_utils import fitting_prompts, pooled_token_metrics, reward_with_lengths
-from task3_grpo.grpo_utils import effective_generation_settings
+from common.rollouts import (GEN_BATCH_SIZE, TF_BATCH_SIZE, effective_generation_settings, fitting_prompts,
+                             generate_responses, pooled_token_metrics, reward_with_lengths)
+from common.run_info import display_path, peak_vram_bytes, run_metadata
+from common.stats import describe
 
 # configs/grpo.yaml sets neither (same values as the Task 2 evaluation).
 EVAL_MAX_NEW_TOKENS = 768

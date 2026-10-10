@@ -15,8 +15,8 @@ import torch
 
 from common.data import load_yaml, read_jsonl, repo_path
 from common.logging_utils import append_jsonl, save_json, wall_timer
-from task1_dpo.dataset_stats import describe
-from task1_dpo.train import display_path, peak_vram_bytes, run_metadata
+from common.run_info import display_path, peak_vram_bytes, run_metadata
+from common.stats import describe
 from task5_feedback import protocol as P
 from task5_feedback.judge_wrapper import enforce_parity, judge_call, judge_generation_settings, parity_check
 from task5_feedback.rlaif import PairwiseAIJudge

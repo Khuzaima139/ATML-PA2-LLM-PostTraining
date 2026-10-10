@@ -34,8 +34,8 @@ import torch
 
 from common.data import load_yaml, read_jsonl, repo_path
 from common.logging_utils import save_json, wall_timer
-from task1_dpo.summarize import bootstrap, diff_stat, iid_resampler, write_csv
-from task1_dpo.train import git_state
+from common.run_info import git_state
+from common.stats import bootstrap, diff_stat, iid_resampler, write_csv
 from task3_grpo.grpo import group_relative_advantages
 from task3_grpo.grpo_utils import INFORMATIVE_RULE, INFORMATIVE_TOL
 

@@ -25,9 +25,10 @@ import torch
 from common.data import load_yaml, prompt_messages, read_jsonl, repo_path
 from common.logging_utils import save_json, wall_timer
 from common.models import load_tokenizer
-from task1_dpo.train import git_state
+from common.run_info import git_state
+from common.stats import heldout_block
 from task2_ppo.analyze_clipping import load_cached_rollouts, rebuild_tokens
-from task2_ppo.summarize import STANDARD, flat_numbers, heldout_block, history_max_diff
+from task2_ppo.summarize import STANDARD, flat_numbers, history_max_diff
 
 FORK_8 = "fork_eps0p20_kl0p10"
 FORK_KL020 = "fork_eps0p20_kl0p20"

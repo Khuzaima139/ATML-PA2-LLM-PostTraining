@@ -17,11 +17,10 @@ import math
 
 import numpy as np
 
-from common.data import load_yaml, read_jsonl, repo_path
+from common.data import load_yaml, repo_path
 from common.logging_utils import save_json, wall_timer
-from task1_dpo.summarize import (Inputs, align, bootstrap, diff_stat, iid_resampler, mean_stat,
-                                 pooled_ratio_stat, prompt_key, write_csv)
-from task1_dpo.train import git_state
+from common.run_info import git_state
+from common.stats import Inputs, N_RESAMPLES, heldout_block, pooled_ratio_stat, standard_heldout, write_csv
 
 STANDARD = "standard"
 CLIP_FORKS = {0.05: "fork_eps0p05_kl0p10", 0.20: "fork_eps0p20_kl0p10", 0.50: "fork_eps0p50_kl0p10"}
@@ -30,7 +29,6 @@ FORKS = sorted(set(CLIP_FORKS.values()) | set(KL_FORKS.values()))
 EVALS = [STANDARD, *FORKS]
 CLIP_PAIRS = ((0.05, 0.20), (0.05, 0.50), (0.20, 0.50))
 KL_PAIRS = ((0.0, 0.20), (0.0, 0.10), (0.10, 0.20))
-N_RESAMPLES = 10_000
 TOL = 1.0e-8
 T975 = {18: 2.10092204024096}  # Student t 97.5% quantile; df 18 = 20 updates - 2 (scipy is not a dependency)
 # History keys that measure time or memory, not the optimisation; skipped by the fork equality check.
@@ -57,38 +55,6 @@ def ols(y) -> dict:
     se = math.sqrt((resid ** 2).sum() / df / (xc ** 2).sum())
     t = T975[df]
     return {"slope": slope, "se": se, "ci_low": slope - t * se, "ci_high": slope + t * se, "df": df, "n": len(y)}
-
-
-def eval_stats(rows: list[dict]) -> dict:
-    """Per-prompt arrays from a generations file, in file order."""
-    return {
-        "rm": mean_stat([r["rm_score"] for r in rows]),
-        "kl": pooled_ratio_stat([r["sum_log_ratio"] for r in rows], [r["token_length"] for r in rows]),
-        "entropy": pooled_ratio_stat([r["sum_neg_logp"] for r in rows], [r["token_length"] for r in rows]),
-        "length": mean_stat([r["token_length"] for r in rows]),
-    }
-
-
-METRICS = ("rm", "kl", "entropy", "length")
-
-
-def boot(stat, n, seed, method):
-    return bootstrap(stat, n, iid_resampler(n), seed, N_RESAMPLES, method)
-
-
-def heldout_block(gens: dict[str, list[dict]], labels: dict, pairs, seed: int) -> dict:
-    """Per-condition estimates and paired differences (a minus b) for every metric."""
-    names = list(labels.values())
-    base = gens[names[0]]
-    aligned = {n: align(base, gens[n], prompt_key, f"held-out {names[0]} vs {n}")[1] for n in names}
-    n = len(base)
-    stats = {lab: eval_stats(aligned[name]) for lab, name in labels.items()}
-    per = {str(lab): {m: boot(stats[lab][m], n, seed, f"{m}, {N_RESAMPLES} prompt resamples") for m in METRICS}
-           for lab in labels}
-    diffs = {f"{a}-{b}": {m: boot(diff_stat(stats[a][m], stats[b][m]), n, seed, f"paired {m} difference")
-                          for m in METRICS} for a, b in pairs}
-    return {"n_prompts": n, "conditions": {str(k): v for k, v in labels.items()}, "per_condition": per,
-            "paired_differences": diffs}
 
 
 def flat_numbers(obj, prefix=""):
@@ -297,17 +263,6 @@ def kl_section(trains: dict, gens: dict, seed: int) -> dict:
         d = [x - y for x, y in zip(col(rows[0.0], key), col(rows[0.20], key))]
         sign[key] = {"diff_beta0_minus_beta0p20": d, **first_constant_sign(d)}
     return {"per_update": per_update, "beta0_vs_beta0p20": sign, "heldout": heldout_block(gens, KL_FORKS, KL_PAIRS, seed)}
-
-
-def standard_heldout(e: dict, gens: list[dict], seed: int) -> dict:
-    m = e["metrics"]
-    st = eval_stats(gens)
-    return {"rm_mean": m["reward"]["mean"], "rm_sd": m["reward"]["std"], "kl": m["kl"], "entropy": m["entropy"],
-            "length_mean": m["length"]["mean"], "length_sd": m["length"]["std"],
-            "truncation_rate_at_768": m["truncation_rate_at_cap"], "n_truncated_at_768": m["n_truncated_at_cap"],
-            "cap": e["settings"]["max_new_tokens"], "n_prompts": len(gens),
-            "bootstrap": {k: boot(st[k], len(gens), seed, k) for k in METRICS},
-            "note": "for Task 4; not compared with forks (20 vs 8 updates)"}
 
 
 def budget_section(trains: dict) -> dict:

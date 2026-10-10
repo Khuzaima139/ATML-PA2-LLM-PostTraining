@@ -8,11 +8,8 @@ Run-level rules recorded in every run JSON:
 from __future__ import annotations
 
 import argparse
-import datetime as dt
 import hashlib
 import math
-import platform
-import subprocess
 
 import torch
 from torch.optim import AdamW
@@ -30,56 +27,12 @@ from common.data import (
 from common.generation import response_sequence_logprobs
 from common.logging_utils import save_json, set_seed, wall_timer
 from common.models import load_policy, load_tokenizer, reference_mode, trainable_parameters
+from common.run_info import display_path, dtype_report, peak_vram_bytes, run_metadata
 from task1_dpo.dpo import dpo_loss
 
 STRATUM_KEY = "length_stratum"
 RULE_A = "skip pair if len(apply_chat_template(prompt, add_generation_prompt=True)) >= max_sequence_length; never truncate the prompt"
 RULE_B = "response longer than its budget is cut to budget-1 tokens and EOS is appended (starter encode_prompt_response)"
-
-
-# ---------------------------------------------------------------- run metadata
-
-def git_state() -> dict:
-    def run(*args):
-        return subprocess.run(["git", *args], capture_output=True, text=True, cwd=repo_path(".")).stdout.strip()
-    # Untracked files (results being written) do not count as dirty.
-    return {"commit": run("rev-parse", "HEAD"), "dirty": bool(run("status", "--porcelain", "--untracked-files=no"))}
-
-
-def hardware() -> dict:
-    import peft
-    import transformers
-    if torch.cuda.is_available():
-        device = torch.cuda.get_device_name(0)
-    else:
-        device = f"cpu ({platform.platform()})"
-    return {
-        "device": device,
-        "python": platform.python_version(),
-        "torch": torch.__version__,
-        "transformers": transformers.__version__,
-        "peft": peft.__version__,
-    }
-
-
-def run_metadata(cfg: dict) -> dict:
-    return {
-        "git": git_state(),
-        "seed": int(cfg["seed"]),
-        "hardware": hardware(),
-        "dtype": cfg["dtype"],
-        "start_time": dt.datetime.now().isoformat(timespec="seconds"),
-    }
-
-
-def display_path(path) -> str:
-    """Repo-relative path when inside the repo, else absolute."""
-    root = repo_path(".")
-    return str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
-
-
-def peak_vram_bytes():
-    return int(torch.cuda.max_memory_allocated()) if torch.cuda.is_available() else None
 
 
 # ---------------------------------------------------------------- rule A filter
@@ -230,12 +183,6 @@ def lora_init_digest(model) -> dict:
             h.update(p.detach().float().cpu().numpy().tobytes())
             n += 1
     return {"lora_A_sha256": h.hexdigest(), "n_lora_A_tensors": n}
-
-
-def dtype_report(model) -> dict:
-    trainable = sorted({str(p.dtype) for p in model.parameters() if p.requires_grad})
-    frozen = sorted({str(p.dtype) for p in model.parameters() if not p.requires_grad})
-    return {"trainable_param_dtypes": trainable, "frozen_param_dtypes": frozen}
 
 
 def attach_forward_dtype_hooks(model, sink: dict):

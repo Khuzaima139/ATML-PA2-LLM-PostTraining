@@ -20,8 +20,9 @@ import torch
 
 from common.data import load_yaml, repo_path
 from common.logging_utils import load_json, save_json, wall_timer
+from common.run_info import display_path, run_metadata
 from task1_dpo import evaluate
-from task1_dpo.train import display_path, run_metadata, run_training
+from task1_dpo.train import run_training
 
 # LoRA A digest of the Kaggle Step 1 smoke run; every Task 1 run must start from this init.
 EXPECTED_LORA_A_SHA256 = "0ef3a1ffae8b06f2a82a26c773f9026b06deab08b63d34115d81ee5542abbc2e"

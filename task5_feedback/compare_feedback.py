@@ -20,10 +20,8 @@ import numpy as np
 
 from common.data import load_yaml, read_jsonl, repo_path
 from common.logging_utils import load_json, save_json, wall_timer
-from task1_dpo.dataset_stats import describe
-from task1_dpo.summarize import bootstrap, iid_resampler, write_csv
-from task1_dpo.train import display_path, git_state
-from task3_grpo.compare_normalization import two_sample_bootstrap
+from common.run_info import display_path, git_state
+from common.stats import bootstrap, describe, iid_resampler, two_sample_bootstrap, write_csv
 from task5_feedback import protocol as P
 
 DATASETS = ("gsm", "transfer")

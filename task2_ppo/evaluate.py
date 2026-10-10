@@ -1,9 +1,9 @@
 """Task 2 held-out evaluation, identical for the standard final adapter and every fork adapter.
 
-Prompts: rl_prompt_pool_eval.jsonl under rule P (task2_ppo.ppo_utils: prompts longer than
+Prompts: rl_prompt_pool_eval.jsonl under rule P (common.rollouts: prompts longer than
 max_prompt_length are excluded and listed). One sampled response per prompt, seed reset right
 before generation, generation settings from the config, response cap eval_max_response_length.
-Generation and teacher forcing reuse task1_dpo.evaluate.generate_responses (fixed batch sizes).
+Generation and teacher forcing reuse common.rollouts.generate_responses (fixed batch sizes).
 
 Metrics: RM raw score (cap reward_max_length; truncated inputs counted with the truncation side),
 common.metrics.sampled_kl against the adapter-disabled reference and sample_entropy, both pooled
@@ -19,10 +19,10 @@ import torch
 from common.data import load_yaml, prompt_messages, read_jsonl, repo_path, write_jsonl
 from common.logging_utils import save_json, set_seed, wall_timer
 from common.models import clear_gpu, load_policy, load_reward_model, load_tokenizer
-from task1_dpo.dataset_stats import describe
-from task1_dpo.evaluate import GEN_BATCH_SIZE, TF_BATCH_SIZE, generate_responses
-from task1_dpo.train import display_path, peak_vram_bytes, run_metadata
-from task2_ppo.ppo_utils import fitting_prompts, pooled_token_metrics, reward_with_lengths
+from common.rollouts import (GEN_BATCH_SIZE, TF_BATCH_SIZE, fitting_prompts, generate_responses, pooled_token_metrics,
+                             reward_with_lengths)
+from common.run_info import display_path, peak_vram_bytes, run_metadata
+from common.stats import describe
 
 RM_BATCH_SIZE = 8
 

@@ -25,7 +25,8 @@ from common.data import load_yaml, prompt_messages, read_jsonl, repo_path
 from common.generation import response_token_logprobs
 from common.logging_utils import save_json, set_seed, wall_timer
 from common.models import load_policy, load_tokenizer, trainable_parameters
-from task1_dpo.train import display_path, peak_vram_bytes, run_metadata
+from common.rollouts import pad_ragged
+from common.run_info import display_path, peak_vram_bytes, run_metadata
 from task2_ppo.ppo import ppo_policy_loss
 from task2_ppo.ppo_utils import (
     DROPOUT_RULE,
@@ -33,7 +34,6 @@ from task2_ppo.ppo_utils import (
     check_clip_identities,
     clip_study,
     disable_dropout,
-    pad_ragged,
 )
 
 MATCH_THRESHOLD = 0.02  # nats, mean absolute per-token difference

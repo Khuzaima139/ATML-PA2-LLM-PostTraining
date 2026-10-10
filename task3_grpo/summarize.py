@@ -15,7 +15,7 @@ Outputs:
                             length, with a 95% percentile bootstrap over updates ((update, value) pairs resampled)
       informative_updates   informative updates out of 20
       zero_gradient_tokens  generated tokens and the zero-gradient shares (masked truncation, uninformative group)
-      heldout               standard held-out evaluation summary (task2_ppo.summarize.standard_heldout)
+      heldout               standard held-out evaluation summary (common.stats.standard_heldout)
   normalization_qualitative.json
       three held-out prompts picked by rules fixed in code (largest |length dr - length grpo|, largest
       RM dr - RM grpo, largest RM grpo - RM dr; ties by lowest prompt_id) and every uninformative
@@ -30,9 +30,8 @@ import numpy as np
 
 from common.data import load_yaml, read_jsonl, repo_path
 from common.logging_utils import load_json, save_json, wall_timer
-from task1_dpo.summarize import bootstrap, iid_resampler, write_csv
-from task1_dpo.train import git_state
-from task2_ppo.summarize import standard_heldout
+from common.run_info import git_state
+from common.stats import bootstrap, iid_resampler, standard_heldout, write_csv
 
 N_RESAMPLES = 10_000
 STANDARD, CANONICAL, DR = "standard", "fork_grpo", "fork_dr_grpo"

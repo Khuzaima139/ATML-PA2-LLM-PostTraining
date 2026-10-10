@@ -32,14 +32,12 @@ from common.generation import batch_generate, response_token_logprobs
 from common.logging_utils import load_json, save_json, set_seed, wall_timer
 from common.metrics import sample_entropy, sampled_kl
 from common.models import load_policy, load_reward_model, load_tokenizer, reference_mode, trainable_parameters
-from task1_dpo.dataset_stats import describe
-from task1_dpo.train import display_path, dtype_report, peak_vram_bytes, run_metadata
-from task2_ppo.continue_train import optimizer_report, plan_prompts
-from task2_ppo.ppo_utils import reward_with_lengths
+from common.rollouts import effective_generation_settings, plan_prompts, reward_with_lengths
+from common.run_info import display_path, dtype_report, optimizer_report, peak_vram_bytes, run_metadata
+from common.stats import describe
 from task3_grpo.grpo import group_relative_advantages, grpo_policy_loss, mask_truncated_sequences
 from task3_grpo.grpo_utils import (
     INFORMATIVE_RULE,
-    effective_generation_settings,
     group_population_std,
     is_informative,
     zero_gradient_token_shares,

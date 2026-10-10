@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 
 from common.data import load_yaml
+from common.run_info import display_path
 from task1_dpo.ablate_beta import (
     SMOKE_EVAL_LIMIT,
     SMOKE_MAX_EXAMPLES,
@@ -23,7 +24,6 @@ from task1_dpo.ablate_beta import (
     train_json_path,
     train_status_line,
 )
-from task1_dpo.train import display_path
 
 
 def main():

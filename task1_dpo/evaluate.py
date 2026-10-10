@@ -19,29 +19,25 @@ import math
 import torch
 
 from common.data import load_yaml, prompt_messages_from_preference, read_jsonl, repo_path, write_jsonl
-from common.generation import batch_generate, response_token_logprobs, score_reward_pairs
+from common.generation import score_reward_pairs
 from common.logging_utils import load_json, save_json, set_seed, wall_timer
 from common.metrics import parse_word_limit, sampled_kl, word_count, word_limit_compliance
-from common.models import clear_gpu, load_policy, load_reward_model, load_tokenizer, reference_mode
-from task1_dpo.dataset_stats import describe
+from common.models import clear_gpu, load_policy, load_reward_model, load_tokenizer
+from common.rollouts import GEN_BATCH_SIZE, TF_BATCH_SIZE, generate_responses
+from common.run_info import display_path, peak_vram_bytes, run_metadata
+from common.stats import describe
 from task1_dpo.dpo import dpo_loss
 from task1_dpo.train import (
-    display_path,
     dpo_sequence_logprobs,
     filter_pairs,
     filter_report,
     make_collate,
-    peak_vram_bytes,
-    run_metadata,
     to_device,
 )
 
 MODES = ("pairs", "stratified", "generate", "wordlimit")
 GENERATION_MODES = ("generate", "wordlimit")
-# Fixed for every Task 1 condition: batch composition changes sampled outputs, so it must match.
-GEN_BATCH_SIZE = 16
-# Memory only: rows per teacher-forcing forward (full-vocab logits) and per reward-model call.
-TF_BATCH_SIZE = 4
+# Memory only: rows per reward-model call (generation and teacher-forcing batches: common.rollouts).
 RM_BATCH_SIZE = 8
 RM_MAX_LENGTH = 1024  # score_reward_pairs default
 WORDLIMIT_SAMPLES = 5
@@ -153,56 +149,6 @@ def score_pairs(model, tokenizer, rows, records, cfg) -> list[dict]:
             })
         if b % PROGRESS_EVERY == 0 or b == n_batches:
             print(f"  teacher forcing batch {b}/{n_batches} t={timer():.0f}s", flush=True)
-    return out
-
-
-def generate_responses(model, tokenizer, prompts: list[list[dict]], cfg, with_kl: bool) -> list[dict]:
-    """Sample one response per prompt in fixed batches; optionally teacher-force policy and reference.
-
-    Token log-probs are kept only on response-mask tokens (up to and including the first EOS).
-    """
-    gen = cfg["generation"]
-    max_prompt = int(cfg["max_sequence_length"])
-    max_new = int(cfg["max_generation_tokens"])
-    out = []
-    timer, n_batches = wall_timer(), math.ceil(len(prompts) / GEN_BATCH_SIZE)
-    for b, start in enumerate(range(0, len(prompts), GEN_BATCH_SIZE), start=1):
-        g = batch_generate(
-            model, tokenizer, prompts[start : start + GEN_BATCH_SIZE],
-            max_prompt_length=max_prompt, max_new_tokens=max_new,
-            temperature=float(gen["temperature"]), top_p=float(gen["top_p"]), do_sample=bool(gen["do_sample"]),
-        )
-        prompt_lens = g["attention_mask"][:, : g["prompt_width"]].sum(-1).tolist()
-        if max(prompt_lens) >= max_prompt:
-            raise RuntimeError("a generation prompt reached max_prompt_length and may have been truncated")
-        pol_rows, ref_rows = [None] * len(prompt_lens), [None] * len(prompt_lens)
-        if with_kl:
-            for j in range(0, len(prompt_lens), TF_BATCH_SIZE):
-                sl = slice(j, j + TF_BATCH_SIZE)
-                args = (g["sequences"][sl], g["attention_mask"][sl], g["prompt_width"], g["response_ids"][sl])
-                with torch.no_grad():
-                    pol = response_token_logprobs(model, *args)[0]
-                with torch.no_grad(), reference_mode(model):
-                    ref = response_token_logprobs(model, *args)[0]
-                for k in range(pol.shape[0]):
-                    pol_rows[j + k], ref_rows[j + k] = pol[k], ref[k]
-                del pol, ref
-        for k, n in enumerate(g["response_lengths"]):
-            rec = {
-                "prompt_tokens": int(prompt_lens[k]),
-                "text": g["responses"][k],
-                "token_length": int(n),
-                "terminated_with_eos": bool(g["terminated_with_eos"][k]),
-                "truncated": bool(g["truncated"][k]),
-            }
-            if with_kl:
-                # The response mask is a prefix of length n (ones up to the first EOS).
-                assert int(g["response_mask"][k].sum().item()) == n and bool(g["response_mask"][k][:n].all())
-                rec["policy_token_logp"] = pol_rows[k][:n].double().cpu().tolist()
-                rec["ref_token_logp"] = ref_rows[k][:n].double().cpu().tolist()
-            out.append(rec)
-        del g
-        print(f"  generation batch {b}/{n_batches} t={timer():.0f}s", flush=True)
     return out
 
 

@@ -42,7 +42,8 @@ from task3_grpo.analyze_group_size import (
 )
 from task3_grpo.continue_train import check_release_settings, eval_logprobs, grpo_update
 from task3_grpo.grpo import group_relative_advantages
-from task3_grpo.grpo_utils import effective_generation_settings, is_informative, zero_gradient_token_shares
+from common.rollouts import effective_generation_settings
+from task3_grpo.grpo_utils import is_informative, zero_gradient_token_shares
 
 LORA = {"r": 8, "alpha": 16, "dropout": 0.05, "target_modules": ["q_proj", "v_proj"]}
 PAD, EOS = 0, 2
@@ -361,9 +362,9 @@ from task3_grpo.compare_normalization import (  # noqa: E402
     spearman,
     term_gradient_section,
     terms_section,
-    two_sample_bootstrap,
     update1_identity,
 )
+from common.stats import two_sample_bootstrap  # noqa: E402
 
 
 def test_spearman_average_ranks_and_monotone_invariance():

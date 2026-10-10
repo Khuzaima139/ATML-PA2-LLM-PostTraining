@@ -21,7 +21,7 @@ import torch
 
 from common.data import load_yaml, repo_path
 from common.logging_utils import load_json, save_json, wall_timer
-from task1_dpo.train import git_state
+from common.run_info import git_state
 from task3_grpo.analyze_group_size import N_CACHED, check_cache, load_k8_cache
 from task3_grpo.grpo_utils import INFORMATIVE_RULE, is_informative
 

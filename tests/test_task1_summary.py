@@ -12,22 +12,18 @@ import numpy as np
 import pytest
 
 from task1_dpo.evaluate import pooled_kl
-from task1_dpo.summarize import (
-    accuracy_stat,
+from common.stats import (
     align,
     bootstrap,
     cluster_resampler,
     diff_stat,
-    gap_stat,
     iid_resampler,
-    largest_compliance_gap,
     mean_stat,
     pooled_ratio_stat,
     prompt_key,
     stratified_resampler,
-    top_rm_gain,
-    wordlimit_violations,
 )
+from task1_dpo.summarize import accuracy_stat, gap_stat, largest_compliance_gap, top_rm_gain, wordlimit_violations
 
 SEED = 6304
 

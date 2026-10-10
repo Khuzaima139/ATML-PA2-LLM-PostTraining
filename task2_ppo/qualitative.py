@@ -19,7 +19,7 @@ import numpy as np
 
 from common.data import load_yaml, read_jsonl, repo_path
 from common.logging_utils import save_json
-from task1_dpo.summarize import align, prompt_key
+from common.stats import align, prompt_key
 
 BETA0, BETA020 = "fork_eps0p20_kl0p00", "fork_eps0p20_kl0p20"
 N_CANDIDATES = 8

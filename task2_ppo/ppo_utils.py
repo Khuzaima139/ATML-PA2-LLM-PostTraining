@@ -3,7 +3,7 @@
 Tensor conventions: per-token tensors are [batch, response_steps]; response_mask is 1.0 on valid
 response tokens (up to and including the first EOS) and 0.0 on padding.
 
-Run-level rules recorded in every Task 2 JSON (see PROMPT_RULE, DROPOUT_RULE):
+Run-level rules recorded in every Task 2 JSON (see common.rollouts.PROMPT_RULE, DROPOUT_RULE):
   P. A prompt is used only if its chat-template encoding (add_generation_prompt=True) has at most
      max_prompt_length tokens, so batch_generate never truncates it. Excluded IDs are logged.
   D. Dropout is disabled (p=0 on every nn.Dropout) in the trainable policy and critic, so old and
@@ -14,52 +14,10 @@ from __future__ import annotations
 import torch
 from torch import nn
 
-from common.metrics import masked_mean, sample_entropy, sampled_kl
+from common.metrics import masked_mean
 from task2_ppo.ppo import compute_gae, ppo_policy_loss, shaped_rewards
 
-PROMPT_RULE = "use a prompt only if len(apply_chat_template(messages, add_generation_prompt=True)) <= max_prompt_length; longer prompts are excluded, never truncated"
 DROPOUT_RULE = "p set to 0 on every torch.nn.Dropout of the trainable policy and critic (LoRA dropout 0.05 inactive)"
-
-
-# ---------------------------------------------------------------- prompts
-
-def prompt_token_count(tokenizer, messages) -> int:
-    return len(tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=True))
-
-
-def fitting_prompts(tokenizer, rows: list[dict], max_prompt_length: int, messages_fn):
-    """Rule P. Returns (kept_rows, kept_records, report); records carry file index, ID and token count."""
-    kept, kept_records, excluded = [], [], []
-    for i, row in enumerate(rows):
-        n = prompt_token_count(tokenizer, messages_fn(row))
-        rec = {"index": i, "prompt_id": row.get("prompt_id", i), "prompt_tokens": n}
-        if n > int(max_prompt_length):
-            excluded.append(rec)
-        else:
-            kept.append(row)
-            kept_records.append(rec)
-    report = {
-        "rule": PROMPT_RULE,
-        "max_prompt_length": int(max_prompt_length),
-        "n_input": len(rows),
-        "n_kept": len(kept),
-        "n_excluded": len(excluded),
-        "excluded": excluded,
-    }
-    return kept, kept_records, report
-
-
-def prompt_order(n_prompts: int, count: int, seed: int) -> list[int]:
-    """First `count` entries of a permutation of range(n_prompts) from its own seeded generator.
-
-    The global RNG is neither read nor advanced, and the order does not depend on eps or beta,
-    so every run with the same seed sees the same prompts (a shorter run sees a prefix).
-    """
-    if count > n_prompts:
-        raise ValueError(f"{count} updates need {count} distinct prompts, only {n_prompts} available")
-    gen = torch.Generator()
-    gen.manual_seed(int(seed))
-    return torch.randperm(n_prompts, generator=gen)[:count].tolist()
 
 
 # ---------------------------------------------------------------- rewards, advantages, positions
@@ -153,30 +111,6 @@ def explained_variance(returns, values, mask) -> float:
     return float(1.0 - (r - v).var(unbiased=False) / var_r)
 
 
-def pad_ragged(rows: list[list[float]]):
-    """Right-pad ragged per-response lists into float64 [n, width] values and mask."""
-    width = max((len(r) for r in rows), default=0)
-    vals = torch.zeros(len(rows), width, dtype=torch.float64)
-    mask = torch.zeros(len(rows), width, dtype=torch.float64)
-    for i, r in enumerate(rows):
-        vals[i, : len(r)] = torch.tensor(r, dtype=torch.float64)
-        mask[i, : len(r)] = 1.0
-    return vals, mask
-
-
-def pooled_token_metrics(policy_logps: list[list[float]], ref_logps: list[list[float]]) -> dict:
-    """common.metrics.sampled_kl and sample_entropy pooled over all response tokens (token-level means)."""
-    pol, mask = pad_ragged(policy_logps)
-    ref, _ = pad_ragged(ref_logps)
-    if mask.sum() == 0:
-        return {"kl": float("nan"), "entropy": float("nan"), "n_tokens": 0}
-    return {
-        "kl": float(sampled_kl(pol, ref, mask)),
-        "entropy": float(sample_entropy(pol, mask)),
-        "n_tokens": int(mask.sum()),
-    }
-
-
 # ---------------------------------------------------------------- model preparation
 
 def disable_dropout(model) -> int:
@@ -207,19 +141,3 @@ def critic_head_to_fp32(value_model) -> dict:
     return {"head_dtype_before": before, "head_dtype_after": sorted({str(m.weight.dtype) for m in trainable}), "hook": handle}
 
 
-@torch.no_grad()
-def reward_with_lengths(rm, rm_tok, prompts, texts, max_length: int, batch_size: int):
-    """Course reward-model scores (common.generation.score_reward_pairs) plus RM input token counts.
-
-    An input longer than max_length is truncated by the helper on rm_tok.truncation_side.
-    """
-    from common.generation import score_reward_pairs
-
-    scores = []
-    for start in range(0, len(texts), batch_size):
-        scores += score_reward_pairs(rm, rm_tok, prompts[start : start + batch_size], texts[start : start + batch_size], max_length=max_length).cpu().tolist()
-    lengths = [
-        len(rm_tok.apply_chat_template(list(p) + [{"role": "assistant", "content": t}], tokenize=True, add_generation_prompt=False))
-        for p, t in zip(prompts, texts)
-    ]
-    return scores, lengths

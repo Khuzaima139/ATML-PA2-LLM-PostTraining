@@ -12,7 +12,7 @@ prompts, unsafe-class rates by the 200 unsafe prompts. AMBIGUOUS is split into t
 AMBIGUOUS, parse failures and unknown labels (both of which parse_json maps to AMBIGUOUS).
 
 Uncertainty: percentile bootstrap over prompts, N_RESAMPLES, a fresh default_rng(seed) per quantity
-(task1_dpo.summarize.bootstrap). Paired differences reuse the same resampled prompt indices.
+(common.stats.bootstrap). Paired differences reuse the same resampled prompt indices.
 """
 from __future__ import annotations
 
@@ -27,9 +27,9 @@ import pandas as pd
 
 from common.data import load_yaml, read_jsonl, repo_path
 from common.logging_utils import load_json, save_json
-from task1_dpo.dataset_stats import describe
-from task1_dpo.summarize import N_RESAMPLES, bootstrap, cluster_resampler, diff_stat, iid_resampler, mean_stat, stratified_resampler
-from task1_dpo.train import git_state
+from common.run_info import git_state
+from common.stats import (N_RESAMPLES, bootstrap, cluster_resampler, describe, diff_stat, iid_resampler, mean_stat,
+                          stratified_resampler)
 from task4_safety.make_audit_sheet import KEY, LABELS_CSV, expand_labels, fixed_audit_ids, load_generations, validate_labels
 from task4_safety.protocol import (AMBIGUOUS, EXPECTED_ADAPTER_SHA256, VIOLENT_WORDING_TYPES, LABEL_MAP, N_PER_CLASS, POLICIES,
                                    generated_name, judge_name, sha256_file, task_dir)

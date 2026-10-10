@@ -32,6 +32,7 @@ from common.data import (
 )
 from common.logging_utils import save_json, wall_timer
 from common.models import load_tokenizer
+from common.stats import describe
 
 FILES = {
     "dpo_standard_train": "dpo_standard_train",
@@ -46,24 +47,6 @@ def git_info() -> dict:
     def run(*args):
         return subprocess.run(["git", *args], capture_output=True, text=True, cwd=repo_path(".")).stdout.strip()
     return {"commit": run("rev-parse", "HEAD"), "dirty": bool(run("status", "--porcelain"))}
-
-
-def describe(x) -> dict:
-    a = np.asarray(x, dtype=float)
-    if a.size == 0:
-        return {"n": 0}
-    q25, med, q75 = np.percentile(a, [25, 50, 75])
-    return {
-        "n": int(a.size),
-        "mean": float(a.mean()),
-        "std": float(a.std(ddof=0)),
-        "median": float(med),
-        "q25": float(q25),
-        "q75": float(q75),
-        "iqr": float(q75 - q25),
-        "min": float(a.min()),
-        "max": float(a.max()),
-    }
 
 
 def compare(chosen, rejected) -> dict:

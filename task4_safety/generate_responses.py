@@ -19,8 +19,8 @@ from common.data import load_yaml, repo_path, write_jsonl
 from common.generation import batch_generate
 from common.logging_utils import save_json, set_seed, wall_timer
 from common.models import load_policy, load_tokenizer
-from task1_dpo.train import display_path, peak_vram_bytes, run_metadata
-from task3_grpo.grpo_utils import effective_generation_settings
+from common.rollouts import effective_generation_settings
+from common.run_info import display_path, peak_vram_bytes, run_metadata
 from task4_safety.protocol import GEN_BATCH_SIZE, POLICIES, generated_name, sha256_file, task_dir, verify_adapter
 
 MAX_PROMPT_LENGTH = 256  # hard-coded in the released generate_for_policy

@@ -22,7 +22,8 @@ from transformers import Qwen2Config, Qwen2ForCausalLM, Qwen2ForSequenceClassifi
 from common.generation import response_token_logprobs
 from common.metrics import masked_mean
 from common.models import make_lora_config, make_value_lora_config, token_values, trainable_parameters, value_parameter_groups
-from task2_ppo.continue_train import critic_values, plan_prompts, policy_logprobs, ppo_update, score_rollout
+from common.rollouts import plan_prompts, pooled_token_metrics
+from task2_ppo.continue_train import critic_values, policy_logprobs, ppo_update, score_rollout
 from task2_ppo.ppo_utils import (
     affected_fraction,
     build_targets,
@@ -32,7 +33,6 @@ from task2_ppo.ppo_utils import (
     disable_dropout,
     effective_terminal_rewards,
     explained_variance,
-    pooled_token_metrics,
     response_slice,
     stability_statistic,
 )
