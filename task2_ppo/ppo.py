@@ -52,7 +52,7 @@ def ppo_policy_loss(new_logp, old_logp, advantage, mask, eps=0.2):
     surr1 = ratio * advantage
     surr2 = ratio.clamp(1.0 - eps, 1.0 + eps) * advantage
 
-    # Starter implementation: students must validate the clipping geometry carefully.
+    # Clipped surrogate: elementwise minimum of the unclipped and clipped terms.
     objective = torch.minimum(surr1, surr2)
 
     loss = -masked_mean(objective, mask)

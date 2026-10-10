@@ -11,7 +11,7 @@ hf_cache/
 .huggingface/
 wandb/
 
-# Student outputs
+# Run outputs
 outputs/
 
 # Downloaded course assets
