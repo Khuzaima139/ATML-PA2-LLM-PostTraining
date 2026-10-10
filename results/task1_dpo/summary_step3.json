@@ -3,8 +3,8 @@
   "config_path": "configs/dpo.yaml",
   "results_dir": "results/task1_dpo",
   "git": {
-    "commit": "d48135f38444f0a9263fdeb50ddf0e905192a21c",
-    "dirty": false
+    "commit": "f5633181a30ad5357ead8dd05ea92bfe1fa7c4b6",
+    "dirty": true
   },
   "seed": 6304,
   "bootstrap": {
@@ -752,7 +752,7 @@
       }
     }
   ],
-  "wall_clock_seconds": 2.557915666999179,
+  "wall_clock_seconds": 2.5680316670041066,
   "table": {
     "gap_definition": "accuracy on preferred_longer minus accuracy on rejected_longer",
     "length_definition": "generated response tokens (common.generation response mask), word-limit prompts, all samples",

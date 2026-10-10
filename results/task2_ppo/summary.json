@@ -3,8 +3,8 @@
   "config_path": "configs/ppo.yaml",
   "results_dir": "results/task2_ppo",
   "git": {
-    "commit": "ade4541e08e58f07724cd279dab669f9d1a9a225",
-    "dirty": false
+    "commit": "f5633181a30ad5357ead8dd05ea92bfe1fa7c4b6",
+    "dirty": true
   },
   "seed": 6304,
   "bootstrap": {
@@ -2817,12 +2817,12 @@
     "results/task2_ppo/generations_eval_fork_eps0p50_kl0p10.jsonl": "4db4ec83967d120074bb79629f68b0058f4990463d9d49950159d63c315b0cfc",
     "results/task2_ppo/cached_clip_study.json": "74f9ecb42fc51cb88328ffd119eccb9d87f6d0f345409f7fc28e44a77bb44032"
   },
-  "wall_clock_seconds": 3.2419434159819502,
+  "wall_clock_seconds": 3.0771686249936465,
   "post_hoc": {
     "script": "task2_ppo.posthoc",
     "git": {
-      "commit": "7ced6a38eb0dcd34906dbae2607d15caf5fad453",
-      "dirty": false
+      "commit": "f5633181a30ad5357ead8dd05ea92bfe1fa7c4b6",
+      "dirty": true
     },
     "seed": 6304,
     "inputs": "summary.json, train_{standard,fork_eps0p20_kl0p10,fork_eps0p20_kl0p20}.json, rollouts and generations of standard and fork_eps0p20_kl0p10, cached_clip_study.json, cached/ppo_rollout.pt, tokenizer only",
@@ -3813,7 +3813,7 @@
         "gpu": "same re-run of standard"
       }
     },
-    "wall_clock_seconds": 0.9646746660000645
+    "wall_clock_seconds": 1.602596332988469
   },
   "qualitative": {
     "comparison": "KL forks beta 0 vs beta 0.20 (eps 0.20), held-out generations",

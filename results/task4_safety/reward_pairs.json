@@ -1,7 +1,7 @@
 {
   "script": "task4_safety.reward_pairs",
   "git": {
-    "commit": "58dd38f4e639463aef2b5210e10fe962dfe16efb",
+    "commit": "f5633181a30ad5357ead8dd05ea92bfe1fa7c4b6",
     "dirty": true
   },
   "seed": 6304,
@@ -292,10 +292,10 @@
       "method": "paired percentile bootstrap: the same resampled indices for both conditions; difference = first minus second (prompt IDs)"
     },
     "source": "results/task1_dpo/summary_steps12.json uncertainty.standard_minus_sft.rm_mean",
-    "source_sha256": "fe7272acd12ae718c724d263224247ca0f7d9f3ec75f85074f06922e0aa19364",
+    "source_sha256": "996dccc66da52a3a3a0692769535b80eb7aea641585eba782599535b6668f287",
     "source_git": {
-      "commit": "d48135f38444f0a9263fdeb50ddf0e905192a21c",
-      "dirty": false
+      "commit": "f5633181a30ad5357ead8dd05ea92bfe1fa7c4b6",
+      "dirty": true
     },
     "n_prompts": {
       "results/task1_dpo/eval_standard.json": 290,

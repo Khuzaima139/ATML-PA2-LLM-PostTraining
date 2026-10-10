@@ -3,8 +3,8 @@
   "config_path": "configs/dpo.yaml",
   "results_dir": "results/task1_dpo",
   "git": {
-    "commit": "d48135f38444f0a9263fdeb50ddf0e905192a21c",
-    "dirty": false
+    "commit": "f5633181a30ad5357ead8dd05ea92bfe1fa7c4b6",
+    "dirty": true
   },
   "seed": 6304,
   "bootstrap": {
@@ -752,7 +752,7 @@
       }
     }
   ],
-  "wall_clock_seconds": 2.557915666999179,
+  "wall_clock_seconds": 2.5680316670041066,
   "table": {
     "budget_note": "standard is one epoch over all retained dpo_standard_train pairs; the beta forks are short runs over the first short_ablation_examples retained pairs; the budgets differ",
     "kl_definition": "common.metrics.sampled_kl pooled over all generated response tokens (token-level mean); the untrained base model's KL is 0 by definition and not computed",

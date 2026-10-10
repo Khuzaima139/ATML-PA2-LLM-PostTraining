@@ -1,8 +1,8 @@
 {
   "script": "task3_grpo.summarize",
   "git": {
-    "commit": "06c256b7b78ff2dc320a86512f1cb192fd25a89a",
-    "dirty": false
+    "commit": "f5633181a30ad5357ead8dd05ea92bfe1fa7c4b6",
+    "dirty": true
   },
   "rules": {
     "selection": "largest value of each rule over the held-out prompts, ties by lowest prompt_id",
