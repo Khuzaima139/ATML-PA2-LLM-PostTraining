@@ -1,0 +1,149 @@
+{
+  "script": "task5_feedback.posthoc",
+  "part": "adapter_effect",
+  "post_hoc": true,
+  "status": "completed",
+  "config_path": "configs/feedback.yaml",
+  "git": {
+    "commit": "4c2285fa89940077e1338e85c0a643c7e992523d",
+    "dirty": false
+  },
+  "seed": 6304,
+  "hardware": {
+    "device": "Tesla T4",
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128",
+    "transformers": "4.57.1",
+    "peft": "0.17.1"
+  },
+  "dtype": "float16",
+  "start_time": "2026-10-10T09:10:58",
+  "settings": {
+    "loading": "evaluate_math.load_frozen_policy (common.models.load_policy, config dtype, CUDA)",
+    "prompts": "first 4 prompt IDs in file order per dataset",
+    "responses": "SFT saved response text re-tokenized, plus EOS if it ended with EOS",
+    "batch": 1,
+    "no_grad": true,
+    "logp": "log_softmax of float32 logits"
+  },
+  "prompt_ids": {
+    "gsm": [
+      "gsm8k:803",
+      "gsm8k:750",
+      "gsm8k:867",
+      "gsm8k:506"
+    ],
+    "transfer": [
+      "svamp:chal-1",
+      "svamp:chal-2",
+      "svamp:chal-3",
+      "svamp:chal-4"
+    ]
+  },
+  "adapters": {
+    "rlvr": {
+      "model_class": "PeftModelForCausalLM",
+      "active_adapter": "default",
+      "active_adapters": [
+        "default"
+      ],
+      "n_lora_layers": 56,
+      "layers_disable_adapters_any": false,
+      "layers_merged_any": false,
+      "n_lora_B": 56,
+      "lora_B_frobenius_total": 0.02060880698263645,
+      "lora_B_frobenius_per_module": {
+        "n": 56,
+        "min": 0.001295750611461699,
+        "median": 0.002473669417668134,
+        "max": 0.0041954247280955315
+      },
+      "n_lora_B_all_zero": 0,
+      "lora_A_frobenius_total": 12.224398612976074,
+      "lora_B_frobenius_by_target": {
+        "q_proj": 0.01904391683638096,
+        "v_proj": 0.007877317257225513
+      }
+    },
+    "rlaif": {
+      "model_class": "PeftModelForCausalLM",
+      "active_adapter": "default",
+      "active_adapters": [
+        "default"
+      ],
+      "n_lora_layers": 56,
+      "layers_disable_adapters_any": false,
+      "layers_merged_any": false,
+      "n_lora_B": 56,
+      "lora_B_frobenius_total": 0.01581152342259884,
+      "lora_B_frobenius_per_module": {
+        "n": 56,
+        "min": 0.0010850410908460617,
+        "median": 0.0018924605683423579,
+        "max": 0.0029317806474864483
+      },
+      "n_lora_B_all_zero": 0,
+      "lora_A_frobenius_total": 12.209107398986816,
+      "lora_B_frobenius_by_target": {
+        "q_proj": 0.014635199680924416,
+        "v_proj": 0.005984577815979719
+      }
+    }
+  },
+  "effect": {
+    "gsm_rlvr": {
+      "n_tokens": 862,
+      "mean_abs_delta_logp": 0.0015233991434797645,
+      "max_abs_delta_logp": 0.04387950897216797,
+      "argmax_change_fraction": 0.0011600927682593465,
+      "per_prompt_mean_abs_delta_logp": [
+        0.0017503417329862714,
+        0.0012229839339852333,
+        0.001583616714924574,
+        0.001558720483444631
+      ],
+      "check_adapter_disabled_vs_sft_max_abs_delta": 0.0
+    },
+    "transfer_rlvr": {
+      "n_tokens": 532,
+      "mean_abs_delta_logp": 0.001311269006691873,
+      "max_abs_delta_logp": 0.03497612476348877,
+      "argmax_change_fraction": 0.0,
+      "per_prompt_mean_abs_delta_logp": [
+        0.002478106413036585,
+        0.0010811751708388329,
+        0.0013511485885828733,
+        0.0009114432614296675
+      ],
+      "check_adapter_disabled_vs_sft_max_abs_delta": 0.0
+    },
+    "gsm_rlaif": {
+      "n_tokens": 862,
+      "mean_abs_delta_logp": 0.0014674665872007608,
+      "max_abs_delta_logp": 0.030002593994140625,
+      "argmax_change_fraction": 0.0,
+      "per_prompt_mean_abs_delta_logp": [
+        0.0017109066247940063,
+        0.0013866337249055505,
+        0.0013033754657953978,
+        0.0013669892214238644
+      ],
+      "check_adapter_disabled_vs_sft_max_abs_delta": 0.0
+    },
+    "transfer_rlaif": {
+      "n_tokens": 532,
+      "mean_abs_delta_logp": 0.0009685111581347883,
+      "max_abs_delta_logp": 0.020293712615966797,
+      "argmax_change_fraction": 0.001879699295386672,
+      "per_prompt_mean_abs_delta_logp": [
+        0.001985548995435238,
+        0.000943032733630389,
+        0.0007335189147852361,
+        0.0006689950823783875
+      ],
+      "check_adapter_disabled_vs_sft_max_abs_delta": 0.0
+    }
+  },
+  "wall_clock_seconds": 18.503397568000025,
+  "peak_vram_bytes": 3425598464
+}
