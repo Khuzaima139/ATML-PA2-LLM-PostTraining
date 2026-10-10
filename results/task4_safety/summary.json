@@ -1,8 +1,8 @@
 {
   "script": "task4_safety.evaluate_safety",
   "git": {
-    "commit": "f5633181a30ad5357ead8dd05ea92bfe1fa7c4b6",
-    "dirty": true
+    "commit": "b5a3fe3fe58c9bf65d6735f82b91a383a8a1824d",
+    "dirty": false
   },
   "seed": 6304,
   "bootstrap": {

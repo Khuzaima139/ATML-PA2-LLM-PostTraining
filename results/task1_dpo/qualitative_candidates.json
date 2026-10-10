@@ -3,8 +3,8 @@
   "config_path": "configs/dpo.yaml",
   "results_dir": "results/task1_dpo",
   "git": {
-    "commit": "f5633181a30ad5357ead8dd05ea92bfe1fa7c4b6",
-    "dirty": true
+    "commit": "b5a3fe3fe58c9bf65d6735f82b91a383a8a1824d",
+    "dirty": false
   },
   "seed": 6304,
   "bootstrap": {
@@ -752,7 +752,7 @@
       }
     }
   ],
-  "wall_clock_seconds": 2.5680316670041066,
+  "wall_clock_seconds": 2.5668339999974705,
   "note": "candidates selected by fixed rules; no quality judgement or ranking was made",
   "rules": {
     "i_rm_gain": "the 10 dpo_standard_eval prompt IDs with the largest RM(standard) minus RM(sft); ties by prompt ID ascending",
