@@ -8,6 +8,8 @@
                   hashed order; needs the three completed generation files of that dataset.
 
 Smoke mode (--limit N) writes under results/task5_feedback/smoke/ only.
+--tag T (post-hoc rerun, step 5e) suffixes the output names: generate writes gen_<dataset>_<policy>_T; judge needs
+--policy rlvr|rlaif, pairs gen_<dataset>_<policy>_T with the untagged SFT file and writes judge_<dataset>_<policy>_T.
 """
 from __future__ import annotations
 
@@ -64,14 +66,16 @@ def out_dir(cfg, smoke: bool):
     return d / "smoke" if smoke else d
 
 
-def gen_paths(cfg, dataset: str, policy: str, smoke: bool):
+def gen_paths(cfg, dataset: str, policy: str, smoke: bool, tag: str | None = None):
     d = out_dir(cfg, smoke)
-    return d / f"gen_{dataset}_{policy}.json", d / f"gen_{dataset}_{policy}.jsonl"
+    stem = f"gen_{dataset}_{policy}" + (f"_{tag}" if tag else "")
+    return d / f"{stem}.json", d / f"{stem}.jsonl"
 
 
-def judge_paths(cfg, dataset: str, smoke: bool):
+def judge_paths(cfg, dataset: str, smoke: bool, policy: str | None = None, tag: str | None = None):
     d = out_dir(cfg, smoke)
-    return d / f"judge_{dataset}.json", d / f"judge_{dataset}.jsonl"
+    stem = f"judge_{dataset}_{policy}_{tag}" if tag else f"judge_{dataset}"
+    return d / f"{stem}.json", d / f"{stem}.jsonl"
 
 
 def refuse_existing(paths, overwrite: bool):
@@ -125,7 +129,7 @@ def generation_metrics(rows: list[dict]) -> dict:
 
 def run_generate(args, cfg):
     smoke = args.limit is not None
-    out_json, out_jsonl = gen_paths(cfg, args.dataset, args.policy, smoke)
+    out_json, out_jsonl = gen_paths(cfg, args.dataset, args.policy, smoke, args.tag)
     refuse_existing((out_json, out_jsonl), args.overwrite)
     elapsed = wall_timer()
     if torch.cuda.is_available():
@@ -155,6 +159,7 @@ def run_generate(args, cfg):
         "stage": "generate",
         "dataset": args.dataset,
         "policy": args.policy,
+        "tag": args.tag,
         "adapter": adapter or "none (base model)",
         "adapter_sha256": adapter_sha,
         "status": "running",
@@ -215,26 +220,26 @@ def run_generate(args, cfg):
 
 # ---------------------------------------------------------------- stage: judge
 
-def load_generation_set(cfg, dataset: str, smoke: bool) -> dict[str, list[dict]]:
-    """The three completed generation files of one dataset, checked for identical prompt order."""
+def load_generation_set(cfg, dataset: str, smoke: bool, trained=P.TRAINED, tag: str | None = None) -> dict[str, list[dict]]:
+    """The completed SFT file (never tagged) and trained-policy files (tagged if tag) of one dataset, same prompt order."""
     gens = {}
-    for pol in P.POLICIES:
-        j, jl = gen_paths(cfg, dataset, pol, smoke)
+    for pol in ("sft", *trained):
+        j, jl = gen_paths(cfg, dataset, pol, smoke, None if pol == "sft" else tag)
         meta = load_json(j)
         if meta["status"] != "completed":
             raise SystemExit(f"{j}: status {meta['status']}")
         gens[pol] = read_jsonl(jl)
     ids = {pol: [r["prompt_id"] for r in rows] for pol, rows in gens.items()}
-    if not (ids["sft"] == ids["rlvr"] == ids["rlaif"]):
+    if any(ids[pol] != ids["sft"] for pol in trained):
         raise SystemExit(f"{dataset}: prompt order differs across policies")
     return gens
 
 
-def judge_tasks(dataset: str, rows: list[dict], gens: dict[str, list[dict]]) -> list[dict]:
+def judge_tasks(dataset: str, rows: list[dict], gens: dict[str, list[dict]], trained=P.TRAINED) -> list[dict]:
     """One task per (prompt, trained policy): compare(question, trained, sft)."""
     tasks = []
     for i, row in enumerate(rows):
-        for pol in P.TRAINED:
+        for pol in trained:
             t, s = gens[pol][i], gens["sft"][i]
             assert t["prompt_id"] == s["prompt_id"] == P.prompt_id(dataset, row)
             tasks.append({"comparison": f"{pol}_vs_sft", "prompt_id": t["prompt_id"], "index": i,
@@ -246,7 +251,8 @@ def judge_tasks(dataset: str, rows: list[dict], gens: dict[str, list[dict]]) -> 
 
 def run_judge(args, cfg):
     smoke = args.limit is not None
-    out_json, out_jsonl = judge_paths(cfg, args.dataset, smoke)
+    trained = (args.policy,) if args.tag else P.TRAINED
+    out_json, out_jsonl = judge_paths(cfg, args.dataset, smoke, args.policy, args.tag)
     refuse_existing((out_json, out_jsonl), args.overwrite)
     elapsed = wall_timer()
     if torch.cuda.is_available():
@@ -254,21 +260,24 @@ def run_judge(args, cfg):
     data_path = dataset_path(cfg, args.dataset)
     data_sha = P.assert_sha(data_path)
     rows = read_jsonl(data_path)
-    gens = load_generation_set(cfg, args.dataset, smoke)
+    gens = load_generation_set(cfg, args.dataset, smoke, trained, args.tag)
     rows = rows[: len(gens["sft"])]
-    tasks = judge_tasks(args.dataset, rows, gens)
+    tasks = judge_tasks(args.dataset, rows, gens, trained)
 
     result = {
         "script": "task5_feedback.evaluate_math",
         "stage": "judge",
         "dataset": args.dataset,
+        "tag": args.tag,
+        "trained_policies": list(trained),
         "status": "running",
         "smoke": smoke,
         "config_path": args.config,
         "config": cfg,
         **run_metadata(cfg),
         "data": {"path": data_path, "sha256": data_sha, "n_prompts": len(rows)},
-        "generation_files": {p: display_path(gen_paths(cfg, args.dataset, p, smoke)[1]) for p in P.POLICIES},
+        "generation_files": {p: display_path(gen_paths(cfg, args.dataset, p, smoke, None if p == "sft" else args.tag)[1])
+                             for p in ("sft", *trained)},
         "settings": {"argument_order": "compare(question, trained_response, sft_response)",
                      "orientation": "released hashed order", "score": P.JUDGE_SCORE},
         "n_calls_planned": len(tasks),
@@ -327,8 +336,15 @@ def main():
     ap.add_argument("--policy", choices=list(P.POLICIES), help="required for --stage generate")
     ap.add_argument("--limit", type=int, help="first N prompts; smoke only, writes under results/task5_feedback/smoke/")
     ap.add_argument("--parity-checks", type=int, default=2, help="released compare() re-run on the first N calls per comparison")
+    ap.add_argument("--tag", help="post-hoc rerun suffix for output names (lowercase letters and digits)")
     ap.add_argument("--overwrite", action="store_true")
     args = ap.parse_args()
+    if args.tag is not None and not (args.tag.isascii() and args.tag.isalnum() and args.tag.islower()):
+        ap.error("--tag must be lowercase letters and digits")
+    if args.stage == "judge" and (args.tag is None) != (args.policy is None):
+        ap.error("--stage judge takes --policy only together with --tag (and --tag needs --policy)")
+    if args.stage == "judge" and args.policy == "sft":
+        ap.error("--stage judge --policy must be rlvr or rlaif")
     cfg = load_yaml(args.config)
     if args.stage == "generate":
         if args.policy is None:

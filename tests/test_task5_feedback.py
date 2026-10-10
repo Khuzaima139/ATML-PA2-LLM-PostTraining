@@ -448,3 +448,43 @@ def test_posthoc_teacher_force_matches_stepwise_reference():
         ref = torch.log_softmax(logits, -1)[full[len(prompt) + i]]
         assert torch.allclose(out["logp"][i], ref, atol=1e-5)
         assert int(out["argmax"][i]) == int(logits.argmax())
+
+
+# ---------------------------------------------------------------- step 5e rerun: tagged names, single trained policy
+
+def _write_gen(d, name, ids, texts):
+    d.mkdir(parents=True, exist_ok=True)
+    (d / f"{name}.json").write_text(json.dumps({"status": "completed"}))
+    (d / f"{name}.jsonl").write_text("\n".join(json.dumps({"prompt_id": i, "text": t, "correct": False})
+                                               for i, t in zip(ids, texts)) + "\n")
+
+
+def test_rerun_tag_names_and_untagged_unchanged(tmp_path):
+    from task5_feedback.evaluate_math import gen_paths, judge_paths
+    cfg = {"results_dir": str(tmp_path)}
+    d = tmp_path / "task5_feedback"
+    assert gen_paths(cfg, "transfer", "rlvr", False) == (d / "gen_transfer_rlvr.json", d / "gen_transfer_rlvr.jsonl")
+    assert judge_paths(cfg, "transfer", False) == (d / "judge_transfer.json", d / "judge_transfer.jsonl")
+    assert gen_paths(cfg, "transfer", "rlvr", False, "rerun") == (d / "gen_transfer_rlvr_rerun.json",
+                                                                   d / "gen_transfer_rlvr_rerun.jsonl")
+    assert judge_paths(cfg, "transfer", False, "rlvr", "rerun") == (d / "judge_transfer_rlvr_rerun.json",
+                                                                     d / "judge_transfer_rlvr_rerun.jsonl")
+
+
+def test_rerun_judge_pairs_tagged_rlvr_with_untagged_sft(tmp_path):
+    from task5_feedback.evaluate_math import judge_tasks, load_generation_set
+    cfg = {"results_dir": str(tmp_path)}
+    d = tmp_path / "task5_feedback"
+    rows = [{"prompt_id": f"svamp:chal-{i}", "question": f"q{i}"} for i in (1, 2)]
+    ids = [P.prompt_id("transfer", r) for r in rows]
+    _write_gen(d, "gen_transfer_sft", ids, ["s1", "s2"])
+    _write_gen(d, "gen_transfer_rlvr", ids, ["orig1", "orig2"])
+    _write_gen(d, "gen_transfer_rlvr_rerun", ids, ["new1", "new2"])
+    gens = load_generation_set(cfg, "transfer", False, ("rlvr",), "rerun")
+    assert set(gens) == {"sft", "rlvr"}
+    tasks = judge_tasks("transfer", rows, gens, ("rlvr",))
+    assert [(t["comparison"], t["a_text"], t["b_text"]) for t in tasks] == [
+        ("rlvr_vs_sft", "new1", "s1"), ("rlvr_vs_sft", "new2", "s2")]
+    _write_gen(d, "gen_transfer_rlvr_rerun", ids[::-1], ["new1", "new2"])
+    with pytest.raises(SystemExit):
+        load_generation_set(cfg, "transfer", False, ("rlvr",), "rerun")
