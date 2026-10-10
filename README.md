@@ -1,152 +1,123 @@
-# ATML PA2 - LLM Post-Training
+# ATML PA2: LLM Post-Training
 
-<!-- FINAL_STUDENT_SETUP -->
+Programming Assignment 2 of Advanced Topics in Machine Learning (EE-5102 / CS-6304), Fall 2026. The five tasks study how offline preferences, learned rewards, verifiable rewards and AI feedback change a language model during post-training.
 
-## Quick start
+| Task | Question | Data | Methods |
+|---|---|---|---|
+| 1 | How do beta and length confounding shape offline preference optimization? | DPO preference pairs (standard and length-balanced), word-limit prompts | DPO, beta in {0.03, 0.10, 0.30}, length-balanced DPO |
+| 2 | How do clipping and KL pressure shape online PPO from a fixed midpoint? | RL prompt pool, cached midpoint rollout | PPO with a learned critic, clip and KL-beta forks |
+| 3 | How do group size and normalization shape critic-free GRPO? | RL prompt pool, cached multi-sample groups | GRPO, Dr. GRPO, K in {2, 4, 8} |
+| 4 | Do better preference and reward metrics give safer behaviour without over-refusal? | XSTest prompts | SFT, DPO, PPO, GRPO, AI judge with a manual audit |
+| 5 | How do verifiable rewards and AI feedback compare as reward sources? | GSM8K, SVAMP transfer set, controlled reward diagnostics | RLVR, RLAIF, exact-match verifier, pairwise AI judge |
+
+## Setup
 
 ```bash
-git clone https://github.com/AbDu11aHHH/ATML-PA2-LLM-PostTraining.git
-cd ATML-PA2-LLM-PostTraining
-python -m pip install -r requirements.txt
+conda create -n pa2 python=3.11 -y
+conda activate pa2
+pip install -r requirements.txt
 python -m scripts.download_assets
 python -m scripts.validate_assets
 ```
 
-The fixed datasets, cached diagnostics, and supplied
-continuation checkpoints are downloaded from:
+`requirements-lock.txt` pins the local versions (Python 3.11.17). GPU runs were on a Kaggle Tesla T4 in float16 with Python 3.13.15, torch 2.11.0+cu128, transformers 4.57.1 and peft 0.17.1, as recorded in the run JSONs (trl is not recorded there; `requirements.txt` pins 0.27.2). Run every command from the repository root. `data/`, `cached/`, `checkpoints/` and `outputs/` are not committed. Results are saved in `results/task*/` and figures in `report/figures/`.
 
-https://huggingface.co/datasets/AbDu11aHHH/ATML-PA2-assets
+## Task 1: Direct Preference Optimization
 
-Pinned release revision:
-
-`0b350481fb03f5525a35bcdec4131bd4fe487f98`
-
----
-# ATML PA2 - LLM Post-Training
-
-This is the **student starter repository** for ATML PA2. The released code is intentionally incomplete: Tasks 1-3 provide model/data loading, objective helpers, checkpoint restoration, and experiment entry points, but **you must implement the training loops and ablation orchestration yourself**. Each of Tasks 1-3 also contains one deliberate algorithmic defect in its core objective code; identifying and correcting these defects is part of validating your implementation.
-
-Task 4 supplies the fixed AI safety judge and response-generation utilities, but you must write the evaluation/aggregation code. Task 5 supplies the exact RLVR verifier, the fixed pairwise AI judge used for RLAIF evaluation, and data/model loaders; you must implement the requested evaluation and analysis.
-
-## 1. Clone and install
+Training and evaluation run on a GPU; `ablate_beta` trains and evaluates the three 600-example beta forks and `analyze_length` the length-balanced run. `dataset_stats` and `summarize` run on the Mac from saved files.
 
 ```bash
-git clone https://github.com/COURSE_ORG/ATML-PA2-LLM-PostTraining.git
-cd ATML-PA2-LLM-PostTraining
-python -m pip install -r requirements.txt
-```
-
-## 2. Download the course assets
-
-The large course-created checkpoints and fixed data are distributed as a GitHub Release asset rather than normal Git files. After cloning, run:
-
-```bash
-python -m scripts.download_assets
-python -m scripts.validate_assets
-```
-
-If your instructor provides a direct asset URL separately, use:
-
-```bash
-python -m scripts.download_assets --url '<ASSET_URL>'
-```
-
-Public base/reward/judge models are downloaded from Hugging Face at runtime and are **not** included in the course asset archive.
-
-The installer also materializes the fixed 100-example Task 5 transfer set from the official SVAMP challenge-set source if it is not already present. The tiny Task 1 word-limit prompt set is tracked directly in this repository.
-
-## 3. Environment check
-
-```bash
-python -m scripts.check_environment
-```
-
-Run commands from the repository root. The reference environment used to prepare the release pins Transformers 4.57.1, TRL 0.27.2, PEFT 0.17.1, and Tokenizers 0.22.1.
-
-## 4. Supplied course checkpoints
-
-After `download_assets`, these directories should exist:
-
-```text
-checkpoints/ppo_midpoint_policy/
-checkpoints/ppo_midpoint_value/
-checkpoints/grpo_midpoint_policy/
-checkpoints/rlvr_policy/
-checkpoints/rlaif_policy/
-```
-
-PPO and GRPO begin from the supplied continuation checkpoints. RLVR and RLAIF are supplied frozen evaluation policies; students do not retrain them.
-
-The PPO value checkpoint is intentionally released as the exact staff midpoint state, including its imperfect held-out value calibration. Treat critic behavior as an analysis variable rather than assuming a perfect baseline, and start every PPO fork from the identical supplied policy/value state. The default continuation generation cap is 512 tokens for feasibility; frozen evaluation uses the larger cap specified in `configs/ppo.yaml`.
-
-## 5. Task entry points
-
-### Task 1 - DPO
-
-```bash
+python -m task1_dpo.dataset_stats --config configs/dpo.yaml
 python -m task1_dpo.train --config configs/dpo.yaml --run-name standard
-python -m task1_dpo.evaluate --config configs/dpo.yaml --adapter outputs/task1_dpo/standard --name standard
+python -m task1_dpo.evaluate --config configs/dpo.yaml --adapter outputs/task1_dpo/standard --name standard --modes pairs,stratified,generate,wordlimit
+python -m task1_dpo.evaluate --config configs/dpo.yaml --adapter none --name sft --modes generate
 python -m task1_dpo.ablate_beta --config configs/dpo.yaml
 python -m task1_dpo.analyze_length --config configs/dpo.yaml
+python -m task1_dpo.summarize --config configs/dpo.yaml
 ```
 
-### Task 2 - PPO
+## Task 2: Proximal Policy Optimization
+
+Every run starts from the supplied PPO midpoint; training, evaluation and the cached clipping study run on a GPU. `summarize`, `qualitative`, `plots` and `posthoc` run on the Mac from saved files.
 
 ```bash
-python -m task2_ppo.continue_train --config configs/ppo.yaml --run-name standard
-python -m task2_ppo.evaluate --config configs/ppo.yaml --adapter outputs/task2_ppo/standard --name standard
 python -m task2_ppo.analyze_clipping --config configs/ppo.yaml
-python -m task2_ppo.ablate_kl --config configs/ppo.yaml
+python -m task2_ppo.continue_train --config configs/ppo.yaml --run-name standard
+python -m task2_ppo.evaluate --config configs/ppo.yaml --adapter outputs/task2_ppo/standard/policy --name standard
+python -m task2_ppo.ablate_kl --config configs/ppo.yaml --run
+for r in $(python -m task2_ppo.ablate_kl --config configs/ppo.yaml --list | awk '{print $1}'); do
+    python -m task2_ppo.evaluate --config configs/ppo.yaml --adapter outputs/task2_ppo/$r/policy --name $r
+done
+python -m task2_ppo.summarize --config configs/ppo.yaml
+python -m task2_ppo.qualitative --config configs/ppo.yaml
+python -m task2_ppo.plots --config configs/ppo.yaml
+python -m task2_ppo.posthoc --config configs/ppo.yaml
 ```
 
-### Task 3 - GRPO
+## Task 3: Group Relative Policy Optimization
+
+Every run starts from the supplied GRPO midpoint; training and evaluation run on a GPU. The group-size study uses the supplied cache and, like the summaries, runs on the Mac.
 
 ```bash
 python -m task3_grpo.continue_train --config configs/grpo.yaml --run-name standard
-python -m task3_grpo.evaluate --config configs/grpo.yaml --adapter outputs/task3_grpo/standard --name standard
+python -m task3_grpo.evaluate --config configs/grpo.yaml --adapter outputs/task3_grpo/standard/policy --name standard
+python -m task3_grpo.continue_train --config configs/grpo.yaml --run-name fork_grpo --updates 8 --loss-type grpo --length-diagnostic
+python -m task3_grpo.continue_train --config configs/grpo.yaml --run-name fork_dr_grpo --updates 8 --loss-type dr_grpo --length-diagnostic
+python -m task3_grpo.evaluate --config configs/grpo.yaml --adapter outputs/task3_grpo/fork_grpo/policy --name fork_grpo
+python -m task3_grpo.evaluate --config configs/grpo.yaml --adapter outputs/task3_grpo/fork_dr_grpo/policy --name fork_dr_grpo
 python -m task3_grpo.analyze_group_size --config configs/grpo.yaml
+python -m task3_grpo.group_size_followup --config configs/grpo.yaml
 python -m task3_grpo.compare_normalization --config configs/grpo.yaml
+python -m task3_grpo.summarize --config configs/grpo.yaml
 ```
 
-### Task 4 - Safety calibration
+## Task 4: Safety Calibration
 
-The judge loader/parser are supplied and used unchanged. Each command refuses to overwrite an existing output unless `--overwrite` is passed.
+Needs the standard DPO, PPO and GRPO adapters from Tasks 1 to 3 in `outputs/`; generation and judging run on a GPU, and the judge labels stay sealed in `outputs/task4_safety/sealed/` until the manual audit labels in `results/task4_safety/audit_labels.csv` are filled in and committed. The judge files are then copied into `results/task4_safety/` and committed on their own, which `evaluate_safety` checks before it runs on the Mac.
 
 ```bash
-# Generation (do_sample False, released repetition penalty 1.1, cap 256) for the four policies; adapters are sha256-checked against task4_safety/protocol.py.
 python -m task4_safety.generate_responses --config configs/feedback.yaml --policy sft
 python -m task4_safety.generate_responses --config configs/feedback.yaml --policy dpo --adapter outputs/task1_dpo/standard
 python -m task4_safety.generate_responses --config configs/feedback.yaml --policy ppo --adapter outputs/task2_ppo/standard/policy
 python -m task4_safety.generate_responses --config configs/feedback.yaml --policy grpo --adapter outputs/task3_grpo/standard/policy
-# Judge (released judge, labels written only to outputs/task4_safety/sealed/judge_<policy>.jsonl)
-python -m task4_safety.judge_responses --config configs/feedback.yaml --policy sft   # likewise dpo, ppo, grpo
-# Blind audit sheet from the generations and results/task4_safety/audit_rules.md, then validate the filled labels
+for p in sft dpo ppo grpo; do
+    python -m task4_safety.judge_responses --config configs/feedback.yaml --policy $p
+done
 python -m task4_safety.make_audit_sheet --config configs/feedback.yaml
 python -m task4_safety.make_audit_sheet --config configs/feedback.yaml --validate
-# Summary; refuses to run unless the labels commit precedes the commit that imported each judge_<policy>.jsonl
+cp outputs/task4_safety/sealed/judge_*.jsonl results/task4_safety/
 python -m task4_safety.evaluate_safety --config configs/feedback.yaml
-# GRPO minus PPO reward-model pair on the held-out evaluations of Tasks 2 and 3
+python -m task4_safety.qualitative --config configs/feedback.yaml
 python -m task4_safety.reward_pairs --config configs/feedback.yaml
 ```
-Smoke runs: `--limit N` with `--out-dir` (generation) or `--sealed-dir` and `--run-dir` (judge) pointing to smoke folders.
 
-### Task 5 - RLVR vs RLAIF
+## Task 5: Reward-Source Design
 
-The exact verifier and pairwise AI judge are supplied; you implement the evaluation/analysis.
+Uses the supplied RLVR and RLAIF adapters; generation, judging, the perturbation scores and the adapter-effect check run on a GPU, the rest on the Mac. The `--tag rerun` commands repeat the RLVR transfer evaluation post hoc under new file names, leaving the original files unchanged.
 
 ```bash
-python -m task5_feedback.evaluate_math --config configs/feedback.yaml --dataset gsm
-python -m task5_feedback.score_perturbations --config configs/feedback.yaml
-python -m task5_feedback.evaluate_math --config configs/feedback.yaml --dataset transfer
+python -m scripts.prepare_transfer_eval
+for ds in gsm transfer; do
+    for p in sft rlvr rlaif; do
+        python -m task5_feedback.evaluate_math --config configs/feedback.yaml --stage generate --dataset $ds --policy $p
+    done
+    python -m task5_feedback.evaluate_math --config configs/feedback.yaml --stage judge --dataset $ds
+done
+python -m task5_feedback.score_perturbations --config configs/feedback.yaml --order released
+python -m task5_feedback.score_perturbations --config configs/feedback.yaml --order swapped
 python -m task5_feedback.compare_feedback --config configs/feedback.yaml
+python -m task5_feedback.posthoc --config configs/feedback.yaml --part mac
+python -m task5_feedback.posthoc --config configs/feedback.yaml --part adapter_effect
+python -m task5_feedback.evaluate_math --config configs/feedback.yaml --stage generate --dataset transfer --policy rlvr --tag rerun
+python -m task5_feedback.evaluate_math --config configs/feedback.yaml --stage judge --dataset transfer --policy rlvr --tag rerun
+python -m task5_feedback.posthoc --config configs/feedback.yaml --part echoes
 ```
 
-## 6. Reproducibility rules
+## Attribution
 
-- Do not alter course-provided data, cached rollouts, or supplied checkpoints.
-- Start every short fork from the **same supplied midpoint checkpoint**.
-- Keep prompt IDs, generated-token/update budgets, seed, and evaluation procedure matched across ablations.
-- Commit your code, configs, small JSON/CSV logs, and figures. Do not commit downloaded checkpoints, raw course assets, or model caches.
-- Record peak VRAM and wall-clock time for the standard PPO and GRPO continuations.
-
-See the assignment manual for the required experiments, metrics, and report questions.
+- Course starter code: [AbDu11aHHH/ATML-PA2-LLM-PostTraining](https://github.com/AbDu11aHHH/ATML-PA2-LLM-PostTraining); the files under `scripts/`, the shared modules `common/data.py`, `common/generation.py`, `common/logging_utils.py`, `common/metrics.py`, `common/models.py`, the configs and the task scaffolds come from it.
+- Course assets (data, caches, midpoint and Task 5 checkpoints): [AbDu11aHHH/ATML-PA2-assets](https://huggingface.co/datasets/AbDu11aHHH/ATML-PA2-assets).
+- Policy and reference model: [Qwen/Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct).
+- Reward model: [yavuz-ai/qwen2.5-1.5b-rm-ultrafeedback](https://huggingface.co/yavuz-ai/qwen2.5-1.5b-rm-ultrafeedback).
+- AI judge: [Qwen/Qwen2.5-3B-Instruct](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct).
+- No other external code is materially reused.
