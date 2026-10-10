@@ -86,7 +86,8 @@ def run_reveal(args, cfg):
     if "qualitative" in summary and not args.overwrite:
         raise SystemExit("summary.json already has qualitative; pass --overwrite to replace it.")
     labels_rel = f"{cfg['results_dir']}/qualitative_labels.json"
-    commit = subprocess.run(["git", "log", "-1", "--format=%h", "--abbrev=7", "--", labels_rel], capture_output=True,
+    # Commit that added the labels file, so later wording edits to it do not move the recorded commit.
+    commit = subprocess.run(["git", "log", "-1", "--diff-filter=A", "--format=%h", "--abbrev=7", "--", labels_rel], capture_output=True,
                             text=True, cwd=repo_path("."), check=True).stdout.strip()
     if not commit:
         raise SystemExit(f"{labels_rel} is not committed; commit the labels before the reveal.")
