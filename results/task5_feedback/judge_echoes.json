@@ -1,0 +1,186 @@
+{
+  "script": "task5_feedback.posthoc",
+  "part": "echoes",
+  "post_hoc": true,
+  "note": "the released parser labels stay the reported metrics; no metric recomputed. echo = raw judge output with more than one label token (pattern \\b(A|B|TIE)\\b on raw.strip().upper())",
+  "config_path": "configs/feedback.yaml",
+  "git": {
+    "commit": "eb575b88d915429652cca6ff19c746ff8622eaee",
+    "dirty": false
+  },
+  "seed": 6304,
+  "hardware": {
+    "device": "cpu (macOS-27.0.1-arm64-arm-64bit)",
+    "python": "3.11.17",
+    "torch": "2.14.1",
+    "transformers": "4.57.1",
+    "peft": "0.17.1"
+  },
+  "dtype": "float16",
+  "start_time": "2026-10-10T14:54:21",
+  "by_stage": {
+    "judge_gsm": {
+      "rlvr_vs_sft": {
+        "n": 300,
+        "n_echo": 15,
+        "echo_parsed_for": {
+          "trained": 7,
+          "sft": 8,
+          "tie": 0
+        },
+        "win_rate_bound": 0.025,
+        "echo_raw_counts": {
+          "A, B,": 10,
+          "A,B,TIE": 3,
+          "A, B": 2
+        }
+      },
+      "rlaif_vs_sft": {
+        "n": 300,
+        "n_echo": 13,
+        "echo_parsed_for": {
+          "trained": 7,
+          "sft": 6,
+          "tie": 0
+        },
+        "win_rate_bound": 0.021666666666666667,
+        "echo_raw_counts": {
+          "A, B,": 6,
+          "A, B": 5,
+          "A, B T": 1,
+          "A,A,TIE": 1
+        }
+      }
+    },
+    "judge_transfer": {
+      "rlvr_vs_sft": {
+        "n": 100,
+        "n_echo": 19,
+        "echo_parsed_for": {
+          "trained": 9,
+          "sft": 10,
+          "tie": 0
+        },
+        "win_rate_bound": 0.095,
+        "echo_raw_counts": {
+          "A, B,": 10,
+          "A, B": 8,
+          "A, B T": 1
+        }
+      },
+      "rlaif_vs_sft": {
+        "n": 100,
+        "n_echo": 21,
+        "echo_parsed_for": {
+          "trained": 11,
+          "sft": 10,
+          "tie": 0
+        },
+        "win_rate_bound": 0.105,
+        "echo_raw_counts": {
+          "A, B,": 11,
+          "A, B": 7,
+          "A,B,TIE": 2,
+          "A,A,TIE": 1
+        }
+      }
+    },
+    "diagnostics_released": {
+      "reasoning_corrupt": {
+        "n": 20,
+        "n_echo": 0,
+        "echo_parsed_for": {
+          "clean": 0,
+          "perturbed": 0,
+          "tie": 0
+        },
+        "win_rate_bound": 0.0,
+        "echo_raw_counts": {}
+      },
+      "wrong_final": {
+        "n": 20,
+        "n_echo": 0,
+        "echo_parsed_for": {
+          "clean": 0,
+          "perturbed": 0,
+          "tie": 0
+        },
+        "win_rate_bound": 0.0,
+        "echo_raw_counts": {}
+      },
+      "filler": {
+        "n": 20,
+        "n_echo": 4,
+        "echo_parsed_for": {
+          "clean": 0,
+          "perturbed": 4,
+          "tie": 0
+        },
+        "win_rate_bound": 0.1,
+        "echo_raw_counts": {
+          "A, B": 4
+        }
+      },
+      "gold_distractor": {
+        "n": 20,
+        "n_echo": 0,
+        "echo_parsed_for": {
+          "clean": 0,
+          "perturbed": 0,
+          "tie": 0
+        },
+        "win_rate_bound": 0.0,
+        "echo_raw_counts": {}
+      }
+    },
+    "diagnostics_swapped": {
+      "reasoning_corrupt": {
+        "n": 20,
+        "n_echo": 0,
+        "echo_parsed_for": {
+          "clean": 0,
+          "perturbed": 0,
+          "tie": 0
+        },
+        "win_rate_bound": 0.0,
+        "echo_raw_counts": {}
+      },
+      "wrong_final": {
+        "n": 20,
+        "n_echo": 0,
+        "echo_parsed_for": {
+          "clean": 0,
+          "perturbed": 0,
+          "tie": 0
+        },
+        "win_rate_bound": 0.0,
+        "echo_raw_counts": {}
+      },
+      "filler": {
+        "n": 20,
+        "n_echo": 4,
+        "echo_parsed_for": {
+          "clean": 3,
+          "perturbed": 1,
+          "tie": 0
+        },
+        "win_rate_bound": 0.1,
+        "echo_raw_counts": {
+          "A, B": 4
+        }
+      },
+      "gold_distractor": {
+        "n": 20,
+        "n_echo": 0,
+        "echo_parsed_for": {
+          "clean": 0,
+          "perturbed": 0,
+          "tie": 0
+        },
+        "win_rate_bound": 0.0,
+        "echo_raw_counts": {}
+      }
+    }
+  },
+  "wall_clock_seconds": 0.09286912501556799
+}
