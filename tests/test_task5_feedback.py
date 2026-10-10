@@ -421,6 +421,33 @@ def test_posthoc_first_divergence_and_last_number():
     assert last_number("no digits") is None
 
 
+def test_posthoc_echo_block_counts_sides_and_bound():
+    """Echo = more than one label token; side from the content label; bound = 0.5 x echoes / n."""
+    from task5_feedback.posthoc import echo_block, is_echo
+    assert is_echo("A, B,") and is_echo("A,B,TIE") and is_echo(" a, a, tie")
+    assert not is_echo("TIE") and not is_echo("B") and not is_echo("AB") and not is_echo("")
+    rows = [
+        {"raw": "A, B,", "label": "A"},    # echo, physical A shown in order AB -> argument a
+        {"raw": "A, B", "label": "B"},     # echo, physical A shown in order BA -> argument b
+        {"raw": "A,B,TIE", "label": "A"},  # echo
+        {"raw": "TIE", "label": "TIE"},
+        {"raw": "B", "label": "B"},
+        {"raw": "A", "label": "A"},
+        {"raw": "TIE", "label": "TIE"},
+        {"raw": "TIE", "label": "TIE"},
+    ]
+    out = echo_block(rows, ("trained", "sft"))
+    assert out["n"] == 8 and out["n_echo"] == 3
+    assert out["echo_parsed_for"] == {"trained": 2, "sft": 1, "tie": 0}
+    assert out["win_rate_bound"] == 0.5 * 3 / 8
+    # Bound is the exact change in the win rate when every echo is scored as a tie instead.
+    score = {"A": 1.0, "TIE": 0.5, "B": 0.0}
+    released = sum(score[r["label"]] for r in rows) / len(rows)
+    as_tie = sum(0.5 if is_echo(r["raw"]) else score[r["label"]] for r in rows) / len(rows)
+    assert abs(released - as_tie) <= out["win_rate_bound"]
+    assert echo_block([], ("clean", "perturbed"))["win_rate_bound"] is None
+
+
 def test_posthoc_teacher_force_matches_stepwise_reference():
     """teacher_force log-probs equal a per-prefix next-token reference on a tiny random Qwen2 (vocab 1000)."""
     from transformers import Qwen2Config, Qwen2ForCausalLM

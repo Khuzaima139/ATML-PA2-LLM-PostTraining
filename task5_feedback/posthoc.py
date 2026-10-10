@@ -1,9 +1,10 @@
 """Task 5 step 5e: post-hoc diagnostics on the saved notebook 6 files. Everything here is post hoc.
 
-No reported number is changed and no existing result file is written. Two parts:
+No reported number is changed and no existing result file is written. Three parts:
 
 --part mac             (default, CPU, no model weights) items 1, 2, 3a, 4, 5, 6, 7
                        -> results/task5_feedback/posthoc_diagnostics.json
+--part echoes          (CPU, step 5f) judge echo table -> results/task5_feedback/judge_echoes.json
 --part adapter_effect  (CUDA only, notebook 7) item 3b: SFT, RLVR and RLAIF loaded exactly as evaluate_math
                        loads them (load_frozen_policy, fp16), adapter names and lora_B norms asserted, SFT's saved
                        responses for the first 4 prompt IDs of each dataset teacher-forced under each policy
@@ -277,6 +278,60 @@ def item6_coverage(gens) -> dict:
             "by_run": out}
 
 
+# ---------------------------------------------------------------- judge echoes (step 5f)
+
+def is_echo(raw: str) -> bool:
+    """More than one label token in the raw judge text (the released parser keeps the first)."""
+    return len(_LABEL_RE.findall(raw.strip().upper())) > 1
+
+
+def echo_block(rows: list[dict], side_names: tuple) -> dict:
+    """Echo count over rows and the content side each echo was parsed for. label is w.r.t. argument a, so
+    A -> side_names[0] (trained / clean), B -> side_names[1] (SFT / perturbed). bound = 0.5 x echoes / n: the
+    largest change in a win rate (A = 1, TIE = 0.5, B = 0) if every echo were scored as a tie instead."""
+    echoes = [r for r in rows if is_echo(r["raw"])]
+    n = len(rows)
+    side = {side_names[0]: 0, side_names[1]: 0, "tie": 0}
+    for r in echoes:
+        side[{"A": side_names[0], "B": side_names[1], "TIE": "tie"}[r["label"]]] += 1
+    return {"n": n, "n_echo": len(echoes), "echo_parsed_for": side,
+            "win_rate_bound": 0.5 * len(echoes) / n if n else None,
+            "echo_raw_counts": dict(Counter(r["raw"] for r in echoes).most_common())}
+
+
+def judge_echoes(cfg) -> dict:
+    d = out_dir(cfg, smoke=False)
+    out = {}
+    for stage in ("judge_gsm", "judge_transfer"):
+        rows = read_jsonl(d / f"{stage}.jsonl")
+        out[stage] = {c: echo_block([r for r in rows if r["comparison"] == c], ("trained", "sft"))
+                      for c in ("rlvr_vs_sft", "rlaif_vs_sft")}
+    for stage in ("diagnostics_released", "diagnostics_swapped"):
+        rows = read_jsonl(d / f"{stage}.jsonl")
+        out[stage] = {cat: echo_block([r for r in rows if r["category"] == cat], ("clean", "perturbed"))
+                      for cat in P.CATEGORIES}
+    return out
+
+
+def run_echoes(args, cfg):
+    out_json = out_dir(cfg, smoke=False) / "judge_echoes.json"
+    refuse_existing(out_json, args.overwrite)
+    elapsed = wall_timer()
+    result = {
+        "script": "task5_feedback.posthoc",
+        "part": "echoes",
+        "post_hoc": True,
+        "note": "the released parser labels stay the reported metrics; no metric recomputed. "
+                "echo = raw judge output with more than one label token (pattern \\b(A|B|TIE)\\b on raw.strip().upper())",
+        "config_path": args.config,
+        **run_metadata(cfg),
+        "by_stage": judge_echoes(cfg),
+    }
+    result["wall_clock_seconds"] = elapsed()
+    save_json(out_json, result)
+    print(f"[posthoc echoes] wrote {display_path(out_json)} t={elapsed():.1f}s", flush=True)
+
+
 # ---------------------------------------------------------------- part mac
 
 def run_mac(args, cfg):
@@ -421,12 +476,14 @@ def run_adapter_effect(args, cfg):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default="configs/feedback.yaml")
-    ap.add_argument("--part", choices=["mac", "adapter_effect"], default="mac")
+    ap.add_argument("--part", choices=["mac", "adapter_effect", "echoes"], default="mac")
     ap.add_argument("--overwrite", action="store_true")
     args = ap.parse_args()
     cfg = load_yaml(args.config)
     if args.part == "mac":
         run_mac(args, cfg)
+    elif args.part == "echoes":
+        run_echoes(args, cfg)
     else:
         run_adapter_effect(args, cfg)
 
