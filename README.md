@@ -57,7 +57,7 @@ python -m task2_ppo.posthoc --config configs/ppo.yaml
 
 ## Task 3: Group Relative Policy Optimization
 
-Every run starts from the supplied GRPO midpoint; training and evaluation run on a GPU. The group-size study uses the supplied cache and, like the summaries, runs on the Mac.
+Every run starts from the supplied GRPO midpoint; training and evaluation run on a GPU. The group-size study uses the supplied cache and, like the summaries and `plots`, runs on the Mac.
 
 ```bash
 python -m task3_grpo.continue_train --config configs/grpo.yaml --run-name standard
@@ -70,6 +70,7 @@ python -m task3_grpo.analyze_group_size --config configs/grpo.yaml
 python -m task3_grpo.group_size_followup --config configs/grpo.yaml
 python -m task3_grpo.compare_normalization --config configs/grpo.yaml
 python -m task3_grpo.summarize --config configs/grpo.yaml
+python -m task3_grpo.plots --config configs/grpo.yaml
 ```
 
 ## Task 4: Safety Calibration
