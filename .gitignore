@@ -33,3 +33,9 @@ data/*
 notes/
 docs/
 *.pdf
+*.ipynb
+
+# Smoke-test outputs
+**/smoke/
+**/smoke_*
+**/*_smoke*
