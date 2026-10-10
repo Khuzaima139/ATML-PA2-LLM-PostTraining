@@ -35,7 +35,7 @@ POLICY_PAIRS = (("sft", "rlvr"), ("sft", "rlaif"), ("rlvr", "rlaif"))
 _LABEL_RE = re.compile(r"\b(A|B|TIE)\b")  # the released parser's pattern (rlaif.PairwiseAIJudge.compare)
 JUDGE_STAGES = ("diagnostics_released", "diagnostics_swapped", "judge_gsm", "judge_transfer")
 N_TEACHER_FORCE = 4
-LOG_GPU0 = "notes/kaggle_logs/task5_queue_gpu0.log"
+LOG_GPU0 = "results/task5_feedback/logs/task5_queue_gpu0.log"  # committed copy of the notebook 6 GPU 0 queue log
 _LOG_EXPECTED = re.compile(r"^(  generation batch \d+/\d+ t=\d+s|\[gen \w+ \w+\] status=.*|===== .*: \w+)$")
 
 

@@ -1,0 +1,90 @@
+  generation batch 1/19 t=23s
+  generation batch 2/19 t=40s
+  generation batch 3/19 t=64s
+  generation batch 4/19 t=82s
+  generation batch 5/19 t=103s
+  generation batch 6/19 t=122s
+  generation batch 7/19 t=139s
+  generation batch 8/19 t=163s
+  generation batch 9/19 t=187s
+  generation batch 10/19 t=210s
+  generation batch 11/19 t=228s
+  generation batch 12/19 t=252s
+  generation batch 13/19 t=276s
+  generation batch 14/19 t=301s
+  generation batch 15/19 t=324s
+  generation batch 16/19 t=348s
+  generation batch 17/19 t=364s
+  generation batch 18/19 t=385s
+  generation batch 19/19 t=405s
+[gen gsm sft] status=completed n=300 eos=288 truncated_at_cap=12 t=410s s_per_prompt=1.35 peak_vram=3.33GiB; wrote results/task5_feedback/gen_gsm_sft.json
+===== results/task5_feedback/gen_gsm_sft.json: completed
+  generation batch 1/19 t=26s
+  generation batch 2/19 t=54s
+  generation batch 3/19 t=81s
+  generation batch 4/19 t=108s
+  generation batch 5/19 t=131s
+  generation batch 6/19 t=152s
+  generation batch 7/19 t=179s
+  generation batch 8/19 t=205s
+  generation batch 9/19 t=232s
+  generation batch 10/19 t=260s
+  generation batch 11/19 t=284s
+  generation batch 12/19 t=304s
+  generation batch 13/19 t=333s
+  generation batch 14/19 t=360s
+  generation batch 15/19 t=388s
+  generation batch 16/19 t=415s
+  generation batch 17/19 t=435s
+  generation batch 18/19 t=461s
+  generation batch 19/19 t=482s
+[gen gsm rlvr] status=completed n=300 eos=289 truncated_at_cap=11 t=487s s_per_prompt=1.61 peak_vram=3.36GiB; wrote results/task5_feedback/gen_gsm_rlvr.json
+===== results/task5_feedback/gen_gsm_rlvr.json: completed
+  generation batch 1/19 t=28s
+  generation batch 2/19 t=48s
+  generation batch 3/19 t=76s
+  generation batch 4/19 t=103s
+  generation batch 5/19 t=127s
+  generation batch 6/19 t=151s
+  generation batch 7/19 t=169s
+  generation batch 8/19 t=196s
+  generation batch 9/19 t=223s
+  generation batch 10/19 t=251s
+  generation batch 11/19 t=277s
+  generation batch 12/19 t=298s
+  generation batch 13/19 t=321s
+  generation batch 14/19 t=349s
+  generation batch 15/19 t=376s
+  generation batch 16/19 t=402s
+  generation batch 17/19 t=429s
+  generation batch 18/19 t=456s
+  generation batch 19/19 t=479s
+[gen gsm rlaif] status=completed n=300 eos=293 truncated_at_cap=7 t=485s s_per_prompt=1.60 peak_vram=3.34GiB; wrote results/task5_feedback/gen_gsm_rlaif.json
+===== results/task5_feedback/gen_gsm_rlaif.json: completed
+  generation batch 1/7 t=14s
+  generation batch 2/7 t=25s
+  generation batch 3/7 t=48s
+  generation batch 4/7 t=66s
+  generation batch 5/7 t=75s
+  generation batch 6/7 t=94s
+  generation batch 7/7 t=104s
+[gen transfer sft] status=completed n=100 eos=100 truncated_at_cap=0 t=108s s_per_prompt=1.04 peak_vram=3.28GiB; wrote results/task5_feedback/gen_transfer_sft.json
+===== results/task5_feedback/gen_transfer_sft.json: completed
+  generation batch 1/7 t=17s
+  generation batch 2/7 t=30s
+  generation batch 3/7 t=56s
+  generation batch 4/7 t=77s
+  generation batch 5/7 t=88s
+  generation batch 6/7 t=110s
+  generation batch 7/7 t=123s
+[gen transfer rlvr] status=completed n=100 eos=100 truncated_at_cap=0 t=128s s_per_prompt=1.23 peak_vram=3.29GiB; wrote results/task5_feedback/gen_transfer_rlvr.json
+===== results/task5_feedback/gen_transfer_rlvr.json: completed
+  generation batch 1/7 t=17s
+  generation batch 2/7 t=29s
+  generation batch 3/7 t=42s
+  generation batch 4/7 t=56s
+  generation batch 5/7 t=68s
+  generation batch 6/7 t=88s
+  generation batch 7/7 t=104s
+[gen transfer rlaif] status=completed n=100 eos=100 truncated_at_cap=0 t=109s s_per_prompt=1.04 peak_vram=3.25GiB; wrote results/task5_feedback/gen_transfer_rlaif.json
+===== results/task5_feedback/gen_transfer_rlaif.json: completed

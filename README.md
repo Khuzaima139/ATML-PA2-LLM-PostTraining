@@ -38,7 +38,7 @@ python -m task1_dpo.summarize --config configs/dpo.yaml
 
 ## Task 2: Proximal Policy Optimization
 
-Every run starts from the supplied PPO midpoint; training, evaluation and the cached clipping study run on a GPU. `summarize`, `qualitative`, `plots` and `posthoc` run on the Mac from saved files.
+Every run starts from the supplied PPO midpoint; training, evaluation and the cached clipping study run on a GPU. `ablate_kl --run` trains the five 8-update forks of the clipping study (eps 0.05, 0.20, 0.50 at beta 0.10) and the KL study (beta 0, 0.10, 0.20 at eps 0.20); the eps 0.20, beta 0.10 fork is shared by both. `summarize`, `qualitative`, `plots` and `posthoc` run on the Mac from saved files. `qualitative --reveal` writes the `qualitative` block of `summary.json` from `qualitative_labels.json` and `qualitative_key.json`.
 
 ```bash
 python -m task2_ppo.analyze_clipping --config configs/ppo.yaml
@@ -50,6 +50,7 @@ for r in $(python -m task2_ppo.ablate_kl --config configs/ppo.yaml --list | awk 
 done
 python -m task2_ppo.summarize --config configs/ppo.yaml
 python -m task2_ppo.qualitative --config configs/ppo.yaml
+python -m task2_ppo.qualitative --config configs/ppo.yaml --reveal
 python -m task2_ppo.plots --config configs/ppo.yaml
 python -m task2_ppo.posthoc --config configs/ppo.yaml
 ```
@@ -91,9 +92,9 @@ python -m task4_safety.qualitative --config configs/feedback.yaml
 python -m task4_safety.reward_pairs --config configs/feedback.yaml
 ```
 
-## Task 5: Reward-Source Design
+## Task 5: RLVR versus RLAIF
 
-Uses the supplied RLVR and RLAIF adapters; generation, judging, the perturbation scores and the adapter-effect check run on a GPU, the rest on the Mac. The `--tag rerun` commands repeat the RLVR transfer evaluation post hoc under new file names, leaving the original files unchanged.
+Uses the supplied RLVR and RLAIF adapters; generation, judging, the perturbation scores and the adapter-effect check run on a GPU, the rest on the Mac. The `--tag rerun` commands repeat the RLVR transfer evaluation post hoc under new file names, leaving the original files unchanged. Run `scripts.prepare_transfer_eval` only if `data/math_transfer_eval.jsonl` is absent; the file must have sha256 `f24163301035ccd4b66d12b687887fe1e167dd31ef62d6bc62a2fa152dcdcb76`. `posthoc --part mac` reads the GPU 0 queue log from `results/task5_feedback/logs/task5_queue_gpu0.log`.
 
 ```bash
 python -m scripts.prepare_transfer_eval

@@ -1,0 +1,71 @@
+{
+  "script": "task2_ppo.qualitative",
+  "seed": 6304,
+  "rule": "Task 2 blind qualitative file: KL-penalty forks beta 0 vs beta 0.20 on held-out prompts.\n\nSelection rule (fixed in advance): the N_CANDIDATES held-out prompts with the largest paired RM gain\nrm(beta 0) - rm(beta 0.20); ties broken by the lowest prompt_id. Runs on the Mac from saved\ngeneration files only.\n\nWrites:\n  results/task2_ppo/qualitative_blind.md  prompt text and the two responses labelled A and B, no RM\n                                          values and no condition names; candidates in held-out file order\n  results/task2_ppo/qualitative_key.json  prompt ID, which label is beta 0, both RM scores\nA/B order: numpy default_rng(seed), one coin per candidate in file order; 0 means A is beta 0.\n",
+  "candidates": [
+    {
+      "prompt_number": 1,
+      "prompt_id": "d995e3ae06848698448f0310c0956505e70240e048f520449e325f00ed1479a0",
+      "eval_index": 13,
+      "beta0_label": "B",
+      "rm_beta0": 1.9912109375,
+      "rm_beta0p20": 0.5869140625
+    },
+    {
+      "prompt_number": 2,
+      "prompt_id": "bbb1f3edc97f55e9a504614eaf228ae71a726659d3fc5a7ede0a50272d82aa36",
+      "eval_index": 24,
+      "beta0_label": "A",
+      "rm_beta0": 3.80859375,
+      "rm_beta0p20": 2.765625
+    },
+    {
+      "prompt_number": 3,
+      "prompt_id": "31eece09e599e4f053971b2174e7dd890a4c35be0509484107026af462fd8ebe",
+      "eval_index": 111,
+      "beta0_label": "B",
+      "rm_beta0": 1.8896484375,
+      "rm_beta0p20": -0.751953125
+    },
+    {
+      "prompt_number": 4,
+      "prompt_id": "e06b63281f181fcbcf7f81edeed07c1708d023712f37120a53b450f3f1e8753e",
+      "eval_index": 121,
+      "beta0_label": "A",
+      "rm_beta0": 2.107421875,
+      "rm_beta0p20": 1.173828125
+    },
+    {
+      "prompt_number": 5,
+      "prompt_id": "daca2da778735d6c998fbafab0580867cb0ade2edc54cdeb264f5da5d7897221",
+      "eval_index": 144,
+      "beta0_label": "A",
+      "rm_beta0": -0.28515625,
+      "rm_beta0p20": -1.4423828125
+    },
+    {
+      "prompt_number": 6,
+      "prompt_id": "93caf967eb5be0e7700fbec9176be10f6d09f64af8c32b691d1740c247f08269",
+      "eval_index": 150,
+      "beta0_label": "B",
+      "rm_beta0": -0.376708984375,
+      "rm_beta0p20": -1.25390625
+    },
+    {
+      "prompt_number": 7,
+      "prompt_id": "2894dbb726d3c81188346bf77db3eb5045e344df4eb774ecc9fbaa57f62f3e71",
+      "eval_index": 153,
+      "beta0_label": "B",
+      "rm_beta0": 2.708984375,
+      "rm_beta0p20": 1.7607421875
+    },
+    {
+      "prompt_number": 8,
+      "prompt_id": "2d2e242d24fd4b4f5085fa977b6e7a48ea54c216ce36a6b6197600cf018d3baf",
+      "eval_index": 191,
+      "beta0_label": "A",
+      "rm_beta0": 3.689453125,
+      "rm_beta0p20": 2.849609375
+    }
+  ]
+}
